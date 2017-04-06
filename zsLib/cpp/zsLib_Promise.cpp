@@ -258,8 +258,8 @@ namespace zsLib
 
         for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
         {
-          auto promise = (*iter);
-          promise->resolve(promise->value<Any>());
+          auto promiseIter = (*iter);
+          promiseIter->resolve(promise->value<Any>());
         }
       }
 
@@ -275,8 +275,8 @@ namespace zsLib
 
         for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
         {
-          auto promise = (*iter);
-          promise->reject(promise->reason<Any>());
+          auto promiseIter = (*iter);
+          promiseIter->reject(promise->reason<Any>());
         }
       }
 

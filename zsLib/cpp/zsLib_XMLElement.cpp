@@ -69,7 +69,7 @@ namespace zsLib
         class Walker : public WalkSink
         {
         public:
-          Walker(size_t &outResult, const GeneratorPtr &inGenerator) : mGenerator(inGenerator), mResult(outResult) {}
+          Walker(size_t &outResult, const GeneratorPtr &generator) : mGenerator(generator), mResult(outResult) {}
 
           virtual bool onElementEnter(ElementPtr inNode)
           {
@@ -146,9 +146,9 @@ namespace zsLib
         class Walker : public WalkSink
         {
         public:
-          Walker(const GeneratorPtr &inGenerator, char * &ioPos) :
-            mGenerator(inGenerator),
-            mPos(ioPos)
+          Walker(const GeneratorPtr &generator, char * &pos) :
+            mGenerator(generator),
+            mPos(pos)
           {}
 
           virtual bool onElementEnter(ElementPtr inNode)
@@ -232,16 +232,16 @@ namespace zsLib
         {
         public:
           Walker(
-                 const GeneratorPtr &inGenerator,
-                 char * &ioPos,
+                 const GeneratorPtr &generator,
+                 char * &pos,
                  size_t &result
                  ) :
-          mGeneratorPtr(inGenerator),
-          mGenerator(*inGenerator),
-          mPos(ioPos),
+          mGeneratorPtr(generator),
+          mGenerator(*generator),
+          mPos(pos),
           mResult(result),
-          mWriteFlags(inGenerator->getJSONWriteFlags()),
-          mStrs(inGenerator->jsonStrs())
+          mWriteFlags(generator->getJSONWriteFlags()),
+          mStrs(generator->jsonStrs())
           {}
 
           virtual bool onElementEnter(ElementPtr el)
@@ -520,12 +520,12 @@ namespace zsLib
             }
 
             // this is an element, do some special handling
-            ElementPtr newObject(XML::Element::create());
-            Parser::safeAdoptAsLastChild(cloneWalk, newObject);
+            ElementPtr newChildObject(XML::Element::create());
+            Parser::safeAdoptAsLastChild(cloneWalk, newChildObject);
 
-            newObject->mName = walk->toElement()->mName;
-            newObject->cloneAttributes(walk->toElement());
-            cloneWalk = newObject;
+            newChildObject->mName = walk->toElement()->mName;
+            newChildObject->cloneAttributes(walk->toElement());
+            cloneWalk = newChildObject;
             continue;
           }
 
@@ -546,12 +546,12 @@ namespace zsLib
             }
 
             // this is an element, do some special handling
-            ElementPtr newObject(XML::Element::create());
-            Parser::safeAdoptAsLastChild(cloneWalk->getParent(), newObject);
+            ElementPtr newChildObject(XML::Element::create());
+            Parser::safeAdoptAsLastChild(cloneWalk->getParent(), newChildObject);
 
-            newObject->mName = walk->toElement()->mName;
-            newObject->cloneAttributes(walk->toElement());
-            cloneWalk = newObject;
+            newChildObject->mName = walk->toElement()->mName;
+            newChildObject->cloneAttributes(walk->toElement());
+            cloneWalk = newChildObject;
             continue;
           }
 
