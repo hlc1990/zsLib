@@ -2038,9 +2038,9 @@ namespace zsLib
     bool firstLine = true;
 
     // each byte takes two hex digits and one representative character, each group needs one space between each group
-    ULONG charsPerGroup = (bytesPerGroup * 3) + 1;
+    ULONG charsPerGroup = static_cast<ULONG>((bytesPerGroup * 3) + 1);
 
-    ULONG groupsPerLine = maxLineLength / charsPerGroup;
+    ULONG groupsPerLine = static_cast<ULONG>(maxLineLength / charsPerGroup);
     groupsPerLine = (groupsPerLine < 1 ? 1: groupsPerLine);
 
     while (bufferSizeInBytes > 0) {
