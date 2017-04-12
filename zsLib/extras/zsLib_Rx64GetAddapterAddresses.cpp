@@ -514,7 +514,11 @@ namespace zsLib
   } // namespace internal
 } // namespace zsLib
 
-  //-------------------------------------------------------------------------
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+//-------------------------------------------------------------------------
 ULONG WINAPI Rx64GetAdaptersAddresses(
   _In_    ULONG                 Family,
   _In_    ULONG                 Flags,
@@ -525,5 +529,9 @@ ULONG WINAPI Rx64GetAdaptersAddresses(
 {
   return zsLib::internal::Rx64GetAdaptersAddresses(Family, Flags, Reserved, AdapterAddresses, SizePointer);
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif //WIN32_RX64
