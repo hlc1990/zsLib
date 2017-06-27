@@ -32,9 +32,9 @@
 #include <zsLib/types.h>
 #include <zsLib/internal/platform.h>
 
-#ifdef WINRT
+#ifdef WINUWP
 
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h>
+#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
 #include <zsLib/internal/zsLib_MessageQueue.h>
 #include <zsLib/Log.h>
@@ -66,7 +66,7 @@ namespace zsLib
       CoreDispatcher ^dispatcher = setupDispatcher();
 
       if (nullptr == dispatcher) {
-        static SingletonLazySharedPtr<MessageQueueThreadBasic> singleton(MessageQueueThreadBasic::create("zsLib.winrt.backgroundDispatcher"));
+        static SingletonLazySharedPtr<MessageQueueThreadBasic> singleton(MessageQueueThreadBasic::create("zsLib.winuwp.backgroundDispatcher"));
         return singleton.singleton();
       }
 
@@ -175,4 +175,4 @@ namespace zsLib
   }
 }
 
-#endif //WINRT
+#endif //WINUWP

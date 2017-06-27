@@ -56,9 +56,9 @@ namespace zsLib
     typedef std::set<IPAddress> IPAddressSet;
 
     static void setup();
-#ifdef WINRT
+#ifdef WINUWP
     static void setup(Windows::UI::Core::CoreDispatcher ^dispatcher);
-#endif //WINRT
+#endif //WINUWP
 
     static RecursiveLockPtr getGlobalLock();
 

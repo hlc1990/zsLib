@@ -31,7 +31,7 @@
 
 #include <zsLib/internal/zsLib_MessageQueueThread.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h>
+#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingBlackberryChannels.h>
@@ -82,10 +82,10 @@ namespace zsLib
         case ThreadPriority_HighestPriority:  priority = THREAD_PRIORITY_HIGHEST; break;
         case ThreadPriority_RealtimePriority: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
       }
-#ifndef WINRT
+#ifndef WINUWP
 		  auto result = SetThreadPriority(handle, priority);
       assert(0 != result);
-#endif //ndef WINRT
+#endif //ndef WINUWP
 
 #endif //_WIN32
     }

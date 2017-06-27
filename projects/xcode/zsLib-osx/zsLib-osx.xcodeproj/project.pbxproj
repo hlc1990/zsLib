@@ -23,7 +23,7 @@
 		00FF08FB1D9C1B6700462998 /* zsLib_MessageQueueThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF08881D9C1B6700462998 /* zsLib_MessageQueueThreadPool.cpp */; };
 		00FF08FC1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF08891D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.cpp */; };
 		00FF08FD1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088A1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp */; };
-		00FF08FE1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp */; };
+		00FF08FE1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp */; };
 		00FF08FF1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088C1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp */; };
 		00FF09001D9C1B6700462998 /* zsLib_Numeric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088D1D9C1B6700462998 /* zsLib_Numeric.cpp */; };
 		00FF09011D9C1B6700462998 /* zsLib_Promise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FF088E1D9C1B6700462998 /* zsLib_Promise.cpp */; };
@@ -94,7 +94,7 @@
 		00FF08881D9C1B6700462998 /* zsLib_MessageQueueThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadPool.cpp; sourceTree = "<group>"; };
 		00FF08891D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadUsingBlackberryChannels.cpp; sourceTree = "<group>"; };
 		00FF088A1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp; sourceTree = "<group>"; };
-		00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp; sourceTree = "<group>"; };
+		00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp; sourceTree = "<group>"; };
 		00FF088C1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp; sourceTree = "<group>"; };
 		00FF088D1D9C1B6700462998 /* zsLib_Numeric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_Numeric.cpp; sourceTree = "<group>"; };
 		00FF088E1D9C1B6700462998 /* zsLib_Promise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_Promise.cpp; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 		00FF08C91D9C1B6700462998 /* zsLib_MessageQueueThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadPool.h; sourceTree = "<group>"; };
 		00FF08CA1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadUsingBlackberryChannels.h; sourceTree = "<group>"; };
 		00FF08CB1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h; sourceTree = "<group>"; };
-		00FF08CC1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h; sourceTree = "<group>"; };
+		00FF08CC1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h; sourceTree = "<group>"; };
 		00FF08CD1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h; sourceTree = "<group>"; };
 		00FF08CE1D9C1B6700462998 /* zsLib_Numeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_Numeric.h; sourceTree = "<group>"; };
 		00FF08CF1D9C1B6700462998 /* zsLib_Promise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_Promise.h; sourceTree = "<group>"; };
@@ -301,7 +301,7 @@
 				00FF08881D9C1B6700462998 /* zsLib_MessageQueueThreadPool.cpp */,
 				00FF08891D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.cpp */,
 				00FF088A1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp */,
-				00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp */,
+				00FF088B1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp */,
 				00FF088C1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp */,
 				00FF088D1D9C1B6700462998 /* zsLib_Numeric.cpp */,
 				00FF088E1D9C1B6700462998 /* zsLib_Promise.cpp */,
@@ -389,7 +389,7 @@
 				00FF08C91D9C1B6700462998 /* zsLib_MessageQueueThreadPool.h */,
 				00FF08CA1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingBlackberryChannels.h */,
 				00FF08CB1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h */,
-				00FF08CC1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h */,
+				00FF08CC1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h */,
 				00FF08CD1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h */,
 				00FF08CE1D9C1B6700462998 /* zsLib_Numeric.h */,
 				00FF08CF1D9C1B6700462998 /* zsLib_Promise.h */,
@@ -500,7 +500,7 @@
 				00FF08F91D9C1B6700462998 /* zsLib_MessageQueueThread.cpp in Sources */,
 				00FF09071D9C1B6700462998 /* zsLib_Stringize.cpp in Sources */,
 				00FF09091D9C1B6700462998 /* zsLib_TimerMonitor.cpp in Sources */,
-				00FF08FE1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.cpp in Sources */,
+				00FF08FE1D9C1B6700462998 /* zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp in Sources */,
 				008666231DEE6A1B00CBA4FD /* zsLib_Helper.cpp in Sources */,
 				00FF090F1D9C1B6700462998 /* zsLib_XMLElement.cpp in Sources */,
 				00FF08F81D9C1B6700462998 /* zsLib_MessageQueue.cpp in Sources */,

@@ -68,9 +68,9 @@ namespace zsLib
     #pragma mark
 
     void setup();
-#ifdef WINRT
+#ifdef WINUWP
     void setup(Windows::UI::Core::CoreDispatcher ^dispatcher);
-#endif //WINRT
+#endif //WINUWP
 
     //-------------------------------------------------------------------------
     static void set8(void* memory, size_t offset, BYTE v)
@@ -114,13 +114,13 @@ namespace zsLib
     internal::setup();
   }
 
-#ifdef WINRT
+#ifdef WINUWP
   //---------------------------------------------------------------------------
   void IHelper::setup(Windows::UI::Core::CoreDispatcher ^dispatcher)
   {
     internal::setup(dispatcher);
   }
-#endif //WINRT
+#endif //WINUWP
 
   //---------------------------------------------------------------------------
   RecursiveLockPtr IHelper::getGlobalLock()

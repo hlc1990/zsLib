@@ -48,7 +48,7 @@
 #include <windows.h>
 #endif //HAVE_WINDOWS_H
 
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinRT.h>
+#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 
 #ifdef _WIN32
 namespace std {
@@ -202,13 +202,13 @@ namespace zsLib
       internal::Setup::singleton().setup();
     }
 
-#ifdef WINRT
+#ifdef WINUWP
     void setup(Windows::UI::Core::CoreDispatcher ^dispatcher)
     {
       setup();
       internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setupDispatcher(dispatcher);
     }
-#endif //WINRT
+#endif //WINUWP
 
   }
 

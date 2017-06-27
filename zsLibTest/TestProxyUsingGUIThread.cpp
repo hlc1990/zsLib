@@ -41,9 +41,9 @@
 #ifdef _WIN32
 #include <Windows.h>
 
-#ifdef WINRT
+#ifdef WINUWP
 using namespace Windows::UI::Core;
-#endif //WINRT
+#endif //WINUWP
 
 #endif //_WIN32
 
@@ -173,7 +173,7 @@ namespace testingUsingGUIThread
       IMessageQueue::size_type count = 0;
 
 #ifdef _WIN32
-#ifdef WINRT
+#ifdef WINUWP
 
       CoreWindow ^coreWindow = CoreWindow::GetForCurrentThread();
       CoreDispatcher ^dispatcher = coreWindow != nullptr ? coreWindow->Dispatcher : nullptr;
@@ -196,7 +196,7 @@ namespace testingUsingGUIThread
             std::this_thread::yield();
         } while (count > 0);
       }
-#else //WINRT
+#else //WINUWP
       BOOL result = 0;
 
       MSG msg;
@@ -217,7 +217,7 @@ namespace testingUsingGUIThread
 
         memset(&msg, 0, sizeof(msg));
       }
-#endif //WINRT
+#endif //WINUWP
 #elif __APPLE__
         count = mThread->getTotalUnprocessedMessages();
         do

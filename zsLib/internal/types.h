@@ -46,8 +46,8 @@
 #ifdef _WIN32
 
 #ifdef __cplusplus_winrt
-#undef WINRT
-#define WINRT
+#undef WINUWP
+#define WINUWP
 #endif //__cplusplus_winrt
 
 #define WIN32_LEAN_AND_MEAN
