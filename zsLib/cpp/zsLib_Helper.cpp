@@ -2048,9 +2048,9 @@ namespace zsLib
     bool firstLine = true;
 
     // each byte takes two hex digits and one representative character, each group needs one space between each group
-    ULONG charsPerGroup = (bytesPerGroup * 3) + 1;
+    size_t charsPerGroup = (bytesPerGroup * 3) + 1;
 
-    ULONG groupsPerLine = maxLineLength / charsPerGroup;
+    size_t groupsPerLine = maxLineLength / charsPerGroup;
     groupsPerLine = (groupsPerLine < 1 ? 1: groupsPerLine);
 
     while (bufferSizeInBytes > 0) {
@@ -2060,7 +2060,7 @@ namespace zsLib
 
       char *fill = fillLine;
 
-      for (ULONG groups = 0; (groups < groupsPerLine); ++groups) {
+      for (size_t groups = 0; (groups < groupsPerLine); ++groups) {
         size_t bytesInNextGroup = (bufferSizeInBytes < bytesPerGroup ? bufferSizeInBytes : bytesPerGroup);
         size_t bytesMissingInGroup = bytesPerGroup - bytesInNextGroup;
         for (size_t pos = 0; pos < bytesInNextGroup; ++pos, ++buffer, ++totalBytesWritten) {

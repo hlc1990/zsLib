@@ -39,8 +39,16 @@
 
 #define ZS_EVENTING_GET_LOG_LEVEL()                                                                           ZS_EVENTING_INTERNAL_GET_LOG_LEVEL()
 #define ZS_EVENTING_GET_SUBSYSTEM_LOG_LEVEL(xSubsystem)                                                       ZS_EVENTING_INTERNAL_GET_SUBSYSTEM_LOG_LEVEL(xSubsystem)
-#define ZS_EVENTING_IS_LOGGING(xHandleReference, xKeywordBitmask, xLevel)                                     ZS_EVENTING_INTERNAL_IS_LOGGING(xHandleReference, xKeywordBitmask, xLevel)
-#define ZS_EVENTING_IS_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)               ZS_EVENTING_INTERNAL_IS_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)
+
+#define ZS_EVENTING_IS_LOGGING(xLevel)                                                                        ZS_EVENTING_INTERNAL_IS_LOGGING(xLevel)
+#define ZS_EVENTING_IS_LOGGING_VALUE(xLevelValue)                                                             ZS_EVENTING_INTERNAL_IS_LOGGING_VALUE(xLevelValue)
+#define ZS_EVENTING_IS_SUBSYSTEM_LOGGING(xSubsystem, xLevel)                                                  ZS_EVENTING_INTERNAL_IS_SUBSYSTEM_LOGGING(xSubsystem, xLevel)
+
+#define ZS_EVENTING_GET_CURRENT_SUBSYSTEM_NAME()                                                              ZS_EVENTING_INTERNAL_GET_CURRENT_SUBSYSTEM_NAME()
+#define ZS_EVENTING_GET_SUBSYSTEM_NAME(xSubsystem)                                                            ZS_EVENTING_INTERNAL_GET_SUBSYSTEM_NAME(xSubsystem)
+
+#define ZS_EVENTING_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)                               ZS_EVENTING_INTERNAL_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)
+#define ZS_EVENTING_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)         ZS_EVENTING_INTERNAL_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)
 
 #define ZS_EVENTING_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash)  ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash)
 #define ZS_EVENTING_UNREGISTER_EVENT_WRITER(xHandleReference)                                                 ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)

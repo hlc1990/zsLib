@@ -154,7 +154,7 @@ namespace zsLib
         ProviderInfo *provider = reinterpret_cast<ProviderInfo *>(eventingAtomDataArray[index]);
         if (!provider) return;
 
-        auto result = EventWrite(provider->mRegistrationHandle, descriptor, dataDescriptorCount, const_cast<PEVENT_DATA_DESCRIPTOR>(dataDescriptor));
+        auto result = EventWrite(provider->mRegistrationHandle, descriptor, (ULONG)dataDescriptorCount, const_cast<PEVENT_DATA_DESCRIPTOR>(dataDescriptor));
         if (!result) result = 1;
         (void)result;
       }

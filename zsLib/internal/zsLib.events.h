@@ -49,7 +49,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_ExceptionEvent(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5) \
-  if (ZS_EVENTING_IS_SUBSYSTEM_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), xSubsystem, Basic)) { \
+  if (ZS_EVENTING_CHECK_IF_SUBSYSTEM_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), xSubsystem, Basic)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[8]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -89,7 +89,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_MessageQueueCreate(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -121,7 +121,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_MessageQueueDestroy(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -153,7 +153,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_MessageQueuePost(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -185,7 +185,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_MessageQueueProcess(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -218,7 +218,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_MessageQueueTotalUnprocessedMessages(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -253,7 +253,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingApply(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -287,7 +287,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingApplyDefaults(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -320,7 +320,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingClear(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -354,7 +354,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingClearAll(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -388,7 +388,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetBool(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -426,7 +426,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetDouble(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -464,7 +464,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetFloat(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -502,7 +502,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetInt(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -540,7 +540,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetString(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -578,7 +578,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingGetUInt(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -616,7 +616,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetBool(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -654,7 +654,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetDouble(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -692,7 +692,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetFloat(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -730,7 +730,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetInt(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -768,7 +768,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetString(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -806,7 +806,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingSetUInt(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -844,7 +844,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingVerifyExists(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -882,7 +882,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SettingVerifyExistsFailed(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Basic)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Basic)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -921,7 +921,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketAccept(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -959,7 +959,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketAdopt(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -994,7 +994,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketBind(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1033,7 +1033,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketClose(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1069,7 +1069,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketConnect(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1109,7 +1109,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketCreate(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[8]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1150,7 +1150,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketError(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1184,7 +1184,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketExceptionEvent(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1216,7 +1216,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketExceptionReset(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1251,7 +1251,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketGetLocalAddress(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1292,7 +1292,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketGetOptionFlag(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1333,7 +1333,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketGetOptionValue(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1376,7 +1376,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketGetOptions(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5, xValue6) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[9]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1421,7 +1421,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketGetRemoteAddress(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1460,7 +1460,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketListen(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Detail)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1494,7 +1494,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketOrphan(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1526,7 +1526,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketReadReadyEvent(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1558,7 +1558,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketReadReadyReset(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1594,7 +1594,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketRecv(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[8]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1640,7 +1640,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketRecvFrom(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5, xValue6, xValue7) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[10]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1688,7 +1688,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketSend(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[8]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1734,7 +1734,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketSendTo(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5, xValue6, xValue7) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[10]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1783,7 +1783,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketSetOption(xSubsystem, xValue1, xValue2, xValue3, xValue4, xValue5, xValue6) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[9]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1828,7 +1828,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketSetOptionFlag(xSubsystem, xValue1, xValue2, xValue3, xValue4) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[7]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1868,7 +1868,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketShutdown(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Debug)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1905,7 +1905,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketWouldBlock(xSubsystem, xValue1, xValue2) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[5]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1939,7 +1939,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketWriteReadyEvent(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -1971,7 +1971,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_SocketWriteReadyReset(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -2005,7 +2005,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_TimerCreate(xSubsystem, xValue1, xValue2, xValue3) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[6]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -2041,7 +2041,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_TimerDestroy(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Trace)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \
@@ -2073,7 +2073,7 @@ namespace zsLib {
     }
 
 #define ZS_INTERNAL_EVENTING_EVENT_TimerEvent(xSubsystem, xValue1) \
-  if (ZS_EVENTING_IS_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
+  if (ZS_EVENTING_CHECK_IF_LOGGING(::zsLib::eventing::getEventHandle_zsLib(), (0x8000000000000000ULL), Insane)) { \
     ::zsLib::eventing::USE_EVENT_DATA_DESCRIPTOR xxDescriptors[4]; \
     uint32_t xxLineNumber = __LINE__; \
     \

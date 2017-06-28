@@ -54,7 +54,12 @@
 
 #define ZS_GET_LOG_LEVEL()                                              ZS_INTERNAL_GET_LOG_LEVEL()
 #define ZS_GET_SUBSYSTEM_LOG_LEVEL(xSubsystem)                          ZS_INTERNAL_GET_SUBSYSTEM_LOG_LEVEL(xSubsystem)
+
+#define ZS_GET_CURRENT_SUBSYSTEM_NAME()                                 ZS_INTERNAL_GET_CURRENT_SUBSYSTEM_NAME()
+#define ZS_GET_SUBSYSTEM_NAME(xSubsystem)                               ZS_INTERNAL_GET_SUBSYSTEM_NAME(xSubsystem)
+
 #define ZS_IS_LOGGING(xLevel)                                           ZS_INTERNAL_IS_LOGGING(xLevel)
+#define ZS_IS_LOGGING_VALUE(xLevelValue)                                ZS_INTERNAL_IS_LOGGING_VALUE(xLevelValue)
 #define ZS_IS_SUBSYSTEM_LOGGING(xSubsystem, xLevel)                     ZS_INTERNAL_IS_SUBSYSTEM_LOGGING(xSubsystem, xLevel)
 
 #define ZS_LOG_FORCED(xSeverity, xLevel, xMsg)                          ZS_INTERNAL_LOG_FORCED(xSeverity, xLevel, xMsg)

@@ -165,6 +165,9 @@ namespace zsLib
 #define ZS_INTERNAL_GET_LOG_LEVEL()                                       ((ZS_GET_SUBSYSTEM()).getOutputLevel())
 #define ZS_INTERNAL_GET_SUBSYSTEM_LOG_LEVEL(xSubsystem)                   ((xSubsystem).getOutputLevel())
 
+#define ZS_INTERNAL_GET_CURRENT_SUBSYSTEM_NAME()                          ((ZS_GET_SUBSYSTEM()).getName())
+#define ZS_INTERNAL_GET_SUBSYSTEM_NAME(xSubsystem)                        ((xSubsystem).getName())
+
 #ifdef ZSLIB_LOGGING_NOOP
 
 #define ZS_INTERNAL_IS_LOGGING(xLevel)                                    (::zsLib::internal::Log::returnFalse())
