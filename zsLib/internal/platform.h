@@ -66,14 +66,14 @@
 #define HAVE_SPRINTF_S 1
 #define HAVE_STRCPY_S 1
 
-#ifdef WINRT
+#if defined(WINRT) || defined(WIN32_RX64)
 
 // WINRT has these defined
 
 // WINRT does not support these features (but WIN32 does)
 #undef HAVE_IF_NAMETOINDEX
 
-#if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP || defined(WIN32_RX64))
 
 // WINRT phone has these defined
 

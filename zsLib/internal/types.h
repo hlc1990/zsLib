@@ -50,7 +50,9 @@
 #define WINRT
 #endif //__cplusplus_winrt
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif //WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <rpc.h>
 #include <stdint.h>
