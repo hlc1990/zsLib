@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		005779B91E968368004B0E53 /* zsLib_Helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 005779B81E968368004B0E53 /* zsLib_Helper.h */; };
 		0086661F1DEE69ED00CBA4FD /* zsLib_MessageQueueManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0086661E1DEE69ED00CBA4FD /* zsLib_MessageQueueManager.cpp */; };
 		008666211DEE6A0200CBA4FD /* zsLib_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008666201DEE6A0200CBA4FD /* zsLib_Settings.cpp */; };
 		008666231DEE6A1B00CBA4FD /* zsLib_Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008666221DEE6A1B00CBA4FD /* zsLib_Helper.cpp */; };
@@ -52,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		001AD3921DE7E9E800103DA3 /* zsLib.events.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zsLib.events.json; sourceTree = "<group>"; };
+		005779B81E968368004B0E53 /* zsLib_Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_Helper.h; sourceTree = "<group>"; };
 		00836BC11DF4AA2900E03A5A /* EventTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTypes.h; sourceTree = "<group>"; };
 		00836BC21DF4AA3C00E03A5A /* zsLib_eventing_EventTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zsLib_eventing_EventTypes.h; sourceTree = "<group>"; };
 		008666151DEE697B00CBA4FD /* IMessageQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMessageQueue.h; sourceTree = "<group>"; };
@@ -169,7 +171,6 @@
 		00FF08D91D9C1B6700462998 /* zsLib_TimerMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_TimerMonitor.h; sourceTree = "<group>"; };
 		00FF08DB1D9C1B6700462998 /* zsLib_XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_XML.h; sourceTree = "<group>"; };
 		00FF08DC1D9C1B6700462998 /* IPAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAddress.h; sourceTree = "<group>"; };
-		00FF08DD1D9C1B6700462998 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		00FF08DE1D9C1B6700462998 /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		00FF08E01D9C1B6700462998 /* MessageQueueAssociator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueueAssociator.h; sourceTree = "<group>"; };
 		00FF08E31D9C1B6700462998 /* Numeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Numeric.h; sourceTree = "<group>"; };
@@ -256,7 +257,6 @@
 				0086661B1DEE69B700CBA4FD /* ISettings.h */,
 				0086661C1DEE69B700CBA4FD /* ITimer.h */,
 				0086661D1DEE69B700CBA4FD /* IWakeDelegate.h */,
-				00FF08DD1D9C1B6700462998 /* license.txt */,
 				00FF08DE1D9C1B6700462998 /* Log.h */,
 				00FF08E01D9C1B6700462998 /* MessageQueueAssociator.h */,
 				00FF08E31D9C1B6700462998 /* Numeric.h */,
@@ -380,6 +380,7 @@
 				00FF08BF1D9C1B6700462998 /* types.h */,
 				00FF08C21D9C1B6700462998 /* zsLib_Event.h */,
 				00FF08C31D9C1B6700462998 /* zsLib_Exception.h */,
+				005779B81E968368004B0E53 /* zsLib_Helper.h */,
 				00FF08C41D9C1B6700462998 /* zsLib_IPAddress.h */,
 				00FF08C51D9C1B6700462998 /* zsLib_Log.h */,
 				00FF08C61D9C1B6700462998 /* zsLib_MessageQueue.h */,
@@ -420,6 +421,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				005779B91E968368004B0E53 /* zsLib_Helper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +628,9 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_SHADOW = YES;
 				HEADER_SEARCH_PATHS = ../../..;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -637,6 +642,9 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_SHADOW = YES;
 				HEADER_SEARCH_PATHS = ../../..;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

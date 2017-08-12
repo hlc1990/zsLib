@@ -35,6 +35,13 @@
 
 #include <zsLib/types.h>
 
+#define ZS_EVENTING_IS_LOGGING(xLevel)                                                                        (::zsLib::internal::Log::returnFalse())
+#define ZS_EVENTING_IS_LOGGING_VALUE(xLevelValue)                                                             (::zsLib::internal::Log::returnFalse())
+#define ZS_EVENTING_IS_SUBSYSTEM_LOGGING(xSubsystem, xLevel)                                                  (::zsLib::internal::Log::returnFalse())
+
+#define ZS_EVENTING_GET_CURRENT_SUBSYSTEM_NAME()                                                              ((ZS_GET_SUBSYSTEM()).getName())
+#define ZS_EVENTING_GET_SUBSYSTEM_NAME(xSubsystem)                                                            ((xSubsystem).getName())
+
 #define ZS_EVENTING_0(xSubsystem, xSeverity, xLevel, xSymbol, xChannelID, xTaskID, xOpCode)
 #define ZS_EVENTING_1(xSubsystem, xSeverity, xLevel, xSymbol, xChannelID, xTaskID, xOpCode, xType1, xName1, xValue1)
 #define ZS_EVENTING_2(xSubsystem, xSeverity, xLevel, xSymbol, xChannelID, xTaskID, xOpCode, xType1, xName1, xValue1, xType2, xName2, xValue2)

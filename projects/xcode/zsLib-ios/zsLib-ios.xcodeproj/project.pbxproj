@@ -63,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		005779BA1E96839D004B0E53 /* zsLib_MessageQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_MessageQueueManager.h; sourceTree = "<group>"; };
 		0067EE151D9C5B4E003BE1AC /* libzsLib-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libzsLib-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0067EE231D9C5BA4003BE1AC /* zsLib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib.cpp; sourceTree = "<group>"; };
 		0067EE241D9C5BA4003BE1AC /* zsLib_Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zsLib_Event.cpp; sourceTree = "<group>"; };
@@ -151,7 +152,6 @@
 		0067EE7D1D9C5BA4003BE1AC /* zsLib_TimerMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_TimerMonitor.h; sourceTree = "<group>"; };
 		0067EE7F1D9C5BA4003BE1AC /* zsLib_XML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zsLib_XML.h; sourceTree = "<group>"; };
 		0067EE801D9C5BA4003BE1AC /* IPAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPAddress.h; sourceTree = "<group>"; };
-		0067EE811D9C5BA4003BE1AC /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		0067EE821D9C5BA4003BE1AC /* Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		0067EE841D9C5BA4003BE1AC /* MessageQueueAssociator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueueAssociator.h; sourceTree = "<group>"; };
 		0067EE871D9C5BA4003BE1AC /* Numeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Numeric.h; sourceTree = "<group>"; };
@@ -243,7 +243,6 @@
 				008666391DEE6D8900CBA4FD /* ISettings.h */,
 				0086663A1DEE6D8900CBA4FD /* ITimer.h */,
 				0086663B1DEE6D8900CBA4FD /* IWakeDelegate.h */,
-				0067EE811D9C5BA4003BE1AC /* license.txt */,
 				0067EE821D9C5BA4003BE1AC /* Log.h */,
 				0067EE841D9C5BA4003BE1AC /* MessageQueueAssociator.h */,
 				0067EE871D9C5BA4003BE1AC /* Numeric.h */,
@@ -365,6 +364,7 @@
 				0067EE681D9C5BA4003BE1AC /* zsLib_IPAddress.h */,
 				0067EE691D9C5BA4003BE1AC /* zsLib_Log.h */,
 				0067EE6A1D9C5BA4003BE1AC /* zsLib_MessageQueue.h */,
+				005779BA1E96839D004B0E53 /* zsLib_MessageQueueManager.h */,
 				0067EE6B1D9C5BA4003BE1AC /* zsLib_MessageQueueThread.h */,
 				0067EE6C1D9C5BA4003BE1AC /* zsLib_MessageQueueThreadBasic.h */,
 				0067EE6D1D9C5BA4003BE1AC /* zsLib_MessageQueueThreadPool.h */,
@@ -613,6 +613,9 @@
 		0067EE1F1D9C5B4E003BE1AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_SHADOW = YES;
 				HEADER_SEARCH_PATHS = ../../..;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -623,6 +626,9 @@
 		0067EE201D9C5B4E003BE1AC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_SHADOW = YES;
 				HEADER_SEARCH_PATHS = ../../..;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

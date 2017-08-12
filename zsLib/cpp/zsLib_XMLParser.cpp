@@ -1096,9 +1096,9 @@ namespace zsLib
 
                 skipWhiteSpace(pos);
 
-                JSONStackEntry &entry = jsonStack.back();
-                currentType = entry.mStackType;
-                currentEl = entry.mElement;
+                JSONStackEntry &entryStack = jsonStack.back();
+                currentType = entryStack.mStackType;
+                currentEl = entryStack.mElement;
                 jsonStack.pop_back();
                 popPos();
 
@@ -1314,8 +1314,8 @@ namespace zsLib
             }
 
             if (jsonStack.size() > 0) {
-              JSONStackEntry &entry = jsonStack.back();
-              addWarning(ParserWarningType_MissingObjectClose, entry.mStartPos);
+              JSONStackEntry &entryStack = jsonStack.back();
+              addWarning(ParserWarningType_MissingObjectClose, entryStack.mStartPos);
             }
 
             if (JSONParserStackType_Array == rootType) {

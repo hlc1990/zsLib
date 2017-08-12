@@ -378,8 +378,8 @@ namespace zsLib
 
         if (0 == replaceList->size()) {
           if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
-            for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter) {
-              auto &subsystem = (*iter);
+            for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+              auto &subsystem = (*innerIter);
               subsystem->setOutputLevel(None);
             }
           }
@@ -636,8 +636,8 @@ namespace zsLib
 
         if (0 == replaceList->size()) {
           if (refThis.mDefaultEventingSubsystemLevels.size() > 0) {
-            for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter) {
-              auto &subsystem = (*iter);
+            for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+              auto &subsystem = (*innerIter);
               subsystem->setEventingLevel(None);
             }
           }

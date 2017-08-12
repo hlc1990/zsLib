@@ -39,6 +39,7 @@
 #define ZS_DECLARE_STRUCT_PTR(xStructName)                                          ZS_INTERNAL_DECLARE_STRUCT_PTR(xStructName)
 #define ZS_DECLARE_INTERACTION_PTR(xInteractionName)                                ZS_INTERNAL_DECLARE_STRUCT_PTR(xInteractionName)
 #define ZS_DECLARE_TYPEDEF_PTR(xOriginalType, xNewTypeName)                         ZS_INTERNAL_DECLARE_TYPEDEF_PTR(xOriginalType, xNewTypeName)
+#define ZS_DECLARE_NOOP(xExistingType)
 #define ZS_DYNAMIC_PTR_CAST(xType, xObject)                                         ZS_INTERNAL_DYNAMIC_PTR_CAST(xType, xObject)
 
 
