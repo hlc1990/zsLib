@@ -66,14 +66,14 @@
 #define HAVE_SPRINTF_S 1
 #define HAVE_STRCPY_S 1
 
-#ifdef WINUWP
+#if defined(WINUWP) || defined(WIN32_RX64)
 
 // WINUWP has these defined
 
 // WINUWP does not support these features (but WIN32 does)
 #undef HAVE_IF_NAMETOINDEX
 
-#if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP || defined(WIN32_RX64))
 
 // WINUWP phone has these defined
 
