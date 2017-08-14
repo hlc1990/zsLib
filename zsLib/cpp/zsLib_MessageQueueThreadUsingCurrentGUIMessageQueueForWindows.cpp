@@ -31,7 +31,7 @@
 
 #include <zsLib/types.h>
 
-#if defined(_WIN32) && !defined(WINUWP) && !defined(WIN32_RX64))
+#if defined(_WIN32) && !defined(WINUWP) && !defined(WIN32_RX64)
 
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h>
 #include <zsLib/internal/zsLib_MessageQueue.h>
