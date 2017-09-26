@@ -42,6 +42,11 @@ namespace zs
   };
 
   [special, dictionary]
+  struct Days
+  {
+  };
+
+  [special, dictionary]
   struct Hours
   {
   };
