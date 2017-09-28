@@ -54,6 +54,11 @@ Please read the leading comments before using the class.
 #ifndef SAFEINT_HPP
 #define SAFEINT_HPP
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedef"
+#endif /* __GNUC__ */
+
 // It is a bit tricky to sort out what compiler we are actually using,
 // do this once here, and avoid cluttering the code
 #define VISUAL_STUDIO_COMPILER 0
@@ -7053,5 +7058,10 @@ SafeInt< T, E > operator |( U lhs, SafeInt< T, E > rhs ) SAFEINT_NOTHROW
 #if defined VISUAL_STUDIO_SAFEINT_COMPAT
 } // utilities
 } // msl
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif /* __GNUC__ */
+
 #endif
 
