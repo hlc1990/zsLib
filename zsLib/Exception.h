@@ -62,9 +62,11 @@ namespace zsLib
               ULONG lineNumber,
               const char *expression = NULL
               );
+    Exception(const Exception &op2);
+
     ~Exception() throw() {}
 
-    virtual const char *what() const throw() {return mMessage.c_str();}
+    virtual const char *what() const throw();
 
     const Subsystem &subsystem() const {return mSubsystem;}
     const String &message() const {return mMessage;}
@@ -72,6 +74,8 @@ namespace zsLib
     CSTR filePath() const {return mFilePath;}
     ULONG lineNumber() const {return mLineNumber;}
     Log::Params params() const;
+
+    Exception &operator=(const Exception &) = delete;
 
   private:
     const Subsystem &mSubsystem;

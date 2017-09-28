@@ -271,8 +271,8 @@ namespace zsLib
 
 #define ZS_INTERNAL_DECLARE_INTERACTION_PROXY_SUBSCRIPTION(xInteractionName, xDelegateName)                                       \
   interaction xInteractionName;                                                                                                   \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xInteractionName> xInteractionName##Ptr;                                \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xInteractionName> xInteractionName##WeakPtr;                              \
+  typedef std::shared_ptr<xInteractionName> xInteractionName##Ptr;                                                                \
+  typedef std::weak_ptr<xInteractionName> xInteractionName##WeakPtr;                                                              \
   typedef zsLib::ProxySubscriptions<xDelegateName, xInteractionName> xDelegateName##Subscriptions;
 
 
@@ -327,7 +327,7 @@ namespace zsLib                                                                 
 
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_0(xConst,xMethod)                                                                            \
-    virtual void xMethod() xConst override {                                                                                                        \
+    void xMethod() xConst override {                                                                                                                \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -344,7 +344,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_1(xConst,xMethod,t1)                                                                         \
-    virtual void xMethod(t1 v1) xConst override {                                                                                                   \
+    void xMethod(t1 v1) xConst override {                                                                                                           \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -365,7 +365,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_2(xConst,xMethod,t1,t2)                                                                      \
-    virtual void xMethod(t1 v1, t2 v2) xConst override {                                                                                            \
+    void xMethod(t1 v1, t2 v2) xConst override {                                                                                                    \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -387,7 +387,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_3(xConst,xMethod,t1,t2,t3)                                                                   \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3) xConst override {                                                                                     \
+    void xMethod(t1 v1, t2 v2, t3 v3) xConst override {                                                                                             \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -410,7 +410,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_4(xConst,xMethod,t1,t2,t3,t4)                                                                \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4) xConst override {                                                                              \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4) xConst override {                                                                                      \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -434,7 +434,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_5(xConst,xMethod,t1,t2,t3,t4,t5)                                                             \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5) xConst override {                                                                       \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5) xConst override {                                                                               \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -459,7 +459,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_6(xConst,xMethod,t1,t2,t3,t4,t5,t6)                                                          \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6) xConst override {                                                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6) xConst override {                                                                        \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -485,7 +485,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_7(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7)                                                       \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7) xConst override {                                                         \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7) xConst override {                                                                 \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -512,7 +512,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_8(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                                                    \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8) xConst override {                                                  \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8) xConst override {                                                          \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -540,7 +540,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_9(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                                                 \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9) xConst override {                                           \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9) xConst override {                                                   \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -569,7 +569,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_10(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)                                            \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10) xConst override {                                  \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10) xConst override {                                          \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -599,7 +599,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_11(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)                                        \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11) xConst override {                         \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11) xConst override {                                 \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -630,7 +630,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_12(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                                    \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12) xConst override {                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12) xConst override {                        \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -662,7 +662,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_13(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13) xConst override {       \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13) xConst override {               \
       SubscriptionDelegateMapPtr subscription;                                                                                                      \
       {                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                              \
@@ -695,7 +695,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_14(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                            \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14) xConst override {              \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14) xConst override {                      \
       SubscriptionDelegateMapPtr subscription;                                                                                                                      \
       {                                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                                              \
@@ -729,7 +729,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_15(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                        \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15) xConst override {     \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15) xConst override {             \
       SubscriptionDelegateMapPtr subscription;                                                                                                                      \
       {                                                                                                                                                             \
         AutoRecursiveLock lock(mLock);                                                                                                                              \
@@ -764,7 +764,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_16(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                                            \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16) xConst override {                                                                    \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16) xConst override {                                                                            \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -800,7 +800,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_17(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                                        \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17) xConst override {                                                           \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17) xConst override {                                                                   \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -837,7 +837,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_18(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                                    \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18) xConst override {                                                  \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18) xConst override {                                                          \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -875,7 +875,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_19(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                                                \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19) xConst override {                                         \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19) xConst override {                                                 \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -914,7 +914,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_20(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                                            \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20) xConst override {                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20) xConst override {                                        \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -954,7 +954,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_21(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                                        \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21) xConst override {                       \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21) xConst override {                               \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -995,7 +995,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_22(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                                    \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22) xConst override {              \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22) xConst override {                      \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -1037,7 +1037,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_23(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                                                \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23) xConst override {     \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23) xConst override {             \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                      \
@@ -1080,7 +1080,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_24(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                                            \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24) xConst override {            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24) xConst override {                    \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                                      \
@@ -1124,7 +1124,7 @@ namespace zsLib                                                                 
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_25(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                                        \
-    virtual void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24, t25 v25) xConst override {   \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24, t25 v25) xConst override {           \
       SubscriptionDelegateMapPtr subscription;                                                                                                                                                                                                              \
       {                                                                                                                                                                                                                                                     \
         AutoRecursiveLock lock(mLock);                                                                                                                                                                                                                      \

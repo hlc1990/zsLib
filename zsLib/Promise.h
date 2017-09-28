@@ -190,9 +190,9 @@ namespace zsLib
     void setReferenceHolder(AnyPtr referenceHolder) {mReferenceHolder = referenceHolder;}
 
   protected:
-    virtual void onPromiseSettled(PromisePtr promise) {}
-    virtual void onPromiseResolved(PromisePtr promise);
-    virtual void onPromiseRejected(PromisePtr promise);
+    void onPromiseSettled(PromisePtr promise) override;
+    void onPromiseResolved(PromisePtr promise) override;
+    void onPromiseRejected(PromisePtr promise) override;
   };
 
   template <typename DataType, typename ReasonType = zsLib::Any, typename UserType = zsLib::Any>
@@ -438,23 +438,23 @@ namespace zsLib
 
   interaction IPromiseSettledDelegate : public IPromiseDelegate
   {
-    virtual void onPromiseSettled(PromisePtr promise) = 0;
-    virtual void onPromiseResolved(PromisePtr promise) {} // filtered
-    virtual void onPromiseRejected(PromisePtr promise) {} // filtered
+    void onPromiseSettled(PromisePtr promise) override = 0;
+    void onPromiseResolved(PromisePtr promise) override; // filtered
+    void onPromiseRejected(PromisePtr promise) override; // filtered
   };
 
   interaction IPromiseResolutionDelegate : public IPromiseDelegate
   {
-    virtual void onPromiseSettled(PromisePtr promise) {}  // filtered
-    virtual void onPromiseResolved(PromisePtr promise) = 0;
-    virtual void onPromiseRejected(PromisePtr promise) = 0;
+    void onPromiseSettled(PromisePtr promise) override; // filtered
+    void onPromiseResolved(PromisePtr promise) override = 0;
+    void onPromiseRejected(PromisePtr promise) override = 0;
   };
 
   interaction IPromiseCatchDelegate : public IPromiseDelegate
   {
-    virtual void onPromiseSettled(PromisePtr promise) {}  // filtered
-    virtual void onPromiseResolved(PromisePtr promise) {} // filtered
-    virtual void onPromiseRejected(PromisePtr promise) = 0;
+    void onPromiseSettled(PromisePtr promise) override;  // filtered
+    void onPromiseResolved(PromisePtr promise) override; // filtered
+    void onPromiseRejected(PromisePtr promise) override = 0;
   };
 }
 

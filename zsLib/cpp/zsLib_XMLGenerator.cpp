@@ -205,6 +205,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      Generator::~Generator()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       size_t Generator::getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode)
       {
         if (!inNode)
@@ -611,6 +616,12 @@ namespace zsLib
       ZS_THROW_BAD_STATE_IF(0 != mDepth)
 
       return buffer;
+    }
+
+    //-------------------------------------------------------------------------
+    GeneratorPtr Generator::toGenerator() const
+    {
+      return mThis.lock();
     }
 
     //-------------------------------------------------------------------------

@@ -41,6 +41,7 @@ zslib_sources = [
     "../zsLib/zsLib/cpp/zsLib_IPAddress.cpp",
     "../zsLib/zsLib/cpp/zsLib_Log.cpp",
     "../zsLib/zsLib/cpp/zsLib_MessageQueue.cpp",
+    "../zsLib/zsLib/cpp/zsLib_MessageQueueAssociator.cpp",
     "../zsLib/zsLib/cpp/zsLib_MessageQueueManager.cpp",
     "../zsLib/zsLib/cpp/zsLib_MessageQueueThread.cpp",
     "../zsLib/zsLib/cpp/zsLib_MessageQueueThreadBasic.cpp",

@@ -96,6 +96,9 @@ namespace zsLib
 
         void cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const;
 
+      public:
+        ~Node();
+
       protected:
         NodeWeakPtr mParent;
 
@@ -121,6 +124,8 @@ namespace zsLib
                  );
 
         Document(const Document &) = delete;
+
+        ~Document();
 
         size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
         void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
@@ -154,10 +159,12 @@ namespace zsLib
       public:
         typedef std::list<AttributePtr> AttributeList;
 
-        Element() {}
+        Element();
         Element(const Element &) = delete;
 
       public:
+        ~Element();
+
         void parse(XML::ParserPos &ioPos);
 
         size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
@@ -201,6 +208,8 @@ namespace zsLib
       class Attribute
       {
       public:
+        ~Attribute();
+
         bool parse(XML::ParserPos &ioPos);
 
         size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
@@ -236,6 +245,8 @@ namespace zsLib
       class Text
       {
       public:
+        ~Text();
+
         void parse(XML::ParserPos &ioPos);
 
         size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
@@ -270,8 +281,10 @@ namespace zsLib
       class Comment
       {
       public:
-        Comment() {}
+        Comment();
         Comment(const Comment &) = delete;
+
+        ~Comment();
 
         void parse(XML::ParserPos &ioPos);
 
@@ -299,8 +312,10 @@ namespace zsLib
         friend class XML::Attribute;
 
       public:
-        Declaration() {}
+        Declaration();
         Declaration(const Declaration &) = delete;
+
+        ~Declaration();
 
         void parse(XML::ParserPos &ioPos);
 
@@ -326,8 +341,10 @@ namespace zsLib
       class Unknown
       {
       public:
-        Unknown() {}
+        Unknown();
         Unknown(const Unknown &) = delete;
+
+        ~Unknown();
 
         void parse(XML::ParserPos &ioPos, const char *start = NULL, const char *ending = NULL);
 
@@ -354,6 +371,9 @@ namespace zsLib
       protected:
         ParserPos();
         ParserPos(const ParserPos &);
+
+      public:
+        ~ParserPos();
 
       protected:
         ParserWeakPtr mParser;
@@ -415,6 +435,7 @@ namespace zsLib
 
       public:
         Parser();
+        ~Parser();
 
         void clearStack();
         void pushPos(const XML::ParserPos &inPos);
@@ -595,6 +616,8 @@ namespace zsLib
       public:
         Generator(UINT writeFlags);
         Generator(const Generator &) = delete;
+
+        ~Generator();
 
       protected:
         static size_t getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode);

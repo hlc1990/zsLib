@@ -34,8 +34,10 @@
 #include <zsLib/types.h>
 #include <zsLib/Exception.h>
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable: 4290)
+#endif //_WIN32
 
 #define ZS_JSON_DEFAULT_ATTRIBUTE_PREFIX '$'
 #define ZS_JSON_DEFAULT_FORCED_TEXT "#text"
@@ -239,22 +241,22 @@ namespace zsLib
 
       virtual NodeType::Type getNodeType() = 0;
 
-      virtual bool isDocument() const                 {return false;}
-      virtual bool isElement() const                  {return false;}
-      virtual bool isAttribute() const                {return false;}
-      virtual bool isText() const                     {return false;}
-      virtual bool isComment() const                  {return false;}
-      virtual bool isDeclaration() const              {return false;}
-      virtual bool isUnknown() const                  {return false;}
+      virtual bool isDocument() const;
+      virtual bool isElement() const;
+      virtual bool isAttribute() const;
+      virtual bool isText() const;
+      virtual bool isComment() const;
+      virtual bool isDeclaration() const;
+      virtual bool isUnknown() const;
 
-      virtual NodePtr         toNode() const          {return NodePtr();}
-      virtual DocumentPtr     toDocument() const      {return DocumentPtr();}
-      virtual ElementPtr      toElement() const       {return ElementPtr();}
-      virtual AttributePtr    toAttribute() const     {return AttributePtr();}
-      virtual TextPtr         toText() const          {return TextPtr();}
-      virtual CommentPtr      toComment() const       {return CommentPtr();}
-      virtual DeclarationPtr  toDeclaration() const   {return DeclarationPtr();}
-      virtual UnknownPtr      toUnknown() const       {return UnknownPtr();}
+      virtual NodePtr         toNode() const;
+      virtual DocumentPtr     toDocument() const;
+      virtual ElementPtr      toElement() const;
+      virtual AttributePtr    toAttribute() const;
+      virtual TextPtr         toText() const;
+      virtual CommentPtr      toComment() const;
+      virtual DeclarationPtr  toDeclaration() const;
+      virtual UnknownPtr      toUnknown() const;
 
       virtual NodePtr         toNodeChecked() const throw(Exceptions::CheckFailed);
       virtual DocumentPtr     toDocumentChecked() const throw(Exceptions::CheckFailed);
@@ -266,8 +268,6 @@ namespace zsLib
       virtual UnknownPtr      toUnknownChecked() const throw(Exceptions::CheckFailed);
 
       virtual NodePtr clone() const = 0;                    // creates a clone of this object and clone becomes root object
-
-      virtual String getBalue() const                 {return String();}
 
     protected:
       Node();
@@ -327,13 +327,13 @@ namespace zsLib
                                           ) const;
 
       // overrides
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
-      virtual NodeType::Type  getNodeType()        {return NodeType::Document;}
-      virtual bool            isDocument() const   {return true;}
-      virtual NodePtr         toNode() const       {return mThis.lock();}
-      virtual DocumentPtr     toDocument() const   {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isDocument() const override;
+      NodePtr         toNode() const override;
+      DocumentPtr     toDocument() const override;
 
     public:
       Document(
@@ -387,18 +387,18 @@ namespace zsLib
       AttributePtr getLastAttributeChecked() const throw(Exceptions::CheckFailed);
 
       // overrides
-      virtual void adoptAsFirstChild(NodePtr inNode);
-      virtual void adoptAsLastChild(NodePtr inNode);
+      void adoptAsFirstChild(NodePtr inNode) override;
+      void adoptAsLastChild(NodePtr inNode) override;
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
       virtual String getValue() const;                         // returns the element name
 
-      virtual NodeType::Type  getNodeType()     {return NodeType::Element;}
-      virtual bool            isElement() const {return true;}
-      virtual NodePtr         toNode() const    {return mThis.lock();}
-      virtual ElementPtr      toElement() const {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool isElement() const override;
+      NodePtr toNode() const override;
+      ElementPtr toElement() const override;
 
     public:
       Element(const make_private &);
@@ -426,37 +426,37 @@ namespace zsLib
       void setQuoted(bool inQuoted);
 
       // overrides
-      virtual NodePtr getFirstChild() const  {return NodePtr();}
-      virtual NodePtr getLastChild() const   {return NodePtr();}
+      NodePtr getFirstChild() const override;
+      NodePtr getLastChild() const override;
 
-      virtual NodePtr getFirstSibling() const;
-      virtual NodePtr getLastSibling() const;
+      NodePtr getFirstSibling() const override;
+      NodePtr getLastSibling() const override;
 
-      virtual void orphan();                                // this node now is a root element and has no document
+      void orphan() override;                                // this node now is a root element and has no document
 
-      virtual void adoptAsPreviousSibling(NodePtr inNode);  // this node is now adopted as the previous sibling to the current
-      virtual void adoptAsNextSibling(NodePtr inNode);      // this node is now adopted as the next sibling from the current
+      void adoptAsPreviousSibling(NodePtr inNode) override;  // this node is now adopted as the previous sibling to the current
+      void adoptAsNextSibling(NodePtr inNode) override;      // this node is now adopted as the next sibling from the current
 
-      virtual bool hasChildren()    {return false;}
-      virtual void removeChildren() {}
+      bool hasChildren() override;
+      void removeChildren() override;
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
       virtual String getValue() const;
       virtual String getValueDecoded() const;
 
-      virtual NodeType::Type  getNodeType()        {return NodeType::Attribute;}
-      virtual bool            isAttribute() const  {return true;}
-      virtual NodePtr         toNode() const       {return mThis.lock();}
-      virtual AttributePtr    toAttribute() const  {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isAttribute() const override;
+      NodePtr         toNode() const override;
+      AttributePtr    toAttribute() const override;
 
     public:
       Attribute(const make_private &);
 
     protected:
-      virtual void adoptAsFirstChild(NodePtr inNode);       // illegal
-      virtual void adoptAsLastChild(NodePtr inNode);        // illegal
+      void adoptAsFirstChild(NodePtr inNode) override;       // illegal
+      void adoptAsLastChild(NodePtr inNode) override;        // illegal
     };
 
     //-------------------------------------------------------------------------
@@ -492,11 +492,11 @@ namespace zsLib
       void setOutputFormat(Formats format);
 
       // overrides
-      virtual bool hasChildren()    {return false;}
-      virtual void removeChildren() {return;}
+      bool hasChildren() override;
+      void removeChildren() override;
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
       virtual String getValue() const;
       virtual String getValueDecoded() const;
@@ -506,17 +506,17 @@ namespace zsLib
                                       bool encode0xDCharactersInText = false
                                       ) const;
 
-      virtual NodeType::Type  getNodeType()  {return NodeType::Text;}
-      virtual bool            isText() const {return true;}
-      virtual NodePtr         toNode() const {return mThis.lock();}
-      virtual TextPtr         toText() const {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isText() const override;
+      NodePtr         toNode() const override;
+      TextPtr         toText() const override;
 
     public:
       Text(const make_private &);
 
     protected:
-      virtual void adoptAsFirstChild(NodePtr inNode);       // illegal
-      virtual void adoptAsLastChild(NodePtr inNode);        // illegal
+      void adoptAsFirstChild(NodePtr inNode) override;       // illegal
+      void adoptAsLastChild(NodePtr inNode) override;        // illegal
     };
 
     //-------------------------------------------------------------------------
@@ -536,25 +536,25 @@ namespace zsLib
       void setValue(String inValue) {mValue = inValue;}
 
       // overrides
-      virtual bool hasChildren()    {return false;}
-      virtual void removeChildren() {return;}
+      bool hasChildren() override;
+      void removeChildren() override;
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
       virtual String getValue() const;
 
-      virtual NodeType::Type  getNodeType()     {return NodeType::Comment;}
-      virtual bool            isComment() const {return true;}
-      virtual NodePtr         toNode() const    {return mThis.lock();}
-      virtual CommentPtr      toComment() const {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isComment() const override;
+      NodePtr         toNode() const override;
+      CommentPtr      toComment() const override;
 
     public:
       Comment(const make_private &);
 
     protected:
-      virtual void adoptAsFirstChild(NodePtr inNode);       // illegal
-      virtual void adoptAsLastChild(NodePtr inNode);        // illegal
+      void adoptAsFirstChild(NodePtr inNode) override;       // illegal
+      void adoptAsLastChild(NodePtr inNode) override;        // illegal
     };
 
     //-------------------------------------------------------------------------
@@ -588,16 +588,16 @@ namespace zsLib
       AttributePtr getLastAttributeChecked() const throw(Exceptions::CheckFailed);
 
       // overrides
-      virtual void adoptAsFirstChild(NodePtr inNode);    // can only add attribute children
-      virtual void adoptAsLastChild(NodePtr inNode);     // can only add attribute children
+      void adoptAsFirstChild(NodePtr inNode) override;    // can only add attribute children
+      void adoptAsLastChild(NodePtr inNode) override;     // can only add attribute children
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
-      virtual NodeType::Type  getNodeType()           {return NodeType::Declaration;}
-      virtual bool            isDeclaration() const   {return true;}
-      virtual NodePtr         toNode() const          {return mThis.lock();}
-      virtual DeclarationPtr  toDeclaration() const   {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isDeclaration() const override;
+      NodePtr         toNode() const override;
+      DeclarationPtr  toDeclaration() const override;
 
     public:
       Declaration(const make_private &);
@@ -620,25 +620,25 @@ namespace zsLib
       void setValue(String inValue) {mValue = inValue;}
 
       // overrides
-      virtual bool hasChildren()    {return false;}
-      virtual void removeChildren() {return;}
+      bool hasChildren() override;
+      void removeChildren() override;
 
-      virtual NodePtr clone() const;
-      virtual void clear();
+      NodePtr clone() const override;
+      void clear() override;
 
       virtual String getValue() const;
 
-      virtual NodeType::Type  getNodeType()     {return NodeType::Unknown;}
-      virtual bool            isUnknown() const {return true;}
-      virtual NodePtr         toNode() const    {return mThis.lock();}
-      virtual UnknownPtr      toUnknown() const {return mThis.lock();}
+      NodeType::Type  getNodeType() override;
+      bool            isUnknown() const override;
+      NodePtr         toNode() const override;
+      UnknownPtr      toUnknown() const override;
 
     public:
       Unknown(const make_private &);
 
     protected:
-      virtual void adoptAsFirstChild(NodePtr inNode);       // illegal
-      virtual void adoptAsLastChild(NodePtr inNode);        // illegal
+      void adoptAsFirstChild(NodePtr inNode) override;       // illegal
+      void adoptAsLastChild(NodePtr inNode) override;        // illegal
     };
 
     //-------------------------------------------------------------------------
@@ -730,6 +730,8 @@ namespace zsLib
     public:
       ParserWarningTypes mWarningType;
       ParserStack mStack;
+
+      ~ParserWarning();
 
       String getAsString(bool inIncludeEntireStack = true) const;
 
@@ -838,7 +840,7 @@ namespace zsLib
       virtual size_t getOutputSize(const NodePtr &onlyThisNode) const;
       virtual std::unique_ptr<char[]> write(const NodePtr &onlyThisNode, size_t *outLengthInChars = NULL) const;
 
-      virtual GeneratorPtr toGenerator() const   {return mThis.lock();}
+      virtual GeneratorPtr toGenerator() const;
 
       virtual XMLWriteFlags getXMLWriteFlags() const;
       virtual JSONWriteFlags getJSONWriteFlags() const;
@@ -854,4 +856,6 @@ namespace zsLib
 
 } // namespace zsLib
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32

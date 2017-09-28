@@ -57,6 +57,16 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
+      Element::Element()
+      {        
+      }
+
+      //-----------------------------------------------------------------------
+      Element::~Element()
+      {        
+      }
+
+      //-----------------------------------------------------------------------
       void Element::parse(XML::ParserPos &ioPos)
       {
         ElementPtr temp = mThis.lock();
@@ -1234,6 +1244,30 @@ namespace zsLib
     String Element::getValue() const
     {
       return mName;
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Element::getNodeType()
+    {
+      return NodeType::Element;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Element::isElement() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Element::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    ElementPtr Element::toElement() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

@@ -60,11 +60,13 @@ namespace zsLib
       static const char *toString(PromiseStates state);
 
     public:
-      Promise(IMessageQueuePtr queue) : MessageQueueAssociator(queue) {}
+      Promise(IMessageQueuePtr queue);
       Promise(
               const std::list<PromisePtr> &promises,
               IMessageQueuePtr queue
-              ) : MessageQueueAssociator(queue), mPromises(promises) {}
+              );
+
+      ~Promise();
 
     protected:
       PromiseWeakPtr mThisWeak;

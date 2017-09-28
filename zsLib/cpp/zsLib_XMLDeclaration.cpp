@@ -55,6 +55,16 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
+      Declaration::Declaration()
+      {
+      }
+
+      //-----------------------------------------------------------------------
+      Declaration::~Declaration()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       void Declaration::parse(XML::ParserPos &ioPos)
       {
         Parser::AutoStack stack(ioPos);
@@ -420,6 +430,30 @@ namespace zsLib
         child = tempNext;
       }
       Node::clear();
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Declaration::getNodeType()
+    {
+      return NodeType::Declaration;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Declaration::isDeclaration() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Declaration::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    DeclarationPtr Declaration::toDeclaration() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

@@ -72,9 +72,9 @@ namespace zsLib
 
       static MessageQueuePtr create(IMessageQueueNotifyPtr notify);
 
-      virtual void post(IMessageQueueMessageUniPtr message) override;
+      void post(IMessageQueueMessageUniPtr message) override;
 
-      virtual size_type getTotalUnprocessedMessages() const override;
+      size_type getTotalUnprocessedMessages() const override;
 
     public:
       //-----------------------------------------------------------------------

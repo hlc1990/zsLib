@@ -251,13 +251,7 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
-      virtual void notifyMessagePosted()
-      {
-        bool posted = mPosted.exchange(true);
-        if (posted) return;
-
-        mPool->notifyPosted(mThisWeak.lock());
-      }
+      void notifyMessagePosted() override;
 
     protected:
       MessageQueueThreadPoolQueueNotifierWeakPtr mThisWeak;
@@ -271,12 +265,31 @@ namespace zsLib
     };
 
     //-------------------------------------------------------------------------
+    void MessageQueueThreadPoolQueueNotifier::notifyMessagePosted()
+    {
+      bool posted = mPosted.exchange(true);
+      if (posted) return;
+
+      mPool->notifyPosted(mThisWeak.lock());
+    }
+
+    //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     #pragma mark
     #pragma mark MessageQueueThreadPool
     #pragma mark
+
+    //-------------------------------------------------------------------------
+    MessageQueueThreadPool::MessageQueueThreadPool(const make_private &)
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    MessageQueueThreadPool::~MessageQueueThreadPool()
+    {
+    }
 
     //-------------------------------------------------------------------------
     void MessageQueueThreadPool::init()

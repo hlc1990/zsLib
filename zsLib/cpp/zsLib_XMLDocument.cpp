@@ -65,6 +65,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      Document::~Document()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       size_t Document::getOutputSizeXML(const GeneratorPtr &generator) const
       {
         DocumentPtr self(mThis.lock());
@@ -307,6 +312,30 @@ namespace zsLib
       mAttributeNameCaseSensative = true;
 
       Node::clear();
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Document::getNodeType()
+    {
+      return NodeType::Document;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Document::isDocument() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Document::toNode() const 
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    DocumentPtr Document::toDocument() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

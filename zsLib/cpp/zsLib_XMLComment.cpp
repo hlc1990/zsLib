@@ -52,6 +52,16 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
+      Comment::Comment()
+      {
+      }
+
+      //-----------------------------------------------------------------------
+      Comment::~Comment()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       void Comment::parse(XML::ParserPos &ioPos)
       {
         Parser::AutoStack stack(ioPos);
@@ -145,6 +155,17 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool Comment::hasChildren()
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    void Comment::removeChildren()
+    {
+    }
+
+    //-------------------------------------------------------------------------
     NodePtr Comment::clone() const
     {
       return cloneAssignParent(NodePtr());
@@ -172,6 +193,30 @@ namespace zsLib
     void Comment::adoptAsLastChild(NodePtr inNode)
     {
       ZS_THROW_INVALID_USAGE("comments are not allowed to have child nodes")
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Comment::getNodeType()
+    {
+      return NodeType::Comment;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Comment::isComment() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Comment::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    CommentPtr Comment::toComment() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

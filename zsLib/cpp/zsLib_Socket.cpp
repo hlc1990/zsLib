@@ -212,6 +212,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    Socket::Socket() :
+      mMonitorReadReady(true),
+      mMonitorWriteReady(true),
+      mMonitorException(true)
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    Socket::~Socket()
+    {
+    }
+
+    //-------------------------------------------------------------------------
     void Socket::notifyReadReady()
     {
       SocketPtr socket;

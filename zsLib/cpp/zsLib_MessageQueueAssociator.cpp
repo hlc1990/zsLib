@@ -1,6 +1,6 @@
 /*
 
- Copyright (c) 2014, Robin Raymond
+ Copyright (c) 2017, Robin Raymond
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -29,26 +29,35 @@
  
  */
 
-#pragma once
+#include <zsLib/MessageQueueAssociator.h>
 
-#include <zsLib/types.h>
-#include <zsLib/IMessageQueue.h>
+#include <zsLib/Log.h>
+
+#ifndef ZSLIB_EVENTING_NOOP
+#include <zsLib/internal/zsLib.events.h>
+
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+#else
+#include <zsLib/eventing/noop.h>
+#endif //ndef ZSLIB_EVENTING_NOOP
 
 namespace zsLib
 {
-  class MessageQueueAssociator
+
+  namespace internal
   {
-  public:
-    MessageQueueAssociator(IMessageQueuePtr queue);
-    ~MessageQueueAssociator();
+  } // namespace internal
 
-    IMessageQueuePtr getAssociatedMessageQueue() const {return mQueue;}
+  //---------------------------------------------------------------------------
+  MessageQueueAssociator::MessageQueueAssociator(IMessageQueuePtr queue) :
+    mQueue(queue)
+  {
+  }
 
-    template <class Closure>
-    void postClosure(const Closure &closure) {mQueue->post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
-
-  private:
-    IMessageQueuePtr mQueue;
-  };
+  //---------------------------------------------------------------------------
+  MessageQueueAssociator::~MessageQueueAssociator()
+  {
+  }
 
 } // namespace zsLib
+

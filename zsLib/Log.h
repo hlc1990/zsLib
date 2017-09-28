@@ -198,6 +198,8 @@ namespace zsLib
       Param(const char *name, const Microseconds &value);
       Param(const char *name, const Nanoseconds &value);
 
+      ~Param();
+
       const XML::ElementPtr &param() const;
 
     private:
@@ -218,6 +220,8 @@ namespace zsLib
       Params(const char *message, const char *staticObjectName);
       Params(const String &message, const char *staticObjectName);
       Params(const Params &params);
+
+      ~Params();
 
       Params &operator<<(const XML::ElementPtr &param);
       Params &operator<<(const Param &param);

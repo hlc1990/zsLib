@@ -69,24 +69,24 @@ namespace zsLib
     protected:
 
     public:
-      MessageQueueThreadPool(const make_private &) {}
-      ~MessageQueueThreadPool() {}
+      MessageQueueThreadPool(const make_private &);
+      ~MessageQueueThreadPool();
 
     protected:
       static MessageQueueThreadPoolPtr create();
 
-      virtual void createThread(
-                                const char *threadName = NULL,
-                                ThreadPriorities threadPriority = ThreadPriority_NormalPriority
-                                ) override;
+      void createThread(
+                        const char *threadName = NULL,
+                        ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+                        ) override;
 
-      virtual void waitForShutdown() override;
+      void waitForShutdown() override;
 
-      virtual bool hasPendingMessages() override;
+      bool hasPendingMessages() override;
 
-      virtual IMessageQueuePtr createQueue() override;
+      IMessageQueuePtr createQueue() override;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority) override;
+      void setThreadPriority(ThreadPriorities threadPriority) override;
 
     protected:
       void init();

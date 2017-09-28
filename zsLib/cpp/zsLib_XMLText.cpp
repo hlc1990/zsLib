@@ -58,6 +58,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      Text::~Text()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       void Text::parse(XML::ParserPos &ioPos)
       {
         Parser::AutoStack stack(ioPos);
@@ -327,6 +332,17 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool Text::hasChildren()
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    void Text::removeChildren()
+    {      
+    }
+
+    //-------------------------------------------------------------------------
     NodePtr Text::clone() const
     {
       return cloneAssignParent(NodePtr());
@@ -380,6 +396,31 @@ namespace zsLib
     {
       ZS_THROW_INVALID_USAGE("text blocks cannot have children")
     }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Text::getNodeType()
+    {
+      return NodeType::Text;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Text::isText() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Text::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    TextPtr Text::toText() const
+    {
+      return mThis.lock();
+    }
+
 
   } // namespace XML
 

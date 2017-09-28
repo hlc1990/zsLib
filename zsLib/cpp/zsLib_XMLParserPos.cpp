@@ -71,6 +71,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      ParserPos::~ParserPos()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       static size_t calculateColumnFromSOL(const char *const inPos, const char *const inStart, ULONG inTabSize)
       {
         // find the start of the line

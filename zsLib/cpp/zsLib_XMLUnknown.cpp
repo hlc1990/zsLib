@@ -51,6 +51,16 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
+      Unknown::Unknown()
+      {
+      }
+
+      //-----------------------------------------------------------------------
+      Unknown::~Unknown()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       void Unknown::parse(XML::ParserPos &ioPos, const char *start, const char *ending)
       {
         Parser::AutoStack stack(ioPos);
@@ -172,6 +182,17 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool Unknown::hasChildren()
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    void Unknown::removeChildren()
+    {
+    }
+
+    //-------------------------------------------------------------------------
     NodePtr Unknown::clone() const
     {
       return cloneAssignParent(NodePtr());
@@ -200,6 +221,30 @@ namespace zsLib
     void Unknown::adoptAsLastChild(NodePtr inNode)
     {
       ZS_THROW_INVALID_USAGE("unknown elements cannot have child nodes")
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Unknown::getNodeType()
+    {
+      return NodeType::Unknown;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Unknown::isUnknown() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Unknown::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    UnknownPtr Unknown::toUnknown() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

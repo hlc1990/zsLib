@@ -52,24 +52,26 @@ namespace zsLib
       MessageQueueThreadBasic(const char *threadName);
 
     public:
+      ~MessageQueueThreadBasic();
+
       static MessageQueueThreadBasicPtr create(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority);
 
       void operator () ();
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message);
+      void post(IMessageQueueMessageUniPtr message) override;
 
-      virtual size_type getTotalUnprocessedMessages() const;
+      size_type getTotalUnprocessedMessages() const override;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted();
+      void notifyMessagePosted() override;
 
       // IMessageQueueThread
-      virtual void waitForShutdown();
+      void waitForShutdown() override;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority);
+      void setThreadPriority(ThreadPriorities threadPriority) override;
 
-      virtual void processMessagesFromThread();
+      void processMessagesFromThread() override;
 
     protected:
       ThreadPtr mThread;

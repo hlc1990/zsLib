@@ -137,6 +137,23 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
+  Exception::Exception(const Exception &op2) :
+    mSubsystem(op2.mSubsystem),
+    mMessage(op2.mMessage),
+    mFunction(op2.mFunction),
+    mFilePath(op2.mFilePath),
+    mLineNumber(op2.mLineNumber),
+    mParams(op2.mParams)
+  {
+  }
+
+  //---------------------------------------------------------------------------
+  const char *Exception::what() const throw()
+  {
+    return mMessage.c_str();
+  }
+
+  //---------------------------------------------------------------------------
   Log::Params Exception::params() const
   {
     return mParams;

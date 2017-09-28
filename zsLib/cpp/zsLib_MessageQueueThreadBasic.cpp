@@ -60,6 +60,11 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    MessageQueueThreadBasic::~MessageQueueThreadBasic()
+    {
+    }
+
+    //-------------------------------------------------------------------------
     void MessageQueueThreadBasic::operator()()
     {
       bool shouldShutdown = false;

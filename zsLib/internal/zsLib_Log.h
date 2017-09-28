@@ -88,6 +88,11 @@ namespace zsLib
 
       struct EventingWriter
       {
+        EventingWriter();
+        EventingWriter(const EventingWriter &op2) = delete;
+
+        ~EventingWriter();
+
         volatile InternalKeywordBitmaskType mKeywordsBitmask {0};
         volatile uint32_t mInitValue {ZSLIB_INTERNAL_LOG_EVENT_WRITER_INIT_VALUE};
         UUID mProviderID {};
@@ -96,14 +101,13 @@ namespace zsLib
         zsLib::Log *mLog{};
         InternalAtomData mAtomInfo[ZSLIB_LOG_PROVIDER_ATOM_MAXIMUM]{};
         ObjectIDBitmaskMap mEnabledObjects;
+
+        EventingWriter &operator=(const EventingWriter &op2) = delete;
       };
 
     public:
-      Log(const make_private &) :
-        mOutputListeners(make_shared<OutputListenerList>()),
-        mEventingListeners(make_shared<EventingListenerList>()),
-        mEventingProviderListeners(make_shared<EventingProviderListenerList>())
-        {}
+      Log(const make_private &);
+      ~Log();
 
       static void initSingleton();
 

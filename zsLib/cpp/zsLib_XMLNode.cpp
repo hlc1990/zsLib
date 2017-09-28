@@ -70,6 +70,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      Node::~Node()
+      {
+      }
+      
+      //-----------------------------------------------------------------------
       void Node::cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const
       {
         ZS_THROW_INVALID_USAGE_IF(inSelf.get() != this)
@@ -932,6 +937,95 @@ namespace zsLib
     void Node::setUserData(void *inData)
     {
       mUserData = inData;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isDocument() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isElement() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isAttribute() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isText() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isComment() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isDeclaration() const
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Node::isUnknown() const{
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Node::toNode() const
+    {
+      return NodePtr();
+    }
+
+    //-------------------------------------------------------------------------
+    DocumentPtr Node::toDocument() const
+    {
+      return DocumentPtr();
+    }
+
+    //-------------------------------------------------------------------------
+    ElementPtr Node::toElement() const
+    {
+      return ElementPtr();
+    }
+
+    //-------------------------------------------------------------------------
+    AttributePtr Node::toAttribute() const
+    {
+      return AttributePtr();
+    }
+
+    //-------------------------------------------------------------------------
+    TextPtr Node::toText() const
+    {
+      return TextPtr();
+    }
+
+    //-------------------------------------------------------------------------
+    CommentPtr Node::toComment() const
+    {
+      return CommentPtr();
+    }
+
+    //-------------------------------------------------------------------------
+    DeclarationPtr Node::toDeclaration() const
+    {
+      return DeclarationPtr();
+    }
+
+    //-------------------------------------------------------------------------
+    UnknownPtr Node::toUnknown() const
+    {
+      return UnknownPtr();
     }
 
     //-------------------------------------------------------------------------

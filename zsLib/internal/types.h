@@ -78,12 +78,10 @@
 
 #include <memory>
 
-#define ZS_INTERNAL_SMART_POINTER_NAMESPACE std
-
 #define ZS_INTERNAL_DECLARE_PTR(xExistingType)                                                      \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xExistingType> xExistingType##Ptr;        \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xExistingType> xExistingType##WeakPtr;      \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::unique_ptr<xExistingType> xExistingType##UniPtr;
+  typedef std::shared_ptr<xExistingType> xExistingType##Ptr;                                        \
+  typedef std::weak_ptr<xExistingType> xExistingType##WeakPtr;                                      \
+  typedef std::unique_ptr<xExistingType> xExistingType##UniPtr;
 
 #define ZS_INTERNAL_DECLARE_USING_PTR(xNamespace, xExistingType)                                    \
   using xNamespace::xExistingType;                                                                  \
@@ -93,24 +91,24 @@
 
 #define ZS_INTERNAL_DECLARE_CLASS_PTR(xClassName)                                                   \
   class xClassName;                                                                                 \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xClassName> xClassName##Ptr;              \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xClassName> xClassName##WeakPtr;            \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::unique_ptr<xClassName> xClassName##UniPtr;
+  typedef std::shared_ptr<xClassName> xClassName##Ptr;                                              \
+  typedef std::weak_ptr<xClassName> xClassName##WeakPtr;                                            \
+  typedef std::unique_ptr<xClassName> xClassName##UniPtr;
 
 #define ZS_INTERNAL_DECLARE_STRUCT_PTR(xStructName)                                                 \
   struct xStructName;                                                                               \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xStructName> xStructName##Ptr;            \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xStructName> xStructName##WeakPtr;          \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::unique_ptr<xStructName> xStructName##UniPtr;
+  typedef std::shared_ptr<xStructName> xStructName##Ptr;                                            \
+  typedef std::weak_ptr<xStructName> xStructName##WeakPtr;                                          \
+  typedef std::unique_ptr<xStructName> xStructName##UniPtr;
 
 #define ZS_INTERNAL_DECLARE_TYPEDEF_PTR(xOriginalType, xNewTypeName)                                \
   typedef xOriginalType xNewTypeName;                                                               \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xNewTypeName> xNewTypeName##Ptr;          \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xNewTypeName> xNewTypeName##WeakPtr;        \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::unique_ptr<xNewTypeName> xNewTypeName##UniPtr;
+  typedef std::shared_ptr<xNewTypeName> xNewTypeName##Ptr;                                          \
+  typedef std::weak_ptr<xNewTypeName> xNewTypeName##WeakPtr;                                        \
+  typedef std::unique_ptr<xNewTypeName> xNewTypeName##UniPtr;
 
 #define ZS_INTERNAL_DYNAMIC_PTR_CAST(xType, xObject)                                                \
-  ZS_INTERNAL_SMART_POINTER_NAMESPACE::dynamic_pointer_cast<xType>(xObject)
+  std::dynamic_pointer_cast<xType>(xObject)
 
 #ifdef _WIN32
 namespace std

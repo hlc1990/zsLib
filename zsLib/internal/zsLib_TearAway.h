@@ -76,16 +76,16 @@ namespace zsLib
   }
 }
 
-#define ZS_INTERNAL_DECLARE_INTERACTION_TEAR_AWAY(xInteractionName, xDataType)                      \
+#define ZS_INTERNAL_DECLARE_INTERACTION_TEAR_AWAY(xInteractionName, xDataType)                                \
   interaction xInteractionName;                                                                               \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xInteractionName> xInteractionName##Ptr;            \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xInteractionName> xInteractionName##WeakPtr;          \
+  typedef std::shared_ptr<xInteractionName> xInteractionName##Ptr;                                            \
+  typedef std::weak_ptr<xInteractionName> xInteractionName##WeakPtr;                                          \
   typedef zsLib::TearAway<xInteractionName, xDataType> xInteractionName##TearAway;
 
 #define ZS_INTERNAL_DECLARE_TYPEDEF_TEAR_AWAY(xOriginalType, xNewTypeName, xDataType)                         \
   typedef xOriginalType xNewTypeName;                                                                         \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::shared_ptr<xNewTypeName> xNewTypeName##Ptr;                    \
-  typedef ZS_INTERNAL_SMART_POINTER_NAMESPACE::weak_ptr<xNewTypeName> xNewTypeName##WeakPtr;                  \
+  typedef std::shared_ptr<xNewTypeName> xNewTypeName##Ptr;                                                    \
+  typedef std::weak_ptr<xNewTypeName> xNewTypeName##WeakPtr;                                                  \
   typedef zsLib::TearAway<xNewTypeName, xDataType> xNewTypeName##TearAway;
 
 #define ZS_INTERNAL_DECLARE_USING_TEAR_AWAY(xNamespace, xExistingType)                                        \

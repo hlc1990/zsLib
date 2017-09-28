@@ -59,6 +59,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
+      Attribute::~Attribute()
+      {
+      }
+
+      //-----------------------------------------------------------------------
       bool Attribute::parse(XML::ParserPos &ioPos)
       {
         Parser::AutoStack stack(ioPos);
@@ -378,6 +383,18 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    NodePtr Attribute::getFirstChild() const
+    {
+      return NodePtr();
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Attribute::getLastChild() const
+    {
+      return NodePtr();
+    }
+
+    //-------------------------------------------------------------------------
     NodePtr Attribute::getFirstSibling() const
     {
       NodePtr parent = getParent();
@@ -550,6 +567,17 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool Attribute::hasChildren()
+    {
+      return false;
+    }
+
+    //-------------------------------------------------------------------------
+    void Attribute::removeChildren()
+    {
+    }
+
+    //-------------------------------------------------------------------------
     NodePtr Attribute::clone() const
     {
       return cloneAssignParent(NodePtr());
@@ -573,6 +601,30 @@ namespace zsLib
     String Attribute::getValueDecoded() const
     {
       return Parser::convertFromEntities(mValue);
+    }
+
+    //-------------------------------------------------------------------------
+    Node::NodeType::Type Attribute::getNodeType()
+    {
+      return NodeType::Attribute;
+    }
+
+    //-------------------------------------------------------------------------
+    bool Attribute::isAttribute() const
+    {
+      return true;
+    }
+
+    //-------------------------------------------------------------------------
+    NodePtr Attribute::toNode() const
+    {
+      return mThis.lock();
+    }
+
+    //-------------------------------------------------------------------------
+    AttributePtr Attribute::toAttribute() const
+    {
+      return mThis.lock();
     }
 
   } // namespace XML

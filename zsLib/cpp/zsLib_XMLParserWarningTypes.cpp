@@ -143,6 +143,11 @@ namespace zsLib
         mStack.push_back(info);
       }
     }
+    
+    //-------------------------------------------------------------------------
+    ParserWarning::~ParserWarning()
+    {
+    }
 
     //-------------------------------------------------------------------------
     String ParserWarning::getAsString(bool inIncludeEntireStack) const

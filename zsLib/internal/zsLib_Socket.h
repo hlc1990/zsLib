@@ -122,16 +122,12 @@ namespace zsLib
     class Socket
     {
     protected:
-      Socket() :
-        mMonitorReadReady(true),
-        mMonitorWriteReady(true),
-        mMonitorException(true)
-      {}
+      Socket();
 
       Socket(const Socket &) = delete;
 
     public:
-      ~Socket() {}
+      ~Socket();
 
       void notifyReadReady();
       void notifyWriteReady();
