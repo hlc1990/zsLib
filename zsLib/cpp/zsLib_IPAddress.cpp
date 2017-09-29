@@ -48,8 +48,10 @@
 #pragma comment(lib, "ws2_32.lib")
 #endif //HAVE_IPHLPAPI_H
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 
 namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
@@ -1310,4 +1312,6 @@ namespace zsLib
 
 } // namespace zsLib
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32

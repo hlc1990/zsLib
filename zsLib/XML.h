@@ -731,6 +731,7 @@ namespace zsLib
       ParserWarningTypes mWarningType;
       ParserStack mStack;
 
+      ParserWarning(const ParserWarning &source);
       ~ParserWarning();
 
       String getAsString(bool inIncludeEntireStack = true) const;

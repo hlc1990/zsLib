@@ -92,9 +92,15 @@ namespace zsLib
 
 #include <zsLib/internal/zsLib_TearAway.h>
 
+#if 0
+#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION 1
+#endif //0
+
 #define ZS_DECLARE_INTERACTION_TEAR_AWAY(xInteractionName, xDataType)                                                                                         ZS_INTERNAL_DECLARE_INTERACTION_TEAR_AWAY(xInteractionName, xDataType)
 #define ZS_DECLARE_TYPEDEF_TEAR_AWAY(xOriginalType, xNewTypeName, xDataType)                                                                                  ZS_INTERNAL_DECLARE_TYPEDEF_TEAR_AWAY(xOriginalType, xNewTypeName, xDataType)
 #define ZS_DECLARE_USING_TEAR_AWAY(xNamespace, xExistingType)                                                                                                 ZS_INTERNAL_DECLARE_USING_TEAR_AWAY(xNamespace, xExistingType)
+
+#define ZS_DECLARE_TEAR_AWAY_IMPLEMENT(xInterface, xDataType)                                                                                                 ZS_INTERNAL_DECLARE_TEAR_AWAY_IMPLEMENT(xInterface, xDataType)
 
 #define ZS_DECLARE_TEAR_AWAY_BEGIN(xInterface, xDataType)                                                                                                     ZS_INTERNAL_DECLARE_TEAR_AWAY_BEGIN(xInterface, xDataType)
 #define ZS_DECLARE_TEAR_AWAY_END()                                                                                                                            ZS_INTERNAL_DECLARE_TEAR_AWAY_END()

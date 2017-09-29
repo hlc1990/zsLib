@@ -52,8 +52,10 @@
 #include <objbase.h>
 #endif //_WIN32
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 #if 0
 char *strptime(const char *buf, const char *fmt, struct tm *tm);
@@ -269,10 +271,10 @@ namespace zsLib
   template void Numeric<LONGLONG>::get(LONGLONG &) const throw (ValueOutOfRange);
   template void Numeric<ULONGLONG>::get(ULONGLONG &) const throw (ValueOutOfRange);
 #ifndef _WIN32
-  template void Numeric<bool>::get(bool &) const throw (ValueOutOfRange);
-  template void Numeric<float>::get(float &) const throw (ValueOutOfRange);
-  template void Numeric<double>::get(double &) const throw (ValueOutOfRange);
-  template void Numeric<UUID>::get(UUID &) const throw (ValueOutOfRange);
+//  template void Numeric<bool>::get(bool &) const throw (ValueOutOfRange);
+//  template void Numeric<float>::get(float &) const throw (ValueOutOfRange);
+//  template void Numeric<double>::get(double &) const throw (ValueOutOfRange);
+//  template void Numeric<UUID>::get(UUID &) const throw (ValueOutOfRange);
 #endif //_WIN32
 
   namespace internal
@@ -616,4 +618,6 @@ namespace zsLib
   }
 }
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32

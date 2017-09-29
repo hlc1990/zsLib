@@ -81,7 +81,7 @@ namespace zsLib
         public:
           Walker(size_t &outResult, const GeneratorPtr &generator) : mGenerator(generator), mResult(outResult) {}
 
-          virtual bool onElementEnter(ElementPtr inNode)
+          bool onElementEnter(ElementPtr inNode) override
           {
             mResult += strlen("<");
             if (inNode->getValue().isEmpty()) {
@@ -125,10 +125,10 @@ namespace zsLib
             return false;
           }
 
-          virtual bool onText(TextPtr inNode)                      {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          virtual bool onComment(CommentPtr inNode)                {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          virtual bool onDeclarationEnter(DeclarationPtr inNode)   {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          virtual bool onUnknown(UnknownPtr inNode)                {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onText(TextPtr inNode) override                     {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onComment(CommentPtr inNode) override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onDeclarationEnter(DeclarationPtr inNode) override  {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onUnknown(UnknownPtr inNode) override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
 
         private:
           const GeneratorPtr &mGenerator;
@@ -161,7 +161,7 @@ namespace zsLib
             mPos(pos)
           {}
 
-          virtual bool onElementEnter(ElementPtr inNode)
+          bool onElementEnter(ElementPtr inNode) override
           {
             Generator::writeBuffer(mPos, "<");
             if (inNode->getValue().isEmpty()) {
@@ -192,7 +192,7 @@ namespace zsLib
             return false;
           }
 
-          virtual bool onElementExit(ElementPtr inNode)
+          bool onElementExit(ElementPtr inNode) override
           {
             bool forceEndTag = (0 != (XML::Generator::XMLWriteFlag_ForceElementEndTag & (mGenerator->getXMLWriteFlags())));
 
@@ -210,10 +210,10 @@ namespace zsLib
             return false;
           }
 
-          virtual bool onText(TextPtr inNode)                      {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          virtual bool onComment(CommentPtr inNode)                {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          virtual bool onDeclarationEnter(DeclarationPtr inNode)   {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          virtual bool onUnknown(UnknownPtr inNode)                {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onText(TextPtr inNode) override                     {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onComment(CommentPtr inNode) override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onDeclarationEnter(DeclarationPtr inNode) override  {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onUnknown(UnknownPtr inNode) override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
 
         private:
           const GeneratorPtr &mGenerator;
@@ -254,7 +254,7 @@ namespace zsLib
           mStrs(generator->jsonStrs())
           {}
 
-          virtual bool onElementEnter(ElementPtr el)
+          bool onElementEnter(ElementPtr el) override
           {
             Generator::GeneratorJSONElementModes mode = Generator::GeneratorJSONElementMode_ObjectType;
             Generator::GeneratorJSONELementChildStates childState = Generator::GeneratorJSONELementChildState_None;
@@ -411,7 +411,7 @@ namespace zsLib
             return false;
           }
 
-          virtual bool onElementExit(ElementPtr el)
+          bool onElementExit(ElementPtr el) override
           {
             Generator::GeneratorJSONElementModes mode = Generator::GeneratorJSONElementMode_ObjectType;
             Generator::GeneratorJSONELementChildStates childState = Generator::GeneratorJSONELementChildState_None;
@@ -950,7 +950,7 @@ namespace zsLib
         {
         public:
           TextWalker(String &outResult) : mResult(outResult) {}
-          virtual bool onText(TextPtr inNode)
+          bool onText(TextPtr inNode) override
           {
             mResult += inNode->getValue();
             return false;
@@ -1001,7 +1001,7 @@ namespace zsLib
         {
         public:
           TextWalker(String &outResult) : mResult(outResult) {}
-          virtual bool onText(TextPtr inNode)
+          bool onText(TextPtr inNode) override
           {
             mResult += inNode->getValueDecoded();
             return false;

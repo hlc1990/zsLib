@@ -36,8 +36,10 @@
 
 #include <zsLib/Log.h>
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 #define ZSLIB_SETTINGS_ROOT_JSON_IS_NESTED_NODE "root"
 
@@ -87,7 +89,7 @@ namespace zsLib
       Settings(const make_private &);
 
     public:
-      ~Settings();
+      ~Settings() override;
 
     protected:
       static SettingsPtr convert(ISettingsPtr setttings);
@@ -180,4 +182,6 @@ namespace zsLib
   } // namespace internal
 } // namespace zsLib
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32

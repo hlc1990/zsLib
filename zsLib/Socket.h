@@ -33,8 +33,10 @@
 
 #include <zsLib/internal/zsLib_Socket.h>
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable: 4290)
+#endif // _WIN32
 
 namespace zsLib
 {
@@ -308,7 +310,7 @@ namespace zsLib
 
     virtual void shutdown(Shutdown::Options inOptions = Shutdown::Both) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified);
 
-    virtual void setBlocking(bool enabled) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified) {setOptionFlag(SetOptionFlag::NonBlocking, !enabled);}
+    virtual void setBlocking(bool enabled) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified);
 
     virtual void setOptionFlag(SetOptionFlag::Options inOption, bool inEnabled) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
     virtual void setOptionValue(SetOptionValue::Options inOption, ULONG inValue) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
@@ -335,7 +337,9 @@ namespace zsLib
   };
 }
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32
 
 ZS_DECLARE_PROXY_BEGIN(zsLib::ISocketDelegate)
 ZS_DECLARE_PROXY_TYPEDEF(zsLib::SocketPtr, SocketPtr)

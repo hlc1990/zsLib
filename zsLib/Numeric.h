@@ -33,8 +33,10 @@
 
 #include <zsLib/internal/zsLib_Numeric.h>
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 namespace zsLib
 {
@@ -70,6 +72,8 @@ namespace zsLib
   };
 }
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32
 
 #include <zsLib/internal/zsLib_Numeric.h>

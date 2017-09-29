@@ -145,6 +145,13 @@ namespace zsLib
     }
     
     //-------------------------------------------------------------------------
+    ParserWarning::ParserWarning(const ParserWarning &source) :
+      mWarningType(source.mWarningType),
+      mStack(source.mStack)
+    {
+    }
+
+    //-------------------------------------------------------------------------
     ParserWarning::~ParserWarning()
     {
     }

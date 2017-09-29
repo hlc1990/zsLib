@@ -131,6 +131,686 @@ namespace zsLib
   using xNamespace::xExistingType##WeakPtr;                                                                   \
   using xNamespace::xExistingType##Proxy;
 
+
+#define ZS_INTERNAL_DECLARE_PROXY_TYPEDEF(xOriginalType, xTypeAlias)                                          \
+    typedef xOriginalType xTypeAlias;
+
+#define ZS_INTERNAL_DECLARE_PROXY_IMPLEMENT(xInterface)                                                       \
+  namespace zsLib                                                                                             \
+  {                                                                                                           \
+    void declareProxyInterface(const xInterface &)                                                            \
+    {                                                                                                         \
+      typedef std::shared_ptr<xInterface> DelegatePtr;                                                        \
+      zsLib::Proxy<xInterface>::create(DelegatePtr());                                                        \
+      zsLib::Proxy<xInterface>::create(zsLib::IMessageQueuePtr(), DelegatePtr());                             \
+      zsLib::Proxy<xInterface>::createUsingQueue(zsLib::IMessageQueuePtr(), DelegatePtr());                   \
+      zsLib::Proxy<xInterface>::createWeak(DelegatePtr());                                                    \
+      zsLib::Proxy<xInterface>::createWeak(zsLib::IMessageQueuePtr(), DelegatePtr());                         \
+      zsLib::Proxy<xInterface>::createWeakUsingQueue(zsLib::IMessageQueuePtr(), DelegatePtr());               \
+      zsLib::Proxy<xInterface>::createNoop(zsLib::IMessageQueuePtr());                                        \
+      zsLib::Proxy<xInterface>::isProxy(DelegatePtr());                                                       \
+      zsLib::Proxy<xInterface>::original(DelegatePtr());                                                      \
+      zsLib::Proxy<xInterface>::getAssociatedMessageQueue(DelegatePtr());                                     \
+      zsLib::Proxy<xInterface>::throwMissingMessageQueue();                                                   \
+    }                                                                                                         \
+  }
+
+#ifndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
+#define ZS_INTERNAL_DECLARE_PROXY_BEGIN(xInterface, xDelegateMustHaveQueue)                                   \
+namespace zsLib                                                                                               \
+{                                                                                                             \
+  template<>                                                                                                  \
+  class Proxy<xInterface> : public internal::Proxy<xInterface, xDelegateMustHaveQueue>                        \
+  {                                                                                                           \
+  public:                                                                                                     \
+    struct Exceptions                                                                                         \
+    {                                                                                                         \
+      ZS_DECLARE_CUSTOM_EXCEPTION_ALT_BASE(DelegateGone, ProxyBase::Exceptions::DelegateGone)                 \
+      ZS_DECLARE_CUSTOM_EXCEPTION_ALT_BASE(MissingDelegateMessageQueue, ProxyBase::Exceptions::MissingDelegateMessageQueue) \
+    };                                                                                                        \
+    ZS_DECLARE_TYPEDEF_PTR(xInterface, Delegate)                                                              \
+    ZS_DECLARE_TYPEDEF_PTR(Proxy<xInterface>, ProxyType)                                                      \
+                                                                                                              \
+  public:                                                                                                     \
+    Proxy(IMessageQueuePtr queue, DelegatePtr delegate, int line, const char *fileName);                      \
+    Proxy(IMessageQueuePtr queue, DelegateWeakPtr delegate, int line, const char *fileName);                  \
+    Proxy(IMessageQueuePtr queue, bool throwsDelegateGone, int line, const char *fileName);                   \
+                                                                                                              \
+  public:                                                                                                     \
+    static DelegatePtr create(DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr create(IMessageQueuePtr queue, DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr createUsingQueue(IMessageQueuePtr queue, DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr createWeak(DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr createWeak(IMessageQueuePtr queue, DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr createWeakUsingQueue(IMessageQueuePtr queue, DelegatePtr delegate, bool throwDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static DelegatePtr createNoop(IMessageQueuePtr queue, bool throwsDelegateGone = false, bool overrideDelegateMustHaveQueue = true, int line = __LINE__, const char *fileName = __FILE__); \
+                                                                                                              \
+    static bool isProxy(DelegatePtr delegate);                                                                \
+                                                                                                              \
+    static DelegatePtr original(DelegatePtr delegate, bool throwDelegateGone = false);                        \
+                                                                                                              \
+    static IMessageQueuePtr getAssociatedMessageQueue(DelegatePtr delegate);                                  \
+                                                                                                              \
+    void throwDelegateGone() const override;                                                                  \
+                                                                                                              \
+    static void throwMissingMessageQueue();                                                                   \
+
+#define ZS_INTERNAL_DECLARE_PROXY_END()                                                                       \
+  };                                                                                                          \
+}
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xConst, xMethod)                                              \
+    void xMethod() xConst override;                                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_1(xConst, xMethod,t1)                                           \
+    void xMethod(t1 v1) xConst override;                                                                      \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_2(xConst, xMethod,t1,t2)                                        \
+    void xMethod(t1 v1, t2 v2) xConst override;                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_3(xConst, xMethod,t1,t2,t3)                                     \
+    void xMethod(t1 v1,t2 v2,t3 v3) xConst override;                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_4(xConst, xMethod,t1,t2,t3,t4)                                  \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override;                                                    \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_5(xConst, xMethod,t1,t2,t3,t4,t5)                               \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override;                                              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_6(xConst, xMethod,t1,t2,t3,t4,t5,t6)                            \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override;                                        \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_7(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7)                         \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override;                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_8(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                      \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override;                            \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_9(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                   \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override;                      \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_10(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)              \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override;              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_11(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)              \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_12(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override;            \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_13(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                                      \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override;                                                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_14(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                                  \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override;                                                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_15(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                              \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override;                                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_16(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                          \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override;                                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_17(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                      \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override;                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_18(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                  \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override;                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_19(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                              \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override;                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_20(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                          \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override;                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_21(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                      \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override;                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_22(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                  \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override;                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_23(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                              \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_24(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                  \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_25(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                      \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override;          \
+
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_0(xConst, xMethod,r1)                                  \
+    r1 xMethod() xConst override;                                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_1(xConst, xMethod,r1,t1)                               \
+    r1 xMethod(t1 v1) xConst override;                                                                      \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_2(xConst, xMethod,r1,t1,t2)                            \
+    r1 xMethod(t1 v1, t2 v2) xConst override;                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_3(xConst, xMethod,r1,t1,t2,t3)                         \
+    r1 xMethod(t1 v1,t2 v2,t3 v3) xConst override;                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_4(xConst, xMethod,r1,t1,t2,t3,t4)                      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override;                                                    \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_5(xConst, xMethod,r1,t1,t2,t3,t4,t5)                   \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override;                                              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_6(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6)                \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override;                                        \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_7(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7)             \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override;                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_8(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8)          \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override;                            \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_9(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9)       \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override;                      \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_10(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)  \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override;              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_11(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override;              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_12(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_13(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                          \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override;                                                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_14(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override;                                                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_15(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                  \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override;                                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_16(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                              \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override;                                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_17(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                          \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override;                                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_18(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override;                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_19(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                  \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override;                                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_20(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                              \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override;                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_21(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                          \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override;                          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_22(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override;                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_23(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                  \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_24(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                      \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_25(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                          \
+    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override;          \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_0(xMethod)                                                                                                 \
+    class Stub_0_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+    public:                                                                                                                                         \
+      Stub_0_##xMethod(DelegatePtr delegate);                                                                                                       \
+      ~Stub_0_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod() override;                                                                                                                        \
+
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_1(xMethod,t1)                                                                                              \
+    class Stub_1_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1;                                                                                                                                        \
+    public:                                                                                                                                         \
+      Stub_1_##xMethod(DelegatePtr delegate,t1 v1);                                                                                                 \
+      ~Stub_1_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1) override;                                                                                                                   \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_2(xMethod,t1,t2)                                                                                           \
+    class Stub_2_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2;                                                                                                                                 \
+    public:                                                                                                                                         \
+      Stub_2_##xMethod(DelegatePtr delegate,t1 v1,t2 v2);                                                                                           \
+      ~Stub_2_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2) override;                                                                                                             \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_3(xMethod,t1,t2,t3)                                                                                        \
+    class Stub_3_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3;                                                                                                                          \
+    public:                                                                                                                                         \
+      Stub_3_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3);                                                                                     \
+      ~Stub_3_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3) override;                                                                                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_4(xMethod,t1,t2,t3,t4)                                                                                     \
+    class Stub_4_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4;                                                                                                                   \
+    public:                                                                                                                                         \
+      Stub_4_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4);                                                                               \
+      ~Stub_4_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4) override;                                                                                                 \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_5(xMethod,t1,t2,t3,t4,t5)                                                                                  \
+    class Stub_5_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5;                                                                                                            \
+    public:                                                                                                                                         \
+      Stub_5_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5);                                                                         \
+      ~Stub_5_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) override;                                                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_6(xMethod,t1,t2,t3,t4,t5,t6)                                                                               \
+    class Stub_6_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6;                                                                                                     \
+    public:                                                                                                                                         \
+      Stub_6_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6);                                                                   \
+      ~Stub_6_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) override;                                                                                     \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_7(xMethod,t1,t2,t3,t4,t5,t6,t7)                                                                            \
+    class Stub_7_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7;                                                                                              \
+    public:                                                                                                                                         \
+      Stub_7_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7);                                                             \
+      ~Stub_7_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) override;                                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_8(xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                                                                         \
+    class Stub_8_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8;                                                                                       \
+    public:                                                                                                                                         \
+      Stub_8_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8);                                                       \
+      ~Stub_8_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) override;                                                                         \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_9(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                                                                      \
+    class Stub_9_##xMethod : public IMessageQueueMessage                                                                                            \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9;                                                                                \
+    public:                                                                                                                                         \
+      Stub_9_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9);                                                 \
+      ~Stub_9_##xMethod() override;                                                                                                                 \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) override;                                                                   \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_10(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)                                                                 \
+    class Stub_10_##xMethod : public IMessageQueueMessage                                                                                           \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10;                                                                       \
+    public:                                                                                                                                         \
+      Stub_10_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10);                                        \
+      ~Stub_10_##xMethod() override;                                                                                                                \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) override;                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_11(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)                                                             \
+    class Stub_11_##xMethod : public IMessageQueueMessage                                                                                           \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11;                                                              \
+    public:                                                                                                                                         \
+      Stub_11_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11);                                \
+      ~Stub_11_##xMethod() override;                                                                                                                \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) override;                                                   \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_12(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                                                         \
+    class Stub_12_##xMethod : public IMessageQueueMessage                                                                                           \
+    {                                                                                                                                               \
+    private:                                                                                                                                        \
+      DelegatePtr mDelegate;                                                                                                                        \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12;                                                     \
+    public:                                                                                                                                         \
+      Stub_12_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12);                        \
+      ~Stub_12_##xMethod() override;                                                                                                                \
+                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                 \
+      const char *getMethodName() const override;                                                                                                   \
+      void processMessage() override;                                                                                                               \
+    };                                                                                                                                              \
+                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) override;                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_13(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                                                 \
+    class Stub_13_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13;                                                                                                        \
+    public:                                                                                                                                                                                                     \
+      Stub_13_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13);                                                                            \
+      ~Stub_13_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) override;                                                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_14(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                                             \
+    class Stub_14_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14;                                                                                               \
+    public:                                                                                                                                                                                                     \
+      Stub_14_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14);                                                                    \
+      ~Stub_14_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) override;                                                                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_15(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                                         \
+    class Stub_15_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15;                                                                                      \
+    public:                                                                                                                                                                                                     \
+      Stub_15_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15);                                                            \
+      ~Stub_15_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) override;                                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_16(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                                     \
+    class Stub_16_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16;                                                                             \
+    public:                                                                                                                                                                                                     \
+      Stub_16_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16);                                                    \
+      ~Stub_16_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) override;                                                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_17(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                                 \
+    class Stub_17_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17;                                                                    \
+    public:                                                                                                                                                                                                     \
+      Stub_17_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17);                                            \
+      ~Stub_17_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) override;                                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_18(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                             \
+    class Stub_18_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18;                                                           \
+    public:                                                                                                                                                                                                     \
+      Stub_18_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18);                                    \
+      ~Stub_18_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) override;                                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_19(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                                         \
+    class Stub_19_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19;                                                  \
+    public:                                                                                                                                                                                                     \
+      Stub_19_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19);                            \
+      ~Stub_19_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) override;                                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_20(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                                     \
+    class Stub_20_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20;                                         \
+    public:                                                                                                                                                                                                     \
+      Stub_20_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20);                    \
+      ~Stub_20_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) override;                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_21(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                                 \
+    class Stub_21_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20; t21 m21;                                \
+    public:                                                                                                                                                                                                     \
+      Stub_21_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21);            \
+      ~Stub_21_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) override;                               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_22(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                             \
+    class Stub_22_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20; t21 m21; t22 m22;                       \
+    public:                                                                                                                                                                                                     \
+      Stub_22_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22);    \
+      ~Stub_22_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) override;                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_23(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                                         \
+    class Stub_23_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20; t21 m21; t22 m22; t23 m23;              \
+    public:                                                                                                                                                                                                     \
+      Stub_23_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23); \
+      ~Stub_23_##xMethod() override;                                                                                                                                                                            \
+                                                                                                                                                                                                                \
+      const char *getDelegateName() const override;                                                                                                                                                             \
+      const char *getMethodName() const override;                                                                                                                                                               \
+      void processMessage() override;                                                                                                                                                                           \
+    };                                                                                                                                                                                                          \
+                                                                                                                                                                                                                \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) override;               \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_24(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                     \
+    class Stub_24_##xMethod : public IMessageQueueMessage                                                                                                                                                       \
+    {                                                                                                                                                                                                           \
+    private:                                                                                                                                                                                                    \
+      DelegatePtr mDelegate;                                                                                                                                                                                    \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20; t21 m21; t22 m22; t23 m23; t24 m24;     \
+    public:                                                                                                                                                                                                     \
+      Stub_24_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24); \
+      ~Stub_24_##xMethod() override;                                                                                                                                                                                \
+                                                                                                                                                                                                                    \
+      const char *getDelegateName() const override;                                                                                                                                                                 \
+      const char *getMethodName() const override;                                                                                                                                                                   \
+      void processMessage() override;                                                                                                                                                                               \
+    };                                                                                                                                                                                                              \
+                                                                                                                                                                                                                    \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) override;           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_25(xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                             \
+    class Stub_25_##xMethod : public IMessageQueueMessage                                                                                                                                                                   \
+    {                                                                                                                                                                                                                       \
+    private:                                                                                                                                                                                                                \
+      DelegatePtr mDelegate;                                                                                                                                                                                                \
+      t1 m1; t2 m2; t3 m3; t4 m4; t5 m5; t6 m6; t7 m7; t8 m8; t9 m9; t10 m10; t11 m11; t12 m12; t13 m13; t14 m14; t15 m15; t16 m16; t17 m17; t18 m18; t19 m19; t20 m20; t21 m21; t22 m22; t23 m23; t24 m24; t25 m25;        \
+    public:                                                                                                                                                                                                                 \
+      Stub_25_##xMethod(DelegatePtr delegate,t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25); \
+      ~Stub_25_##xMethod() override;                                                                                                                                                                                        \
+                                                                                                                                                                                                                            \
+      const char *getDelegateName() const override;                                                                                                                                                                         \
+      const char *getMethodName() const override;                                                                                                                                                                           \
+      void processMessage() override;                                                                                                                                                                                       \
+    };                                                                                                                                                                                                                      \
+                                                                                                                                                                                                                            \
+    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) override;           \
+
+
+
+#else //ndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
+
+
 #define ZS_INTERNAL_DECLARE_PROXY_BEGIN(xInterface, xDelegateMustHaveQueue)                                   \
 namespace zsLib                                                                                               \
 {                                                                                                             \
@@ -389,10 +1069,6 @@ namespace zsLib                                                                 
 #define ZS_INTERNAL_DECLARE_PROXY_END()                                                                       \
   };                                                                                                          \
 }
-
-#define ZS_INTERNAL_DECLARE_PROXY_TYPEDEF(xOriginalType, xTypeAlias)                                          \
-    typedef xOriginalType xTypeAlias;
-
 
 #define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xConst, xMethod)                                              \
     void xMethod() xConst override {                                                                          \
@@ -681,7 +1357,6 @@ namespace zsLib                                                                 
       return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25);                                                                                                \
     }
 
-
 #define ZS_INTERNAL_DECLARE_PROXY_METHOD_0(xMethod)                                                                                                 \
     class Stub_0_##xMethod : public IMessageQueueMessage                                                                                            \
     {                                                                                                                                               \
@@ -744,7 +1419,7 @@ namespace zsLib                                                                 
         internal::ProxyPack<t1>(m1, v1);                                                                                                            \
         internal::ProxyPack<t2>(m2, v2);                                                                                                            \
       }                                                                                                                                             \
-      ~Stub_2_##xMethod() override  {                                                                                                               \
+      ~Stub_2_##xMethod() override {                                                                                                                \
         internal::ProxyClean<t1>(m1);                                                                                                               \
         internal::ProxyClean<t2>(m2);                                                                                                               \
       }                                                                                                                                             \
@@ -2005,5 +2680,6 @@ namespace zsLib                                                                 
       mQueue->post(std::move(stub));                                                                                                                                                                                        \
     }
 
+#endif //ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
 
 #endif //ZSLIB_INTERNAL_PROXY_H_a1792950ebd2df4b616a6b341965c42d

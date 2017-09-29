@@ -82,7 +82,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      virtual void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() override
       {
         ISettings::setString(ZSLIB_SETTING_TIMER_MONITOR_THREAD_PRIORITY, "normal");
       }

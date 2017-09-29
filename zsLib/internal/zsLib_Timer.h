@@ -71,9 +71,9 @@ namespace zsLib
                              Time timeout
                              );
 
-      virtual PUID getID() const override { return mID; }
+      PUID getID() const override;
 
-      virtual void cancel() override;      // cancel a timer (it is no longer needed)
+      void cancel() override;      // cancel a timer (it is no longer needed)
 
       void background(bool background = true) override;  // background the timer (will run until timer is cancelled even if reference to object is forgotten)
 

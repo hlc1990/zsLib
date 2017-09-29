@@ -91,7 +91,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      virtual void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() override
       {
         ISettings::setBool(ZSLIB_SETTING_MESSAGE_QUEUE_MANAGER_PROCESS_APPLICATION_MESSAGE_QUEUE_ON_QUIT, false);
       }
@@ -293,11 +293,9 @@ namespace zsLib
 
       ZS_LOG_DEBUG(log("updating message queue thread") + ZS_PARAM("name", name) + ZS_PARAM("priority", zsLib::toString(priority)))
 
-      ZS_DECLARE_TYPEDEF_PTR(zsLib::IMessageQueueThread, IMessageQueueThread)
-
       IMessageQueuePtr queue = (*found).second;
 
-      IMessageQueueThreadPtr thread = ZS_DYNAMIC_PTR_CAST(IMessageQueueThread, queue);
+      IMessageQueueThreadPtr thread = ZS_DYNAMIC_PTR_CAST(zsLib::IMessageQueueThread, queue);
       if (!thread) {
         ZS_LOG_WARNING(Detail, log("found thread was not recognized as a message queue thread") + ZS_PARAM("name", name))
         return;

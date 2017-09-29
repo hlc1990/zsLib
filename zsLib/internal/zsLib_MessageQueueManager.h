@@ -116,14 +116,14 @@ namespace zsLib
       #pragma mark MessageQueueManager => IWakeDelegate
       #pragma mark
 
-      virtual void onWake();
+      void onWake() override;
 
       //---------------------------------------------------------------------
       #pragma mark
       #pragma mark MessageQueueManager => ISingletonManagerDelegate
       #pragma mark
 
-      virtual void notifySingletonCleanup();
+      void notifySingletonCleanup() override;
 
     protected:
       //---------------------------------------------------------------------

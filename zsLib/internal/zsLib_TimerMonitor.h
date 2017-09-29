@@ -82,7 +82,7 @@ namespace zsLib
       #pragma mark TimerMonitor => ISingletonManagerDelegate
       #pragma mark
 
-      virtual void notifySingletonCleanup();
+      void notifySingletonCleanup() override;
 
     private:
       zsLib::Log::Params log(const char *message) const;

@@ -36,6 +36,8 @@
 #include <ratio>
 #include <stdexcept>
 
+#line 40 "/third_party/../../zsLib/date.h"
+
 namespace date
 {
 

@@ -45,7 +45,8 @@ namespace zsLib
   #pragma mark
 
   template<typename XFACTORYINTERFACE>
-  interaction IFactory : public XFACTORYINTERFACE
+  interaction IFactory : public XFACTORYINTERFACE,
+                         public zsLib::Any
   {
   public:
     ZS_DECLARE_TYPEDEF_PTR(XFACTORYINTERFACE, UseFactoryInterface);

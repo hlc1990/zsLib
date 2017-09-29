@@ -50,8 +50,10 @@
 #include <unistd.h>
 #endif //ndef _WIN32
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib_socket)}
 
@@ -1266,6 +1268,12 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
+  void Socket::setBlocking(bool enabled) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified)
+  {
+    setOptionFlag(SetOptionFlag::NonBlocking, !enabled);
+  }
+
+  //---------------------------------------------------------------------------
   void Socket::setOptionFlag(Socket::SetOptionFlag::Options inOption, bool inEnabled) const throw(
                                                                                                   Exceptions::InvalidSocket,
                                                                                                   Exceptions::UnsupportedSocketOption,
@@ -1497,4 +1505,6 @@ namespace zsLib
 
 } // namespace zsLib
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32

@@ -94,6 +94,25 @@ namespace zsLib
   using xNamespace::xExistingType##WeakPtr;                                                                   \
   using xNamespace::xExistingType##TearAway;
 
+
+
+#define ZS_INTERNAL_DECLARE_TEAR_AWAY_IMPLEMENT(xInterface, xDataType)                                        \
+  namespace zsLib                                                                                             \
+  {                                                                                                           \
+    void declareProxyInterface(const xInterface &)                                                            \
+    {                                                                                                         \
+      typedef std::shared_ptr<xInterface> TearAwayInterfacePtr;                                               \
+      zsLib::TearAway<xInterface, xDataType>::create(TearAwayInterfacePtr());                                 \
+      zsLib::TearAway<xInterface, xDataType>::isTearAway(TearAwayInterfacePtr());                             \
+      zsLib::TearAway<xInterface, xDataType>::original(TearAwayInterfacePtr());                               \
+      zsLib::TearAway<xInterface, xDataType>::data(TearAwayInterfacePtr());                                   \
+      zsLib::TearAway<xInterface, xDataType>::tearAway(TearAwayInterfacePtr());                               \
+    }                                                                                                         \
+  }
+
+
+#ifndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 #define ZS_INTERNAL_DECLARE_TEAR_AWAY_BEGIN(xInterface, xDataType)                                            \
 namespace zsLib                                                                                               \
 {                                                                                                             \
@@ -106,7 +125,42 @@ namespace zsLib                                                                 
     ZS_DECLARE_PTR(TearAwayType)                                                                              \
     ZS_DECLARE_TYPEDEF_PTR(xDataType, TearAwayData)                                                           \
                                                                                                               \
-  public:                                                                                                    \
+  public:                                                                                                     \
+    TearAway(TearAwayInterfacePtr original, TearAwayDataPtr data = TearAwayDataPtr());                        \
+                                                                                                              \
+  public:                                                                                                     \
+    static TearAwayInterfacePtr create(                                                                       \
+                                      TearAwayInterfacePtr original,                                          \
+                                      TearAwayDataPtr data = TearAwayDataPtr()                                \
+                                      );                                                                      \
+                                                                                                              \
+    static bool isTearAway(TearAwayInterfacePtr tearAway);                                                    \
+                                                                                                              \
+    static TearAwayInterfacePtr original(TearAwayInterfacePtr tearAway);                                      \
+                                                                                                              \
+    static TearAwayDataPtr data(TearAwayInterfacePtr tearAway);                                               \
+                                                                                                              \
+    static TearAwayTypePtr tearAway(TearAwayInterfacePtr tearAwayInterface);                                  \
+
+#define ZS_INTERNAL_DECLARE_TEAR_AWAY_END()                                                                   \
+  };                                                                                                          \
+}
+
+#else //ndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
+#define ZS_INTERNAL_DECLARE_TEAR_AWAY_BEGIN(xInterface, xDataType)                                            \
+namespace zsLib                                                                                               \
+{                                                                                                             \
+  template<>                                                                                                  \
+  class TearAway<xInterface, xDataType> : public internal::TearAway<xInterface, xDataType>                    \
+  {                                                                                                           \
+  public:                                                                                                     \
+    ZS_DECLARE_TYPEDEF_PTR(xInterface, TearAwayInterface)                                                     \
+    typedef TearAway<xInterface, xDataType> TearAwayType;                                                     \
+    ZS_DECLARE_PTR(TearAwayType)                                                                              \
+    ZS_DECLARE_TYPEDEF_PTR(xDataType, TearAwayData)                                                           \
+                                                                                                              \
+  public:                                                                                                     \
     TearAway(TearAwayInterfacePtr original, TearAwayDataPtr data = TearAwayDataPtr()) : internal::TearAway<xInterface, xDataType>(original, data) {} \
                                                                                                               \
   public:                                                                                                     \
@@ -162,6 +216,8 @@ namespace zsLib                                                                 
 #define ZS_INTERNAL_DECLARE_TEAR_AWAY_END()                                                                   \
   };                                                                                                          \
 }
+
+#endif //ndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
 
 #define ZS_INTERNAL_DECLARE_TEAR_AWAY_TYPEDEF(xOriginalType, xTypeAlias)                                      \
     typedef xOriginalType xTypeAlias;

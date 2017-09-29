@@ -135,7 +135,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      virtual void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() override
       {
         ISettings::setString(ZSLIB_SETTING_SOCKET_MONITOR_THREAD_PRIORITY, "normal");
       }
@@ -244,7 +244,7 @@ namespace zsLib
       #pragma mark
 
       //-----------------------------------------------------------------------
-      virtual void notifySingletonCleanup() override
+      void notifySingletonCleanup() override
       {
         cancel();
       }
@@ -433,7 +433,9 @@ namespace zsLib
         for (poll_size index = 0; index < mPollingCount; ++index) {
           mPollingSet[index].revents = 0; // reset events
         }
+#ifdef _WIN32
         outEvents = mPollingHandleSet;
+#endif // _WIN32
         return mPollingSet;
       }
 
@@ -458,7 +460,9 @@ namespace zsLib
 
       ZS_LOG_INSANE(log("preparing polling") + ZS_PARAM("count", mOfficialCount) + ZS_PARAM("allocated", mOfficialAllocationSize))
 
+#ifdef _WIN32
       outEvents = mPollingHandleSet;
+#endif // _WIN32
       return mPollingSet;
     }
 

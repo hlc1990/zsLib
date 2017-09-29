@@ -29,6 +29,8 @@
  
  */
 
+#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 #include <zsLib/zsLib.h>
 
 #ifndef ZSLIB_EVENTING_NOOP
@@ -43,10 +45,6 @@ namespace zsLib {ZS_IMPLEMENT_SUBSYSTEM(zsLib_socket)}
 ZS_EVENTING_SUBSYSTEM_DEFAULT_LEVEL(zsLib, Debug)
 ZS_EVENTING_SUBSYSTEM_DEFAULT_LEVEL(zsLib_socket, Debug)
 
-// The classes below are exported
-//#pragma GCC visibility push(default)  // hidden to hide
-
-//#pragma GCC visibility pop
 
 namespace zsLib
 {
@@ -57,11 +55,16 @@ namespace zsLib
       ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zsLib));
       ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zsLib_socket));
     }
-  }
+  } // namespace internal
 
   AutoInitializedPUID::AutoInitializedPUID()
   {
     mValue = createPUID();
   }
 
-};
+} // namespace zsLib
+
+ZS_DECLARE_PROXY_IMPLEMENT(zsLib::IWakeDelegate)
+ZS_DECLARE_PROXY_IMPLEMENT(zsLib::IPromiseDelegate)
+ZS_DECLARE_PROXY_IMPLEMENT(zsLib::ISocketDelegate)
+ZS_DECLARE_PROXY_IMPLEMENT(zsLib::ITimerDelegate)

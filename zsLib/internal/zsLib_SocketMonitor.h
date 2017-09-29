@@ -155,14 +155,18 @@ namespace zsLib
       poll_size mOfficialAllocationSize {0};
       poll_size mOfficialCount {0};
       poll_fd *mOfficialSet {NULL};
+#ifdef _WIN32
       EventHandle *mOfficialHandleSet {NULL};
       EventHandleHolderPtr *mOfficialHandleHolderSet {NULL};
+#endif // _WIN32
 
       poll_size mPollingAllocationSize {0};
       poll_size mPollingCount {0};
       poll_fd *mPollingSet {NULL};
+#ifdef _WIN32
       EventHandle *mPollingHandleSet {NULL};
       EventHandleHolderPtr *mPollingHandleHolderSet {NULL};
+#endif // _WIN32
 
       poll_size mPollingFiredEventCount {0};
       FiredEventPair *mPollingFiredEvents {NULL};

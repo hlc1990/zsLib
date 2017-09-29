@@ -298,13 +298,13 @@ namespace zsLib
   {
     for (auto iter = mSubsystems.begin(); iter != mSubsystems.end(); ++iter)
     {
-      auto &subsystem = (*iter);
+      auto *subsystem = (*iter);
       subsystem->setEventingLevel(None);
     }
 
     for (auto iter = mCleanUpWriters.begin(); iter != mCleanUpWriters.end(); ++iter)
     {
-      auto writer = (*iter);
+      auto *writer = (*iter);
       writer->mInitValue = 0;
       delete writer;
     }
@@ -368,8 +368,8 @@ namespace zsLib
 
         for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
         {
-          auto &subsystem = (*iter);
-          auto name = subsystem->getName();
+          auto *subsystem = (*iter);
+          auto *name = subsystem->getName();
           auto found = refThis.mDefaultOutputSubsystemLevels.find(String(name));
           if (found != refThis.mDefaultOutputSubsystemLevels.end()) {
             auto level = static_cast<Level>((*found).second);
@@ -412,7 +412,7 @@ namespace zsLib
         if (0 == replaceList->size()) {
           if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
             for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-              auto &subsystem = (*innerIter);
+              auto *subsystem = (*innerIter);
               subsystem->setOutputLevel(None);
             }
           }
@@ -626,8 +626,8 @@ namespace zsLib
 
         for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
         {
-          auto &subsystem = (*iter);
-          auto name = subsystem->getName();
+          auto *subsystem = (*iter);
+          auto *name = subsystem->getName();
           auto found = refThis.mDefaultEventingSubsystemLevels.find(String(name));
           if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
             auto level = static_cast<Level>((*found).second);
@@ -670,7 +670,7 @@ namespace zsLib
         if (0 == replaceList->size()) {
           if (refThis.mDefaultEventingSubsystemLevels.size() > 0) {
             for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-              auto &subsystem = (*innerIter);
+              auto *subsystem = (*innerIter);
               subsystem->setEventingLevel(None);
             }
           }
@@ -724,13 +724,13 @@ namespace zsLib
 
     for (auto iter = eventWriterList.begin(); iter != eventWriterList.end(); ++iter)
     {
-      auto writer = (*iter);
+      auto *writer = (*iter);
       delegate->notifyEventingProviderRegistered(reinterpret_cast<uintptr_t>(writer), &(writer->mAtomInfo[0]));
     }
 
     for (auto iter = eventWriterList.begin(); iter != eventWriterList.end(); ++iter)
     {
-      auto writer = (*iter);
+      auto *writer = (*iter);
       if (0 != writer->mKeywordsBitmask) {
         delegate->notifyEventingProviderLoggingStateChanged(reinterpret_cast<uintptr_t>(writer), &(writer->mAtomInfo[0]), writer->mKeywordsBitmask);
       }
@@ -825,7 +825,7 @@ namespace zsLib
       {
         auto found = refThis.mEventWriters.find(providerID);
         if (found != refThis.mEventWriters.end()) {
-          auto existingWriter = (*found).second;
+          auto *existingWriter = (*found).second;
           return reinterpret_cast<uintptr_t>(existingWriter);
         }
       }

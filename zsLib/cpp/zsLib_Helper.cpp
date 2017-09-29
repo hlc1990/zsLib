@@ -1665,7 +1665,7 @@ namespace zsLib
     public:
       Walker() {}
 
-      virtual bool onElementEnter(ElementPtr inElement)
+      bool onElementEnter(ElementPtr inElement) override
       {
         typedef std::list<NodePtr> ChildrenList;
         typedef std::list<AttributePtr> ChildrenAttributeList;

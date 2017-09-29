@@ -54,8 +54,10 @@ namespace zsLib
 
 #ifdef ZSLIB_INTERNAL_NUMERIC_H_f1973c558a596895b01b96e4a76de63f_SECOND_INCLUDE
 
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable:4290)
+#endif // _WIN32
 
 namespace zsLib
 {
@@ -90,7 +92,9 @@ namespace zsLib
   void Numeric<Nanoseconds>::get(Nanoseconds &outValue) const throw (ValueOutOfRange);
 }
 
+#ifdef _WIN32
 #pragma warning(pop)
+#endif // _WIN32
 
 #else
 #define ZSLIB_INTERNAL_NUMERIC_H_f1973c558a596895b01b96e4a76de63f_SECOND_INCLUDE

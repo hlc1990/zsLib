@@ -126,67 +126,11 @@ namespace zsLib
       #pragma mark PromiseMultiDelegate => IPromiseDelegate
       #pragma mark
 
-      //-----------------------------------------------------------------------
-      virtual void onPromiseSettled(PromisePtr) {}
+      void onPromiseSettled(PromisePtr) override;
 
-      //-----------------------------------------------------------------------
-      virtual void onPromiseResolved(PromisePtr promise)
-      {
-        PromisePtr pThis;
+      void onPromiseResolved(PromisePtr promise) override;
 
-        {
-          AutoRecursiveLock lock(mLock);
-
-          pThis = mThisWeak.lock();
-          if (!pThis) return;
-
-          if (mFired) return;
-
-          if (mAllMode) {
-            auto found = mPendingPromises.find(promise->getID());
-            if (found == mPendingPromises.end()) return;
-
-            mPendingPromises.erase(found);
-            if (mPendingPromises.size() > 0) return;
-          } else {
-            mPendingPromises.clear();
-          }
-
-          mFired = true;
-        }
-
-        pThis->resolve();
-      }
-
-      //-----------------------------------------------------------------------
-      virtual void onPromiseRejected(PromisePtr promise)
-      {
-        PromisePtr pThis;
-
-        {
-          AutoRecursiveLock lock(mLock);
-
-          pThis = mThisWeak.lock();
-          if (!pThis) return;
-
-          if (mFired) return;
-
-          if (mAllMode) {
-            if (mIgnoredRejections) {
-              auto found = mPendingPromises.find(promise->getID());
-              if (found == mPendingPromises.end()) return;
-
-              mPendingPromises.erase(found);
-              if (mPendingPromises.size() > 0) return;
-            }
-          }
-
-          mFired = true;
-          mPendingPromises.clear();
-        }
-
-        pThis->reject(promise->reason<Any>());
-      }
+      void onPromiseRejected(PromisePtr promise) override;
 
     private:
       //-----------------------------------------------------------------------
@@ -202,6 +146,70 @@ namespace zsLib
 
       PromiseMap mPendingPromises;
     };
+
+    //-------------------------------------------------------------------------
+    void PromiseMultiDelegate::onPromiseSettled(PromisePtr)
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    void PromiseMultiDelegate::onPromiseResolved(PromisePtr promise)
+    {
+      PromisePtr pThis;
+
+      {
+        AutoRecursiveLock lock(mLock);
+
+        pThis = mThisWeak.lock();
+        if (!pThis) return;
+
+        if (mFired) return;
+
+        if (mAllMode) {
+          auto found = mPendingPromises.find(promise->getID());
+          if (found == mPendingPromises.end()) return;
+
+          mPendingPromises.erase(found);
+          if (mPendingPromises.size() > 0) return;
+        } else {
+          mPendingPromises.clear();
+        }
+
+        mFired = true;
+      }
+
+      pThis->resolve();
+    }
+
+    //-------------------------------------------------------------------------
+    void PromiseMultiDelegate::onPromiseRejected(PromisePtr promise)
+    {
+      PromisePtr pThis;
+
+      {
+        AutoRecursiveLock lock(mLock);
+
+        pThis = mThisWeak.lock();
+        if (!pThis) return;
+
+        if (mFired) return;
+
+        if (mAllMode) {
+          if (mIgnoredRejections) {
+            auto found = mPendingPromises.find(promise->getID());
+            if (found == mPendingPromises.end()) return;
+
+            mPendingPromises.erase(found);
+            if (mPendingPromises.size() > 0) return;
+          }
+        }
+
+        mFired = true;
+        mPendingPromises.clear();
+      }
+
+      pThis->reject(promise->reason<Any>());
+    }
 
 
     //-------------------------------------------------------------------------
@@ -240,45 +248,14 @@ namespace zsLib
     protected:
       //-----------------------------------------------------------------------
       #pragma mark
-      #pragma mark PromiseAllDelegate => IPromiseDelegate
+      #pragma mark PromiseBroadcastDelegate => IPromiseDelegate
       #pragma mark
 
-      //-----------------------------------------------------------------------
-      virtual void onPromiseSettled(PromisePtr) {}
+      void onPromiseSettled(PromisePtr) override;
 
-      //-----------------------------------------------------------------------
-      virtual void onPromiseResolved(PromisePtr promise)
-      {
-        {
-          AutoRecursiveLock lock(mLock);
+      void onPromiseResolved(PromisePtr promise) override;
 
-          if (mFired) return;
-          mFired = true;
-        }
-
-        for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
-        {
-          auto promiseIter = (*iter);
-          promiseIter->resolve(promise->value<Any>());
-        }
-      }
-
-      //-----------------------------------------------------------------------
-      virtual void onPromiseRejected(PromisePtr promise)
-      {
-        {
-          AutoRecursiveLock lock(mLock);
-
-          if (mFired) return;
-          mFired = true;
-        }
-
-        for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
-        {
-          auto promiseIter = (*iter);
-          promiseIter->reject(promise->reason<Any>());
-        }
-      }
+      void onPromiseRejected(PromisePtr promise) override;
 
     private:
       //-----------------------------------------------------------------------
@@ -287,6 +264,54 @@ namespace zsLib
       #pragma mark
 
     };
+
+
+    //-------------------------------------------------------------------------
+    void PromiseBroadcastDelegate::onPromiseSettled(PromisePtr)
+    {
+    }
+
+    //-------------------------------------------------------------------------
+    void PromiseBroadcastDelegate::onPromiseResolved(PromisePtr promise)
+    {
+      {
+        AutoRecursiveLock lock(mLock);
+
+        if (mFired) return;
+        mFired = true;
+      }
+
+      for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
+      {
+        auto promiseIter = (*iter);
+        promiseIter->resolve(promise->value<Any>());
+      }
+    }
+
+    //-------------------------------------------------------------------------
+    void PromiseBroadcastDelegate::onPromiseRejected(PromisePtr promise)
+    {
+      {
+        AutoRecursiveLock lock(mLock);
+
+        if (mFired) return;
+        mFired = true;
+      }
+
+      for (auto iter = mPromises.begin(); iter != mPromises.end(); ++iter)
+      {
+        auto promiseIter = (*iter);
+        promiseIter->reject(promise->reason<Any>());
+      }
+    }
+
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    #pragma mark
+    #pragma mark Promise
+    #pragma mark
 
     //-------------------------------------------------------------------------
     Promise::Promise(IMessageQueuePtr queue) :
