@@ -77,7 +77,7 @@ namespace zsLib
       ThreadPtr mThread;
       String mThreadName;
 
-      mutable zsLib::Event mEvent;
+      mutable zsLib::Event mEvent {zsLib::Event::Reset_Auto};
       MessageQueuePtr mQueue;
 
       mutable Lock mLock;

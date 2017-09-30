@@ -202,6 +202,7 @@ namespace zsLib
     public:
       //-----------------------------------------------------------------------
       SocketMonitorLoadBalancer(const make_private &) :
+        shutdownQueue_(IMessageQueueThread::createBasic("zsLib.SocketMonitorLoadBalancer", ThreadPriority_LowPriority)),
 #ifdef _WIN32
         maxSocketsPerMonitor_(WSA_MAXIMUM_WAIT_EVENTS)
 #else
@@ -274,6 +275,8 @@ namespace zsLib
 
           info.monitor_->shutdown();
         }
+
+        shutdownQueue_->waitForShutdown();
       }
 
       //-----------------------------------------------------------------------
@@ -340,7 +343,13 @@ namespace zsLib
 
         if (!shutdownMonitor) return;
 
-        shutdownMonitor->shutdown();
+        try {
+          shutdownQueue_->postClosure([shutdownMonitor]()
+          {
+            shutdownMonitor->shutdown();
+          });
+        } catch (IMessageQueue::Exceptions::MessageQueueGone &) {
+        }
       }
 
       //-----------------------------------------------------------------------
@@ -358,6 +367,7 @@ namespace zsLib
 
       size_t maxSocketsPerMonitor_ {};
       SocketMonitorMap socketMonitors_;
+      IMessageQueueThreadPtr shutdownQueue_;
     };
 
     //-------------------------------------------------------------------------
@@ -906,6 +916,12 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    void SocketMonitor::unlink()
+    {
+      SocketMonitorLoadBalancer::unlink(mID);
+    }
+
+    //-------------------------------------------------------------------------
     void SocketMonitor::monitorBegin(
                                      SocketPtr socket,
                                      bool monitorRead,
@@ -985,8 +1001,6 @@ namespace zsLib
 
       if (event)
         event->wait();
-
-      SocketMonitorLoadBalancer::unlink(mID);
     }
 
     //-------------------------------------------------------------------------
