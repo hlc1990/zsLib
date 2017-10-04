@@ -64,6 +64,7 @@ namespace zsLib
 
       ZS_DECLARE_TYPEDEF_PROXY(XINTERFACE, Delegate)
 
+      typedef ProxySubscriptions<XINTERFACE, SUBSCRIPTIONBASECLASS> ProxySubscriptionsBaseType;
       typedef std::pair<SubscriptionWeakPtr, DelegatePtr> SubscriptionDelegatePair;
 
       typedef std::map<Subscription *, SubscriptionDelegatePair> SubscriptionDelegateMap;
@@ -76,7 +77,16 @@ namespace zsLib
       ZS_DECLARE_TYPEDEF_PTR(SUBSCRIPTIONBASECLASS, BaseSubscription)
 
     public:
-      ProxySubscriptions() {}
+      ProxySubscriptions(DelegateImplPtr delegate) : 
+        mDelegateImpl(delegate)
+      {
+      }
+
+      ProxySubscriptions(const ProxySubscriptionsBaseType &source) :
+        mDelegateImpl(source.mDelegateImpl)
+      {
+      }
+
       ~ProxySubscriptions() {}
 
       SubscriptionPtr subscribe(
@@ -269,12 +279,26 @@ namespace zsLib
   }
 }
 
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_IMPLEMENT(xInterface, xSubscriptionClass)                                         \
+  namespace zsLib                                                                                                                 \
+  {                                                                                                                               \
+    void declareProxySubscriptionInterface(const xInterface &, const xSubscriptionClass &)                                        \
+    {                                                                                                                             \
+      zsLib::ProxySubscriptions<xInterface, xSubscriptionClass> temp;                                                             \
+      (void)temp;                                                                                                                 \
+      zsLib::ProxySubscriptions<xInterface, xSubscriptionClass>::create();                                                        \
+    }                                                                                                                             \
+  }
+
 #define ZS_INTERNAL_DECLARE_INTERACTION_PROXY_SUBSCRIPTION(xInteractionName, xDelegateName)                                       \
   interaction xInteractionName;                                                                                                   \
   typedef std::shared_ptr<xInteractionName> xInteractionName##Ptr;                                                                \
   typedef std::weak_ptr<xInteractionName> xInteractionName##WeakPtr;                                                              \
   typedef zsLib::ProxySubscriptions<xDelegateName, xInteractionName> xDelegateName##Subscriptions;
 
+
+#ifndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_BEGIN(xInterface, xSubscriptionClass)                                             \
 namespace zsLib                                                                                                                   \
@@ -286,14 +310,134 @@ namespace zsLib                                                                 
     typedef ProxySubscriptions<xInterface, xSubscriptionClass> ProxySubscriptionsType;                                            \
     class DerivedDelegateImpl;                                                                                                    \
                                                                                                                                   \
-    ProxySubscriptions()                                                                                                          \
-    {                                                                                                                             \
-      mDelegateImpl = make_shared<DerivedDelegateImpl>();                                                                         \
-    }                                                                                                                             \
+    ProxySubscriptions();                                                                                                         \
+    ProxySubscriptions(const ProxySubscriptionsType &source);                                                                     \
+                                                                                                                                  \
+    static ProxySubscriptionsType create();                                                                                       \
                                                                                                                                   \
     class DerivedDelegateImpl : public DelegateImpl                                                                               \
     {                                                                                                                             \
     public:                                                                                                                       \
+
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_END()                                                                             \
+    };                                                                                                                            \
+  };                                                                                                                              \
+}
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_TYPEDEF(xOriginalType, xTypeAlias)                                                \
+    typedef xOriginalType xTypeAlias;
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_0(xConst,xMethod)                                                                            \
+    void xMethod() xConst override;                                                                                                                 \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_1(xConst,xMethod,t1)                                                                         \
+    void xMethod(t1 v1) xConst override;                                                                                                            \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_2(xConst,xMethod,t1,t2)                                                                      \
+    void xMethod(t1 v1, t2 v2) xConst override;                                                                                                     \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_3(xConst,xMethod,t1,t2,t3)                                                                   \
+    void xMethod(t1 v1, t2 v2, t3 v3) xConst override;                                                                                              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_4(xConst,xMethod,t1,t2,t3,t4)                                                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4) xConst override;                                                                                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_5(xConst,xMethod,t1,t2,t3,t4,t5)                                                             \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5) xConst override;                                                                                \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_6(xConst,xMethod,t1,t2,t3,t4,t5,t6)                                                          \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6) xConst override;                                                                         \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_7(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7)                                                       \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7) xConst override;                                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_8(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                                                    \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8) xConst override;                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_9(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                                                 \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9) xConst override;                                                    \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_10(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)                                            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10) xConst override;                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_11(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)                                        \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11) xConst override;                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_12(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                                    \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12) xConst override;                         \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_13(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13) xConst override;                \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_14(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14) xConst override;                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_15(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                        \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15) xConst override;              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_16(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                                            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16) xConst override;                                                                             \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_17(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                                        \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17) xConst override;                                                                    \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_18(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                                    \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18) xConst override;                                                           \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_19(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19) xConst override;                                                  \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_20(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                                            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20) xConst override;                                         \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_21(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                                        \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21) xConst override;                                \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_22(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                                    \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22) xConst override;                       \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_23(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                                                \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23) xConst override;              \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_24(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                                            \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24) xConst override;                     \
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_25(xConst,xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                                        \
+    void xMethod(t1 v1, t2 v2, t3 v3, t4 v4, t5 v5, t6 v6, t7 v7, t8 v8, t9 v9, t10 v10, t11 v11, t12 v12, t13 v13, t14 v14, t15 v15, t16 v16, t17 v17, t18 v18, t19 v19, t20 v20, t21 v21, t22 v22, t23 v23, t24 v24, t25 v25) xConst override;            \
+
+
+#else //ndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
+
+#define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_BEGIN(xInterface, xSubscriptionClass)                                               \
+namespace zsLib                                                                                                                     \
+{                                                                                                                                   \
+  template<>                                                                                                                        \
+  class ProxySubscriptions<xInterface, xSubscriptionClass> : public internal::ProxySubscriptions<xInterface, xSubscriptionClass>    \
+  {                                                                                                                                 \
+  public:                                                                                                                           \
+    typedef ProxySubscriptions<xInterface, xSubscriptionClass> ProxySubscriptionsType;                                              \
+    typedef std::shared_ptr<ProxySubscriptionsType> ProxySubscriptionsTypePtr;                                                      \
+    class DerivedDelegateImpl;                                                                                                      \
+                                                                                                                                    \
+    ProxySubscriptions() : internal::ProxySubscriptions<xInterface, xSubscriptionClass>(make_shared<DerivedDelegateImpl>())         \
+    {                                                                                                                               \
+    }                                                                                                                               \
+                                                                                                                                    \
+    ProxySubscriptions(const ProxySubscriptionsType &source) : internal::ProxySubscriptions<xInterface, xSubscriptionClass>(source) \
+    {                                                                                                                               \
+    }                                                                                                                               \
+                                                                                                                                    \
+    static ProxySubscriptionsType create()                                                                                          \
+    {                                                                                                                               \
+      ProxySubscriptionsType result;                                                                                                \
+      return result;                                                                                                                \
+    }                                                                                                                               \
+                                                                                                                                    \
+    class DerivedDelegateImpl : public DelegateImpl                                                                                 \
+    {                                                                                                                               \
+    public:                                                                                                                         \
 
 
 #define ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_END()                                                                             \
@@ -1167,5 +1311,8 @@ namespace zsLib                                                                 
         }                                                                                                                                                                                                                                                   \
       }                                                                                                                                                                                                                                                     \
     }
+
+#endif //ndef ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 
 #endif //ZSLIB_INTERNAL_PROXY_SUBSCRIPTIONS_H_cf7229753b441247ccece9f3b92317ed96045660

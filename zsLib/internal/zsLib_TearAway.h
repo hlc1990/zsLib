@@ -99,7 +99,7 @@ namespace zsLib
 #define ZS_INTERNAL_DECLARE_TEAR_AWAY_IMPLEMENT(xInterface, xDataType)                                        \
   namespace zsLib                                                                                             \
   {                                                                                                           \
-    void declareProxyInterface(const xInterface &)                                                            \
+    void declareTearAwayInterface(const xInterface &)                                                         \
     {                                                                                                         \
       typedef std::shared_ptr<xInterface> TearAwayInterfacePtr;                                               \
       zsLib::TearAway<xInterface, xDataType>::create(TearAwayInterfacePtr());                                 \

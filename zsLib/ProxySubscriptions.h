@@ -123,6 +123,10 @@ namespace zsLib
 
 #define ZS_DECLARE_INTERACTION_PROXY_SUBSCRIPTION(xInteractionName, xDelegateName)                                                                                            ZS_INTERNAL_DECLARE_INTERACTION_PROXY_SUBSCRIPTION(xInteractionName, xDelegateName)
 
+//#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
+#define ZS_DECLARE_PROXY_SUBSCRIPTIONS_IMPLEMENT(xInterface, xSubscriptionClass)                                                                                              ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_IMPLEMENT(xInterface, xSubscriptionClass)
+
 #define ZS_DECLARE_PROXY_SUBSCRIPTIONS_BEGIN(xInterface, xSubscriptionClass)                                                                                                  ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_BEGIN(xInterface, xSubscriptionClass)
 #define ZS_DECLARE_PROXY_SUBSCRIPTIONS_END()                                                                                                                                  ZS_INTERNAL_DECLARE_PROXY_SUBSCRIPTIONS_END()
 
