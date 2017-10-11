@@ -419,6 +419,9 @@
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_RangeSelection.cpp">
       <Filter>zsLib\cpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueAssociator.cpp">
+      <Filter>zsLib\cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\zsLib\cpp\zsLib.events.json">
