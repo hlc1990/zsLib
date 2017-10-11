@@ -53,8 +53,9 @@ static_library("zslib") {
   ]
 
   # Suppress warnings from the Chromium Clang plugin (bugs.webrtc.org/163).
-  configs -= [ "//build/config/clang:find_bad_constructs" ]
-
+  if(is_linux) {
+    configs -= [ "//build/config/clang:find_bad_constructs" ]
+  }
 }
 
 
