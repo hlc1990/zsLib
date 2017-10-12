@@ -119,7 +119,7 @@ zslib_sources = [
   ]
 
 if(!is_win) {
-  zslib_sources = [
+  zslib_sources += [
     "../zsLib/zsLib/extras/zsLib_Rx64GetAddapterAddresses.cpp",
     "../zsLib/zsLib/extras/uuid/config.h",
     "../zsLib/zsLib/extras/uuid/uuid.h",
