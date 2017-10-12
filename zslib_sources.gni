@@ -82,12 +82,6 @@ zslib_sources = [
     "../zsLib/zsLib/eventing/noop.h",
     "../zsLib/zsLib/eventing/internal/zsLib_eventing_EventTypes.h",
     "../zsLib/zsLib/eventing/internal/zsLib_eventing_Log.h",
-    "../zsLib/zsLib/extras/zsLib_Rx64GetAddapterAddresses.cpp",
-    "../zsLib/zsLib/extras/uuid/config.h",
-    "../zsLib/zsLib/extras/uuid/uuid.h",
-    "../zsLib/zsLib/extras/uuid/uuid_types.h",
-    "../zsLib/zsLib/extras/uuid/uuidd.h",
-    "../zsLib/zsLib/extras/uuid/uuidP.h",
     "../zsLib/zsLib/internal/platform.h",
     "../zsLib/zsLib/internal/types.h",
     "../zsLib/zsLib/internal/zsLib.events.h",
@@ -124,7 +118,15 @@ zslib_sources = [
     "../zsLib/zsLib/internal/zsLib_XML.h",
   ]
 
-
-
+if(!is_win) {
+  zslib_sources = [
+    "../zsLib/zsLib/extras/zsLib_Rx64GetAddapterAddresses.cpp",
+    "../zsLib/zsLib/extras/uuid/config.h",
+    "../zsLib/zsLib/extras/uuid/uuid.h",
+    "../zsLib/zsLib/extras/uuid/uuid_types.h",
+    "../zsLib/zsLib/extras/uuid/uuidd.h",
+    "../zsLib/zsLib/extras/uuid/uuidP.h",
+  ]
+}
 
 
