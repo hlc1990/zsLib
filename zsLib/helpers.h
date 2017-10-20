@@ -70,6 +70,15 @@ namespace zsLib
     return Time(duration);
   }
 
+  inline Days toDays(const Days &v) {return v;}
+  inline Days toDays(const Hours &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Minutes &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Seconds &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Milliseconds &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Microseconds &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Nanoseconds &v) {return std::chrono::duration_cast<Days>(v);}
+
+  inline Hours toHours(const Days &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Hours &v) {return v;}
   inline Hours toHours(const Minutes &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Seconds &v) {return std::chrono::duration_cast<Hours>(v);}
@@ -77,6 +86,7 @@ namespace zsLib
   inline Hours toHours(const Microseconds &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Nanoseconds &v) {return std::chrono::duration_cast<Hours>(v);}
 
+  inline Minutes toMinutes(const Days &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Hours &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Minutes &v) {return v;}
   inline Minutes toMinutes(const Seconds &v) {return std::chrono::duration_cast<Minutes>(v);}
@@ -84,6 +94,7 @@ namespace zsLib
   inline Minutes toMinutes(const Microseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Nanoseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
 
+  inline Seconds toSeconds(const Days &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Hours &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Minutes &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Seconds &v) {return v;}
@@ -91,6 +102,7 @@ namespace zsLib
   inline Seconds toSeconds(const Microseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Nanoseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
 
+  inline Milliseconds toMilliseconds(const Days &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Hours &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Minutes &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Seconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
@@ -98,6 +110,7 @@ namespace zsLib
   inline Milliseconds toMilliseconds(const Microseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
 
+  inline Microseconds toMicroseconds(const Days &v) {return std::chrono::duration_cast<Microseconds>(v);}
   inline Microseconds toMicroseconds(const Hours &v) {return std::chrono::duration_cast<Microseconds>(v);}
   inline Microseconds toMicroseconds(const Minutes &v) {return std::chrono::duration_cast<Microseconds>(v);}
   inline Microseconds toMicroseconds(const Seconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
@@ -105,6 +118,7 @@ namespace zsLib
   inline Microseconds toMicroseconds(const Microseconds &v) {return v;}
   inline Microseconds toMicroseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
 
+  inline Nanoseconds toNanoseconds(const Days &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Hours &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Minutes &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Seconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
