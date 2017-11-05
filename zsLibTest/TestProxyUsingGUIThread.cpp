@@ -29,6 +29,8 @@
  
  */
 
+#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 #include <zsLib/Proxy.h>
 #include <zsLib/IMessageQueueThread.h>
 #include <zsLib/Stringize.h>
