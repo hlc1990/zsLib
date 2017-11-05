@@ -180,13 +180,11 @@ namespace zsLib
 
         EventingAtomIndex index = mAtomIndex;
 
-        UUID providerID {};
-        String providerName;
-        String providerHash;
-        if (!zsLib::Log::getEventingWriterInfo(handle, providerID, providerName, providerHash)) return;
+        zsLib::Log::GetEventingWriterInfoResult result;
+        if (!zsLib::Log::getEventingWriterInfo(handle, result)) return;
 
         GUID registerID {};
-        memcpy(&registerID, providerID.begin(), sizeof(GUID));
+        memcpy(&registerID, result.providerID_.begin(), sizeof(GUID));
 
         AutoRecursiveLock lock(*this);
 

@@ -107,7 +107,7 @@
 #endif //__APPPLE__
 
 
-#ifdef _LINUX
+#ifdef __linux__
 
 // Linux has these options
 #define HAVE_NET_IF_H 1
@@ -122,6 +122,6 @@
 // Android does not support these features
 
 #endif //_ANDROID
-#endif //_LINUX
+#endif //__linux__
 
 #endif //ZSLIB_INTERNAL_PLATFORM_H_ae1ca1614cb82fd6e3e9751af73f2658

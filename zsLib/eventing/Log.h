@@ -50,10 +50,10 @@
 #define ZS_EVENTING_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)                               ZS_EVENTING_INTERNAL_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)
 #define ZS_EVENTING_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)         ZS_EVENTING_INTERNAL_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)
 
-#define ZS_EVENTING_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash)  ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash)
-#define ZS_EVENTING_UNREGISTER_EVENT_WRITER(xHandleReference)                                                 ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)
+#define ZS_EVENTING_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN)  ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN)
+#define ZS_EVENTING_UNREGISTER_EVENT_WRITER(xHandleReference)                                                                ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)
 
-#define ZS_EVENTING_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)                                  ZS_EVENTING_INTERNAL_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)
+#define ZS_EVENTING_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)                                                 ZS_EVENTING_INTERNAL_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)
 
 #define ZS_EVENTING_WRITE_EVENT(xHandle, xSeverity, xLevel, xEventDescriptor, xEventParameterDescriptor, xEventDataDescriptor, xEventDataDescriptorCount) ZS_EVENTING_INTERNAL_WRITE_EVENT(xHandle, xSeverity, xLevel, xEventDescriptor, xEventParameterDescriptor, xEventDataDescriptor, xEventDataDescriptorCount)
 
