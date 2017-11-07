@@ -29,6 +29,8 @@
  
  */
 
+#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 #include <zsLib/internal/zsLib_SocketMonitor.h>
 
 #ifndef ZSLIB_EVENTING_NOOP
