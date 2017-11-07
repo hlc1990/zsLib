@@ -29,6 +29,8 @@
  
  */
 
+#define ZS_DECLARE_TEMPLATE_GENERATE_IMPLEMENTATION
+
 #include <zsLib/internal/zsLib_Timer.h>
 
 #include <zsLib/Exception.h>
