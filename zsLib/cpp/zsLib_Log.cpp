@@ -791,12 +791,13 @@ namespace zsLib
   Log::ProviderHandle Log::registerEventingWriter(
                                                   const char *providerID,
                                                   const char *providerName,
-                                                  const char *uniqueProviderHash
+                                                  const char *uniqueProviderHash,
+                                                  const char *providerJMAN
                                                   )
   {
     try {
       UUID tempProviderID = Numeric<UUID>(providerID);
-      return registerEventingWriter(tempProviderID, providerName, uniqueProviderHash);
+      return registerEventingWriter(tempProviderID, providerName, uniqueProviderHash, providerJMAN);
     } catch (const Numeric<UUID>::ValueOutOfRange &) {
     }
 
@@ -807,7 +808,8 @@ namespace zsLib
   Log::ProviderHandle Log::registerEventingWriter(
                                                   const UUID &providerID,
                                                   const char *providerName,
-                                                  const char *uniqueProviderHash
+                                                  const char *uniqueProviderHash,
+                                                  const char *providerJMAN
                                                   )
   {
     LogPtr log = Log::singleton();
@@ -835,7 +837,7 @@ namespace zsLib
       writer->mProviderName = String(providerName);
       writer->mUniqueProviderHash = String(uniqueProviderHash);
       writer->mLog = log.get();
-
+      writer->mJMAN = providerJMAN ? providerJMAN : "";
       refThis.mEventWriters[providerID] = writer;
 
       notifyList = refThis.mEventingProviderListeners;
@@ -902,10 +904,7 @@ namespace zsLib
   //---------------------------------------------------------------------------
   bool Log::getEventingWriterInfo(
                                   ProviderHandle handle,
-                                  UUID &outProviderID,
-                                  String &outProviderName,
-                                  String &outUniqueProviderHash,
-                                  EventingAtomDataArray *outArray
+                                  GetEventingWriterInfoResult &result
                                   )
   {
     if (0 == handle) return false;
@@ -913,12 +912,13 @@ namespace zsLib
     EventingWriter *writer = reinterpret_cast<EventingWriter *>(handle);
     if (ZSLIB_INTERNAL_LOG_EVENT_WRITER_INIT_VALUE != writer->mInitValue) return false;
 
-    outProviderID = writer->mProviderID;
-    outProviderName = writer->mProviderName;
-    outUniqueProviderHash = writer->mUniqueProviderHash;
-    if (outArray) {
-      (*outArray) = &(writer->mAtomInfo[0]);
+    result.providerID_ = writer->mProviderID;
+    result.providerName_ = writer->mProviderName;
+    result.uniqueProviderHash_ = writer->mUniqueProviderHash;
+    if (result.includeJMAN_) {
+      result.jman_ = writer->mJMAN;
     }
+    result.atomArray_ = &(writer->mAtomInfo[0]);
     return true;
   }
 

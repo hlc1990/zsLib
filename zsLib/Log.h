@@ -293,21 +293,30 @@ namespace zsLib
     static ProviderHandle registerEventingWriter(
                                                  const char *providerID,
                                                  const char *providerName,
-                                                 const char *uniqueProviderHash
+                                                 const char *uniqueProviderHash,
+                                                 const char *providerJMAN
                                                  );
     static ProviderHandle registerEventingWriter(
                                                  const UUID &providerID,
                                                  const char *providerName,
-                                                 const char *uniqueProviderHash
+                                                 const char *uniqueProviderHash,
+                                                 const char *providerJMAN
                                                  );
     static void unregisterEventingWriter(ProviderHandle providerHandle);
 
+    struct GetEventingWriterInfoResult
+    {
+      UUID providerID_;
+      String providerName_;
+      String uniqueProviderHash_;
+      bool includeJMAN_ {false};
+      String jman_;
+      EventingAtomDataArray atomArray_ {};
+    };
+
     static bool getEventingWriterInfo(
                                       ProviderHandle handle,
-                                      UUID &outProviderID,
-                                      String &outProviderName,
-                                      String &outUniqueProviderHash,
-                                      EventingAtomDataArray *outArray = NULL
+                                      GetEventingWriterInfoResult &result
                                       );
     
     static void setEventingLevelByName(

@@ -33,9 +33,9 @@
 #include <zsLib/Numeric.h>
 #include <zsLib/internal/platform.h>
 
-#if (defined _LINUX || defined __QNX__)
+#if (defined __linux__ || defined __QNX__)
 #include <stdio.h>
-#endif //_LINUX
+#endif //__linux__
 
 #ifdef HAVE_NET_IF_H
 #include <net/if.h>

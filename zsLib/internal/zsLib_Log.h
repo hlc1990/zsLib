@@ -98,6 +98,7 @@ namespace zsLib
         UUID mProviderID {};
         String mProviderName;
         String mUniqueProviderHash;
+        String mJMAN;
         zsLib::Log *mLog{};
         InternalAtomData mAtomInfo[ZSLIB_LOG_PROVIDER_ATOM_MAXIMUM]{};
         ObjectIDBitmaskMap mEnabledObjects;

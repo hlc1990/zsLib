@@ -36,6 +36,7 @@
 
 #ifndef ZSLIB_EVENTING_NOOP
 #include <zsLib/internal/zsLib.events.h>
+#include <zsLib/internal/zsLib.events.jman.h>
 #else
 #include <zsLib/eventing/noop.h>
 #endif //ndef ZSLIB_EVENTING_NOOP

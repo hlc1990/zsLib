@@ -46,8 +46,8 @@
 #define ZS_EVENTING_INTERNAL_GET_CURRENT_SUBSYSTEM_NAME()                                                   ((ZS_GET_SUBSYSTEM()).getName())
 #define ZS_EVENTING_INTERNAL_GET_SUBSYSTEM_NAME(xSubsystem)                                                 ((xSubsystem).getName())
 
-#define ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash) \
-  { (xHandleReference) = zsLib::Log::registerEventingWriter((xProviderID), (xProviderName), (xUniqueProviderHash)); }
+#define ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN) \
+  { (xHandleReference) = zsLib::Log::registerEventingWriter((xProviderID), (xProviderName), (xUniqueProviderHash), (xProviderJMAN)); }
 
 #define ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)                                                \
   { zsLib::Log::ProviderHandle _handle = (xHandleReference); (xHandleReference) = 0; zsLib::Log::unregisterEventingWriter(_handle); }
