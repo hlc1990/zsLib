@@ -192,8 +192,8 @@ namespace zsLib
         provider->mID = registerID;
         provider->mEventingHandle = handle;
         
-        auto result = EventRegister(&(provider->mID), eventWriterEnableCallback, reinterpret_cast<PVOID>(provider), &(provider->mRegistrationHandle));
-        if (ERROR_SUCCESS != result) {
+        auto registerResult = EventRegister(&(provider->mID), eventWriterEnableCallback, reinterpret_cast<PVOID>(provider), &(provider->mRegistrationHandle));
+        if (ERROR_SUCCESS != registerResult) {
           delete provider;
           provider = NULL;
           return;
