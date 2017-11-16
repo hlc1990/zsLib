@@ -15,11 +15,14 @@ config("zslib_config") {
     } else {
       cflags_cc = [ 
         "-std=c++11",
-        "-nostdinc++",
         "-g",
         "-Wall",
       ]
-
+      if  (is_linux) {
+        cflags_cc += [
+          "-nostdinc++",
+        ]
+      }
     }
   
     include_dirs = [ 
