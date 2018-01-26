@@ -36,7 +36,7 @@
 #ifndef ZSLIB_EVENTING_NOOP
 #include <zsLib/internal/zsLib.events.h>
 
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 #else
 #include <zsLib/eventing/noop.h>
 #endif //ndef ZSLIB_EVENTING_NOOP

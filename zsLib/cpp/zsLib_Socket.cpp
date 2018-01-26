@@ -57,7 +57,7 @@
 #pragma warning(disable:4290)
 #endif // _WIN32
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib_socket)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib_socket)}
 
 namespace zsLib
 {

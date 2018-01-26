@@ -32,7 +32,7 @@
 #include <zsLib/XML.h>
 #include <zsLib/Exception.h>
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 #pragma warning(push)
 #pragma warning(disable: 4290)

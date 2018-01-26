@@ -50,6 +50,12 @@
 #define ZS_EVENTING_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)                               ZS_EVENTING_INTERNAL_CHECK_IF_LOGGING(xHandleReference, xKeywordBitmask, xLevel)
 #define ZS_EVENTING_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)         ZS_EVENTING_INTERNAL_CHECK_IF_SUBSYSTEM_LOGGING(xHandleReference, xKeywordBitmask, xSubsystem, xLevel)
 
+#define ZS_EVENTING_TRACE_OBJECT(xLevel, xObject, xMessage)                                                   ZS_EVENTING_INTERNAL_TRACE_OBJECT(xLevel, xObject, xMessage)
+#define ZS_EVENTING_TRACE_OBJECT_VALUE(xLevelValue, xObject, xMessage)                                        ZS_EVENTING_INTERNAL_TRACE_OBJECT_VALUE(xLevelValue, xObject, xMessage)
+
+#define ZS_EVENTING_TRACE_OBJECT_PTR(xLevel, xObject, xMessage)                                               ZS_EVENTING_INTERNAL_TRACE_OBJECT_PTR(xLevel, xObject, xMessage)
+#define ZS_EVENTING_TRACE_OBJECT_PTR_VALUE(xLevelValue, xObject, xMessage)                                    ZS_EVENTING_INTERNAL_TRACE_OBJECT_PTR_VALUE(xLevelValue, xObject, xMessage)
+
 #define ZS_EVENTING_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN)  ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN)
 #define ZS_EVENTING_UNREGISTER_EVENT_WRITER(xHandleReference)                                                                ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)
 

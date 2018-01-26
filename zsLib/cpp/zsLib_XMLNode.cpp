@@ -32,7 +32,7 @@
 #include <zsLib/XML.h>
 #include <zsLib/Exception.h>
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 #define ZS_INTERNAL_XML_FILTER_BIT_DOCUMENT     0x0001
 #define ZS_INTERNAL_XML_FILTER_BIT_ELEMENT      0x0002

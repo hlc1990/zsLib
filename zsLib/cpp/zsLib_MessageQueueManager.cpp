@@ -39,7 +39,7 @@
 
 #define ZSLIB_MESSAGE_QUEUE_MANAGER_RESERVED_GUI_THREAD_NAME "c745461ccd5bfd8427beeda5f952dc68fb09668a_zsLib.guiThread"
 
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {

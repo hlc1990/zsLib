@@ -41,7 +41,7 @@
 
 namespace zsLib
 {
-  ZS_DECLARE_FORWARD_SUBSYSTEM(zsLib)
+  ZS_DECLARE_FORWARD_SUBSYSTEM(zslib)
 
   namespace internal
   {

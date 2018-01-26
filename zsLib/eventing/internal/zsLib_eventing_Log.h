@@ -46,13 +46,19 @@
 #define ZS_EVENTING_INTERNAL_GET_CURRENT_SUBSYSTEM_NAME()                                                   ((ZS_GET_SUBSYSTEM()).getName())
 #define ZS_EVENTING_INTERNAL_GET_SUBSYSTEM_NAME(xSubsystem)                                                 ((xSubsystem).getName())
 
+#define ZS_EVENTING_INTERNAL_TRACE_OBJECT(xLevel, xObject, xMessage)                                        {if (ZS_EVENTING_INTERNAL_IS_LOGGING(xLevel)) (xObject).trace(__func__, (xMessage));}
+#define ZS_EVENTING_INTERNAL_TRACE_OBJECT_VALUE(xLevelValue, xObject, xMessage)                             {if (ZS_EVENTING_INTERNAL_IS_LOGGING_VALUE(xLevelValue)) (xObject).trace(__func__, (xMessage));}
+
+#define ZS_EVENTING_INTERNAL_TRACE_OBJECT_PTR(xLevel, xObject, xMessage)                                    {if ((xObject) && (ZS_EVENTING_INTERNAL_IS_LOGGING(xLevel))) (xObject)->trace(__func__, (xMessage));}
+#define ZS_EVENTING_INTERNAL_TRACE_OBJECT_PTR_VALUE(xLevelValue, xObject, xMessage)                         {if ((xObject) && (ZS_EVENTING_INTERNAL_IS_LOGGING_VALUE(xLevelValue))) (xObject)->trace(__func__, (xMessage));}
+
 #define ZS_EVENTING_INTERNAL_REGISTER_EVENT_WRITER(xHandleReference, xProviderID, xProviderName, xUniqueProviderHash, xProviderJMAN) \
   { (xHandleReference) = zsLib::Log::registerEventingWriter((xProviderID), (xProviderName), (xUniqueProviderHash), (xProviderJMAN)); }
 
 #define ZS_EVENTING_INTERNAL_UNREGISTER_EVENT_WRITER(xHandleReference)                                                \
   { zsLib::Log::ProviderHandle _handle = (xHandleReference); (xHandleReference) = 0; zsLib::Log::unregisterEventingWriter(_handle); }
 
-#define ZS_EVENTING_INTERNAL_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)                       {zsLib::Log::setEventingLevelByName(#xSubsystemName, zsLib::Log::xLevel);}
+#define ZS_EVENTING_INTERNAL_REGISTER_SUBSYSTEM_DEFAULT_LEVEL(xSubsystemName, xLevel)                       {zsLib::Log::setDefaultEventingLevelByName(#xSubsystemName, zsLib::Log::xLevel);}
 
 
 #define ZS_EVENTING_INTERNAL_WRITE_EVENT(xHandle, xSeverity, xLevel, xEventDescriptor, xEventParameterDescriptor, xEventDataDescriptor, xEventDataDescriptorCount)  \

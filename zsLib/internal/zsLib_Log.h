@@ -128,6 +128,7 @@ namespace zsLib
 
       SubsystemLevelMap mDefaultOutputSubsystemLevels;
       SubsystemLevelMap mDefaultEventingSubsystemLevels;
+      SubsystemLevelMap mEventingSubsystemLevels;
 
       EventWriterMap mEventWriters;
       EventWriterSet mCleanUpWriters;
@@ -160,6 +161,9 @@ namespace zsLib
 
 #define ZS_INTERNAL_GET_SUBSYSTEM()                                       (getCurrentSubsystem())
 #define ZS_INTERNAL_GET_OTHER_SUBSYSTEM(xNamespace, xSubsystem)           (xNamespace::get##xSubsystem##Subsystem())
+
+#define ZS_INTERNAL_GET_CURRENT_TIMESTAMP_MS()                            (::zsLib::Log::getCurrentTimestampMS())
+#define ZS_INTERNAL_GET_CURRENT_THREAD_ID()                               (::zsLib::Log::getCurrentThreadID())
 
 #define ZS_INTERNAL_LOG_PARAMS(xMsg)                                      (::zsLib::Log::Params(xMsg))
 #define ZS_INTERNAL_PARAM(xName, xValue)                                  (::zsLib::Log::Param(xName, xValue))

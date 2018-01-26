@@ -61,7 +61,7 @@
 char *strptime(const char *buf, const char *fmt, struct tm *tm);
 #endif //0
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 using namespace std;
 

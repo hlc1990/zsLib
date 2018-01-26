@@ -34,7 +34,7 @@
 #include <zsLib/String.h>
 #include <zsLib/Exception.h>
 
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {

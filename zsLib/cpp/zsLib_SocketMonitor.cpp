@@ -45,7 +45,7 @@
 
 #define ZSLIB_SOCKET_MONITOR_TIMEOUT_IN_MILLISECONDS (10*(1000))
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib_socket)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib_socket)}
 
 namespace zsLib
 {

@@ -49,7 +49,7 @@ namespace zsLib
   template <typename XINTERFACE>
   class Proxy;
 
-  ZS_DECLARE_FORWARD_SUBSYSTEM(zsLib)
+  ZS_DECLARE_FORWARD_SUBSYSTEM(zslib)
 
   namespace internal
   {
@@ -1058,12 +1058,12 @@ namespace zsLib                                                                 
                                                                                                               \
     void throwDelegateGone() const override                                                                   \
     {                                                                                                         \
-      throw Exceptions::DelegateGone(ZS_GET_OTHER_SUBSYSTEM(::zsLib, zsLib), ::zsLib::Log::Params("proxy points to destroyed delegate", getInterfaceName()), __FUNCTION__, __FILE__, __LINE__); \
+      throw Exceptions::DelegateGone(ZS_GET_OTHER_SUBSYSTEM(::zsLib, zslib), ::zsLib::Log::Params("proxy points to destroyed delegate", getInterfaceName()), __FUNCTION__, __FILE__, __LINE__); \
     }                                                                                                         \
                                                                                                               \
     static void throwMissingMessageQueue()                                                                    \
     {                                                                                                         \
-      throw Exceptions::MissingDelegateMessageQueue(ZS_GET_OTHER_SUBSYSTEM(::zsLib, zsLib), ::zsLib::Log::Params("proxy missing message queue", getInterfaceName()), __FUNCTION__, __FILE__, __LINE__); \
+      throw Exceptions::MissingDelegateMessageQueue(ZS_GET_OTHER_SUBSYSTEM(::zsLib, zslib), ::zsLib::Log::Params("proxy missing message queue", getInterfaceName()), __FUNCTION__, __FILE__, __LINE__); \
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_END()                                                                       \

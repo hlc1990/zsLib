@@ -54,7 +54,7 @@
 #endif // _WIN32
 
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 // http://www.sfr-fresh.com/unix/misc/dante-1.2.0.tar.gz:a/dante-1.2.0/libscompat/inet_pton.c
 #ifndef AF_INET6

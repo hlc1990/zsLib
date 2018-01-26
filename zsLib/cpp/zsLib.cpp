@@ -39,8 +39,8 @@
 #include <zsLib/eventing/noop.h>
 #endif //ndef ZSLIB_EVENTING_NOOP
 
-namespace zsLib {ZS_IMPLEMENT_SUBSYSTEM(zsLib)}
-namespace zsLib {ZS_IMPLEMENT_SUBSYSTEM(zsLib_socket)}
+namespace zsLib {ZS_IMPLEMENT_SUBSYSTEM(zslib)}
+namespace zsLib {ZS_IMPLEMENT_SUBSYSTEM(zslib_socket)}
 
 ZS_EVENTING_SUBSYSTEM_DEFAULT_LEVEL(zsLib, Debug)
 ZS_EVENTING_SUBSYSTEM_DEFAULT_LEVEL(zsLib_socket, Debug)
@@ -52,8 +52,8 @@ namespace zsLib
   {
     void initSubsystems()
     {
-      ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zsLib));
-      ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zsLib_socket));
+      ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zslib));
+      ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zslib_socket));
     }
   } // namespace internal
 

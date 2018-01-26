@@ -38,7 +38,7 @@
 
 #define ZS_INTERNAL_UTF8_MAX_CHARACTER_ENCODED_BYTE_SIZE (sizeof(BYTE)*6)
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 using namespace std;
 

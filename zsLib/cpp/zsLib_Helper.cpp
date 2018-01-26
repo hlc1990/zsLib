@@ -44,7 +44,7 @@
 #include <zsLib/IPAddress.h>
 #include <zsLib/XML.h>
 
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {

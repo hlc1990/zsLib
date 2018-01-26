@@ -40,7 +40,7 @@ namespace std {
 }
 #endif //_WIN32
 
-namespace zsLib {ZS_DECLARE_SUBSYSTEM(zsLib)}
+namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
 namespace zsLib
 {

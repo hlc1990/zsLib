@@ -40,9 +40,12 @@
 
 #ifdef _WIN32
 #include <Evntprov.h>
+#include <WinBase.h>
+#else
+#include <pthread.h>
 #endif //_WIN32
 
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zsLib) }
+namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {
@@ -228,7 +231,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  const char *Log::toString(Severity severity)
+  const char *Log::toString(Severity severity) noexcept
   {
     switch (severity) {
       case Informational: return "Informational";
@@ -240,7 +243,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Log::Severity Log::toSeverity(const char *inSeverityStr)
+  Log::Severity Log::toSeverity(const char *inSeverityStr) noexcept(false)
   {
     String severityStr(inSeverityStr);
 
@@ -259,7 +262,7 @@ namespace zsLib
   }
   
   //---------------------------------------------------------------------------
-  const char *Log::toString(Level level)
+  const char *Log::toString(Level level) noexcept
   {
     switch (level) {
       case None:          return "None";
@@ -273,7 +276,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Log::Level Log::toLevel(const char *inLevelStr)
+  Log::Level Log::toLevel(const char *inLevelStr) noexcept(false)
   {
     String levelStr(inLevelStr);
 
@@ -321,6 +324,26 @@ namespace zsLib
   LogPtr Log::create()
   {
     return make_shared<Log>(make_private{});
+  }
+
+  //---------------------------------------------------------------------------
+  QWORD Log::getCurrentTimestampMS() noexcept
+  {
+    return (QWORD)(toMilliseconds(zsLib::now()).count());
+  }
+
+  //---------------------------------------------------------------------------
+  QWORD Log::getCurrentThreadID() noexcept
+  {
+#ifdef _WIN32
+    return (GetCurrentThreadId());
+#else
+#ifdef __APPLE__
+    return (QWORD)(((PTRNUMBER)pthread_mach_thread_np(pthread_self())));
+#else
+    return (QWORD)(((PTRNUMBER)pthread_self()));
+#endif //APPLE
+#endif //_WIN32
   }
 
   //---------------------------------------------------------------------------
@@ -458,16 +481,46 @@ namespace zsLib
         }
       }
 
+      // only if listeners attached then there's a reason to adjust the subsystem's current level
+      if (refThis.mEventingListeners->size() > 0)
       {
-        auto found = refThis.mDefaultEventingSubsystemLevels.find(String(inSubsystem->getName()));
-        if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
-          inSubsystem->setEventingLevel(static_cast<Level>((*found).second));
-        } else {
-          auto foundDefault = refThis.mDefaultEventingSubsystemLevels.find(String());
-          if (foundDefault != refThis.mDefaultEventingSubsystemLevels.end()) {
-            inSubsystem->setEventingLevel(static_cast<Level>((*foundDefault).second));
+        String subsystemName(inSubsystem->getName());
+
+        // set the eventing level for the new subsystem in order or priority
+        {
+          auto found = refThis.mEventingSubsystemLevels.find(subsystemName);
+          if (found != refThis.mEventingSubsystemLevels.end()) {
+            inSubsystem->setEventingLevel(static_cast<Level>((*found).second));
+            goto adjusted_level;
           }
         }
+        {
+          auto found = refThis.mEventingSubsystemLevels.find(String());
+          if (found != refThis.mEventingSubsystemLevels.end()) {
+            inSubsystem->setEventingLevel(static_cast<Level>((*found).second));
+            goto adjusted_level;
+          }
+        }
+        {
+          auto found = refThis.mDefaultEventingSubsystemLevels.find(subsystemName);
+          if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
+            inSubsystem->setEventingLevel(static_cast<Level>((*found).second));
+            goto adjusted_level;
+          }
+        }
+        {
+          auto found = refThis.mDefaultEventingSubsystemLevels.find(String());
+          if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
+            inSubsystem->setEventingLevel(static_cast<Level>((*found).second));
+            goto adjusted_level;
+          }
+        }
+        {
+          inSubsystem->setEventingLevel(Level::None);
+          goto adjusted_level;
+        }
+      adjusted_level:
+        {}
       }
     }
 
@@ -617,24 +670,50 @@ namespace zsLib
       notifyList = refThis.mSubsystems;
 
       if (0 == originalSize) {
-        Optional<Level> defaultLevel;
 
-        {
-          auto found = refThis.mDefaultEventingSubsystemLevels.find(String());
-          if (found != refThis.mDefaultEventingSubsystemLevels.end()) defaultLevel = static_cast<Level>((*found).second);
-        }
+        auto foundAll = refThis.mEventingSubsystemLevels.find(String());
+        auto foundDefault = refThis.mDefaultEventingSubsystemLevels.find(String());
 
         for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
         {
           auto *subsystem = (*iter);
           auto *name = subsystem->getName();
-          auto found = refThis.mDefaultEventingSubsystemLevels.find(String(name));
-          if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
-            auto level = static_cast<Level>((*found).second);
-            subsystem->setEventingLevel(level);
-          } else if (defaultLevel.hasValue()) {
-            subsystem->setEventingLevel(defaultLevel.value());
+
+          String subsystemName(subsystem->getName());
+
+          // set the individual subsystem level by order of priority
+          {
+            auto found = refThis.mEventingSubsystemLevels.find(subsystemName);
+            if (found != refThis.mEventingSubsystemLevels.end()) {
+              subsystem->setEventingLevel(static_cast<Level>((*found).second));
+              goto adjusted_level;
+            }
           }
+          {
+            if (foundAll != refThis.mEventingSubsystemLevels.end()) {
+              subsystem->setEventingLevel(static_cast<Level>((*foundAll).second));
+              goto adjusted_level;
+            }
+          }
+          {
+            auto found = refThis.mDefaultEventingSubsystemLevels.find(subsystemName);
+            if (found != refThis.mDefaultEventingSubsystemLevels.end()) {
+              subsystem->setEventingLevel(static_cast<Level>((*found).second));
+              goto adjusted_level;
+            }
+          }
+          {
+            if (foundDefault != refThis.mDefaultEventingSubsystemLevels.end()) {
+              subsystem->setEventingLevel(static_cast<Level>((*foundDefault).second));
+              goto adjusted_level;
+            }
+          }
+          {
+            subsystem->setEventingLevel(Level::None);
+            goto adjusted_level;
+          }
+        adjusted_level:
+          {}
         }
       }
     }
@@ -661,23 +740,26 @@ namespace zsLib
 
     (*replaceList) = (*refThis.mEventingListeners);
 
-    for (auto iter = replaceList->begin(); iter != replaceList->end(); ++iter)
+    auto originalSize = replaceList->size();
+
+    for (auto iter_doNotUse = replaceList->begin(); iter_doNotUse != replaceList->end(); )
     {
-      if (delegate.get() == (*iter).get())
-      {
-        replaceList->erase(iter);
+      auto current = iter_doNotUse;
+      ++iter_doNotUse;
 
-        if (0 == replaceList->size()) {
-          if (refThis.mDefaultEventingSubsystemLevels.size() > 0) {
-            for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-              auto *subsystem = (*innerIter);
-              subsystem->setEventingLevel(None);
-            }
-          }
+      if (delegate.get() == (*current).get()) {
+        replaceList->erase(current);
+      }
+    }
+
+    if (originalSize != replaceList->size()) {
+      refThis.mEventingListeners = replaceList;
+
+      if (0 == replaceList->size()) {
+        for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+          auto *subsystem = (*innerIter);
+          subsystem->setEventingLevel(None);
         }
-
-        refThis.mEventingListeners = replaceList;
-        return;
       }
     }
   }
@@ -923,10 +1005,10 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Log::setEventingLevelByName(
-                                   const char *subsystemName,
-                                   Level level
-                                   )
+  void Log::setDefaultEventingLevelByName(
+                                          const char *subsystemName,
+                                          Level level
+                                          )
   {
     String subsystemNameStr(subsystemName);
     if (subsystemNameStr.isEmpty()) {
@@ -947,16 +1029,71 @@ namespace zsLib
       // if no listeners attached then there's no reason to adjust the subsystem's current level
       if (refThis.mEventingListeners->size() < 1) return;
 
+      // default level will never take affect while an eventing level for all compoments is in affect
+      if (refThis.mEventingSubsystemLevels.end() != refThis.mEventingSubsystemLevels.find(String())) return;
+
       for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
       {
         auto &subsystem = *(*iter);
 
+        String checkSubsystemName = String(subsystem.getName());
+
+        // default level will not take affect if the component has an existing event level set for the specific componenet
+        if (refThis.mEventingSubsystemLevels.end() != refThis.mEventingSubsystemLevels.find(checkSubsystemName)) continue;
+
         if (defaultAll) {
+          // default for all will not take affect if there is a default for the specific component
+          if (refThis.mDefaultEventingSubsystemLevels.end() != refThis.mDefaultEventingSubsystemLevels.find(checkSubsystemName)) continue;
+
           subsystem.setEventingLevel(level);
           continue;
         }
 
-        if (subsystemNameStr == subsystem.getName()) {
+        if (subsystemNameStr == checkSubsystemName) {
+          subsystem.setEventingLevel(level);
+        }
+      }
+    }
+  }
+
+  //---------------------------------------------------------------------------
+  void Log::setEventingLevelByName(
+                                   const char *subsystemName,
+                                   Level level
+                                   )
+  {
+    String subsystemNameStr(subsystemName);
+    if (subsystemNameStr.isEmpty()) {
+      subsystemNameStr = String();
+    }
+
+    LogPtr log = Log::singleton();
+    if (!log) return;
+
+    Log &refThis = (*log);
+
+    bool defaultAll = subsystemNameStr.isEmpty();
+
+    {
+      AutoRecursiveLock lock(refThis.mLock);
+      refThis.mEventingSubsystemLevels[subsystemNameStr] = static_cast<decltype(level)>(static_cast<std::underlying_type<decltype(level)>::type>(level));
+
+      // if no listeners attached then there's no reason to adjust the subsystem's current level
+      if (refThis.mEventingListeners->size() < 1) return;
+
+      for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
+      {
+        auto &subsystem = *(*iter);
+        String checkSubsystemName = String(subsystem.getName());
+
+        if (defaultAll) {
+          // set all level will not take affect if there is a value for the specific component
+          if (refThis.mEventingSubsystemLevels.end() != refThis.mEventingSubsystemLevels.find(checkSubsystemName)) continue;
+          subsystem.setEventingLevel(level);
+          continue;
+        }
+
+        if (subsystemNameStr == checkSubsystemName) {
           subsystem.setEventingLevel(level);
         }
       }

@@ -48,6 +48,9 @@
 /// get a subsystem that is not part of this subsystem
 #define ZS_GET_OTHER_SUBSYSTEM(xNamespace, xSubsystem)                  ZS_INTERNAL_GET_OTHER_SUBSYSTEM(xNamespace, xSubsystem)
 
+#define ZS_GET_CURRENT_TIMESTAMP_MS()                                   ZS_INTERNAL_GET_CURRENT_TIMESTAMP_MS()
+#define ZS_GET_CURRENT_THREAD_ID()                                      ZS_INTERNAL_GET_CURRENT_THREAD_ID()
+
 #define ZS_LOG_PARAMS(xMsg)                                             ZS_INTERNAL_LOG_PARAMS(xMsg)
 #define ZS_PARAM(xName, xValue)                                         ZS_INTERNAL_PARAM(xName, xValue)
 #define ZS_PARAMIZE(xValueName)                                         ZS_INTERNAL_PARAMIZE(xValueName)
@@ -145,8 +148,8 @@ namespace zsLib
       Severity_Last       = Fatal
     };
 
-    static const char *toString(Severity severity);
-    static Severity toSeverity(const char *severityStr); // throw (Exceptions::InvalidArgument);
+    static const char *toString(Severity severity) noexcept;
+    static Severity toSeverity(const char *severityStr) noexcept(false); // throw (Exceptions::InvalidArgument);
 
     enum Level : LevelBaseType
     {
@@ -162,8 +165,8 @@ namespace zsLib
       Level_Last          = Insane,
     };
 
-    static const char *toString(Level level);
-    static Level toLevel(const char *levelStr); // throw (Exceptions::InvalidArgument);
+    static const char *toString(Level level) noexcept;
+    static Level toLevel(const char *levelStr) noexcept(false); // throw (Exceptions::InvalidArgument);
 
     //-------------------------------------------------------------------------
     #pragma mark
@@ -245,6 +248,14 @@ namespace zsLib
 
     //-------------------------------------------------------------------------
     #pragma mark
+    #pragma mark Log => (helper routines)
+    #pragma mark
+
+    static QWORD getCurrentThreadID() noexcept;
+    static QWORD getCurrentTimestampMS() noexcept;
+
+    //-------------------------------------------------------------------------
+    #pragma mark
     #pragma mark Log => (output methods)
     #pragma mark
 
@@ -319,6 +330,10 @@ namespace zsLib
                                       GetEventingWriterInfoResult &result
                                       );
     
+    static void setDefaultEventingLevelByName(
+                                              const char *subsystemName,
+                                              Level level
+                                              );
     static void setEventingLevelByName(
                                        const char *subsystemName,
                                        Level level

@@ -77,6 +77,7 @@ namespace zsLib
   inline Days toDays(const Milliseconds &v) {return std::chrono::duration_cast<Days>(v);}
   inline Days toDays(const Microseconds &v) {return std::chrono::duration_cast<Days>(v);}
   inline Days toDays(const Nanoseconds &v) {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Time &v) { return Days(std::chrono::time_point_cast<Days>(v).time_since_epoch()); }
 
   inline Hours toHours(const Days &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Hours &v) {return v;}
@@ -85,6 +86,7 @@ namespace zsLib
   inline Hours toHours(const Milliseconds &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Microseconds &v) {return std::chrono::duration_cast<Hours>(v);}
   inline Hours toHours(const Nanoseconds &v) {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Time &v) { return Hours(std::chrono::time_point_cast<Hours>(v).time_since_epoch()); }
 
   inline Minutes toMinutes(const Days &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Hours &v) {return std::chrono::duration_cast<Minutes>(v);}
@@ -93,6 +95,7 @@ namespace zsLib
   inline Minutes toMinutes(const Milliseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Microseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
   inline Minutes toMinutes(const Nanoseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Time &v) { return Minutes(std::chrono::time_point_cast<Minutes>(v).time_since_epoch()); }
 
   inline Seconds toSeconds(const Days &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Hours &v) {return std::chrono::duration_cast<Seconds>(v);}
@@ -101,6 +104,7 @@ namespace zsLib
   inline Seconds toSeconds(const Milliseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Microseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
   inline Seconds toSeconds(const Nanoseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Time &v) { return Seconds(std::chrono::time_point_cast<Seconds>(v).time_since_epoch()); }
 
   inline Milliseconds toMilliseconds(const Days &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Hours &v) {return std::chrono::duration_cast<Milliseconds>(v);}
@@ -109,6 +113,7 @@ namespace zsLib
   inline Milliseconds toMilliseconds(const Milliseconds &v) {return v;}
   inline Milliseconds toMilliseconds(const Microseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
   inline Milliseconds toMilliseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Time &v) { return Milliseconds(std::chrono::time_point_cast<Milliseconds>(v).time_since_epoch()); }
 
   inline Microseconds toMicroseconds(const Days &v) {return std::chrono::duration_cast<Microseconds>(v);}
   inline Microseconds toMicroseconds(const Hours &v) {return std::chrono::duration_cast<Microseconds>(v);}
@@ -117,6 +122,7 @@ namespace zsLib
   inline Microseconds toMicroseconds(const Milliseconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
   inline Microseconds toMicroseconds(const Microseconds &v) {return v;}
   inline Microseconds toMicroseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Time &v) { return Microseconds(std::chrono::time_point_cast<Microseconds>(v).time_since_epoch()); }
 
   inline Nanoseconds toNanoseconds(const Days &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Hours &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
@@ -125,5 +131,6 @@ namespace zsLib
   inline Nanoseconds toNanoseconds(const Milliseconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Microseconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
   inline Nanoseconds toNanoseconds(const Nanoseconds &v) {return v;}
+  inline Nanoseconds toNanoseconds(const Time &v) { return Nanoseconds(std::chrono::time_point_cast<Nanoseconds>(v).time_since_epoch()); }
 
 } // namespace zsLib
