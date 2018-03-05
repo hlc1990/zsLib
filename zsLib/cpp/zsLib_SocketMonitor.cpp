@@ -45,6 +45,10 @@
 
 #define ZSLIB_SOCKET_MONITOR_TIMEOUT_IN_MILLISECONDS (10*(1000))
 
+#if ANDROID
+using SafeIntInternal;
+#endif
+
 namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib_socket)}
 
 namespace zsLib
