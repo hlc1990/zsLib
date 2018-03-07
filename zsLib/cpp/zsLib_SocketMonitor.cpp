@@ -45,9 +45,6 @@
 
 #define ZSLIB_SOCKET_MONITOR_TIMEOUT_IN_MILLISECONDS (10*(1000))
 
-#if ANDROID
-using SafeIntInternal;
-#endif
 
 namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib_socket)}
 
@@ -1087,7 +1084,11 @@ namespace zsLib
     {
       debugSetCurrentThreadName("org.zsLib.socketMonitor");
 
+#if ANDROID
+      SafeIntInternal::srand(static_cast<unsigned int>(time(NULL)));
+#else
       srand(static_cast<unsigned int>(time(NULL)));
+#endif
 
       ZS_LOG_DETAIL(log("socket monitor thread started"))
 
@@ -1499,7 +1500,12 @@ namespace zsLib
 
             if (((tries > 5) && (tries < 10)) ||
                 (tries > 15)) {
+#if ANDROID
+              mWakeUpAddress.setPort(5000+(SafeIntInternal::rand()%(65525-5000)));
+#else
               mWakeUpAddress.setPort(5000+(rand()%(65525-5000)));
+#endif
+              //mWakeUpAddress.setPort(5000+(rand()%(65525-5000)));
             } else {
               mWakeUpAddress.setPort(0);
             }

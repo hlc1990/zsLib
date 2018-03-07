@@ -61,6 +61,38 @@ static_library("zslib") {
     "_LIB",
   ]
 
+  if (is_android){
+    defines += [
+      "_ANDROID",
+      "HAVE_INTTYPES_H",
+      "HAVE_UNISTD_H",
+      "HAVE_ERRNO_H",
+      "HAVE_NETINET_IN_H",
+      "HAVE_SYS_IOCTL_H",
+      "HAVE_SYS_MMAN_H",
+      "HAVE_SYS_MOUNT_H",
+      "HAVE_SYS_PRCTL_H",
+      "HAVE_SYS_RESOURCE_H",
+      "HAVE_SYS_SELECT_H",
+      "HAVE_SYS_STAT_H",
+      "HAVE_SYS_TYPES_H",
+      "HAVE_STDLIB_H",
+      "HAVE_STRDUP",
+      "HAVE_MMAP",
+      "HAVE_UTIME_H",
+      "HAVE_GETPAGESIZE",
+      "HAVE_LSEEK64",
+      "HAVE_LSEEK64_PROTOTYPE",
+      "HAVE_EXT2_IOCTLS",
+      "HAVE_LINUX_FD_H",
+      "HAVE_TYPE_SSIZE_T",
+      "HAVE_SYS_TIME_H",
+      "HAVE_SYS_PARAM_H",
+      "HAVE_SYSCONF",
+    ]
+
+  }
+
   deps = [
     ":zslib_events",
   ]

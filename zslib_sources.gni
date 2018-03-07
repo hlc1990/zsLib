@@ -127,6 +127,21 @@ if(!is_win) {
     "../zsLib/zsLib/extras/uuid/uuidd.h",
     "../zsLib/zsLib/extras/uuid/uuidP.h",
   ]
+
+  if (is_android) {
+    zslib_sources += [
+      "zsLib/extras/uuid/clear.c",
+      "zsLib/extras/uuid/compare.c",
+      "zsLib/extras/uuid/copy.c",
+      "zsLib/extras/uuid/gen_uuid.c",
+      "zsLib/extras/uuid/isnull.c",
+      "zsLib/extras/uuid/pack.c",
+      "zsLib/extras/uuid/parse.c",
+      "zsLib/extras/uuid/unpack.c",
+      "zsLib/extras/uuid/unparse.c",
+      "zsLib/extras/uuid/uuid_time.c",
+    ]
+  }
 }
 
 

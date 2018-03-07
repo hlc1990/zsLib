@@ -38,6 +38,10 @@
 #include <sstream>
 #include <iomanip>
 
+#if ANDROID
+#include <base/os_compat_android.h>
+#endif
+
 #define ZSLIB_HAVE_STD_GETTIME 1
 
 #ifdef __unix__
