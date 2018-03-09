@@ -115,13 +115,13 @@
 #define HAVE_IF_NAMETOINDEX 1
 #define HAVE_PTHREAD_SETNAME_WITH_2 1
 
-#ifdef _ANDROID
+#ifdef ANDROID
 
 // Android supports these additional features
 
 // Android does not support these features
 
-#endif //_ANDROID
+#endif //ANDROID
 #endif //__linux__
 
 #endif //ZSLIB_INTERNAL_PLATFORM_H_ae1ca1614cb82fd6e3e9751af73f2658

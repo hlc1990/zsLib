@@ -160,7 +160,7 @@ namespace zsLib
       return internal::MessageQueueThreadUsingMainThreadMessageQueueForApple::singleton();
 #elif defined(__QNX__)
       return internal::MessageQueueThreadUsingBlackberryChannels::singleton();
-#elif defined(_ANDROID)
+#elif defined(ANDROID)
       return internal::MessageQueueThreadBasic::create("build");
 #else
 #define __STR2__(x) #x

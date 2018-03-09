@@ -63,7 +63,7 @@ static_library("zslib") {
 
   if (is_android){
     defines += [
-      "_ANDROID",
+      "ANDROID",
       "HAVE_INTTYPES_H",
       "HAVE_UNISTD_H",
       "HAVE_ERRNO_H",
