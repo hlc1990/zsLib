@@ -18,7 +18,7 @@ config("zslib_config") {
         "/wd4290",
       ]
       
-      if (!is_winuwp)
+      if (!is_target_winuwp)
       {
         cflags_cc += ["/EHsc"]
       }
