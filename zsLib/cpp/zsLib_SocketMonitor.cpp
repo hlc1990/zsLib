@@ -28,6 +28,9 @@
  either expressed or implied, of the FreeBSD Project.
  
  */
+#ifdef HAVE_SYS_SELECT_H
+  #include <sys/select.h>
+#endif
 
 #include <zsLib/internal/zsLib_SocketMonitor.h>
 #include <zsLib/internal/zsLib_MessageQueueThread.h>
