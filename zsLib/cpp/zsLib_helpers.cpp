@@ -97,7 +97,8 @@ namespace zsLib {
 
     //-------------------------------------------------------------------------
     void uuid_generate_random(zsLib::internal::uuid_wrapper::raw_uuid_type &uuid) {
-      auto result = CoCreateGuid(&uuid);
+      ZS_MAYBE_USED() auto result = CoCreateGuid(&uuid);
+      ZS_MAYBE_USED(result);
       ZS_ASSERT(S_OK == result);
     }
   }

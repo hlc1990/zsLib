@@ -167,8 +167,9 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ThreadPriorities threadPriority) noexcept
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ZS_MAYBE_USED() ThreadPriorities threadPriority) noexcept
     {
+      ZS_MAYBE_USED(threadPriority);
       // no-op
     }
   }

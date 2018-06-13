@@ -45,10 +45,12 @@ namespace zsLib
   {
     //-------------------------------------------------------------------------
     void setThreadPriority(
-                           Thread::native_handle_type handle,
-                           ThreadPriorities threadPriority
+                           ZS_MAYBE_USED() Thread::native_handle_type handle,
+                           ZS_MAYBE_USED() ThreadPriorities threadPriority
                            ) noexcept
     {
+      ZS_MAYBE_USED(handle);
+      ZS_MAYBE_USED(threadPriority);
 #ifndef _WIN32
       const int policy = SCHED_RR;
       const int minPrio = sched_get_priority_min(policy);
@@ -83,7 +85,8 @@ namespace zsLib
         case ThreadPriority_RealtimePriority: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
       }
 #ifndef WINUWP
-		  auto result = SetThreadPriority(handle, priority);
+		  ZS_MAYBE_USED() auto result = SetThreadPriority(handle, priority);
+      ZS_MAYBE_USED(result);
       ZS_ASSERT(0 != result);
 #endif //ndef WINUWP
 

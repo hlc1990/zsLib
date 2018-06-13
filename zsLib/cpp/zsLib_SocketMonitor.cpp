@@ -667,7 +667,8 @@ namespace zsLib
       event_type temp = mOfficialSet[index].events;
       mOfficialSet[index].events = mOfficialSet[index].events | events;
 #ifdef _WIN32
-      auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+      ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+      ZS_MAYBE_USED(selectResult);
       ZS_ASSERT(0 == selectResult);
 #endif //_WIN32
 
@@ -698,10 +699,12 @@ namespace zsLib
         ZS_LOG_TRACE(log("remove events no longer needs to monitor as no events are being monitored") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty))
         reset(socket);
       } else {
-        ZS_LOG_INSANE(log("remove events found existing thus updating") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty))
+        ZS_LOG_INSANE(log("remove events found existing thus updating") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty));
 
 #ifdef _WIN32
-      auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+        ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+        ZS_MAYBE_USED(selectResult);
+
         ZS_ASSERT(0 == selectResult);
 #endif //_WIN32
       }
@@ -811,7 +814,8 @@ namespace zsLib
         eventHandle = NULL;
         ZS_LOG_WARNING(Detail, log("create event handle failed") + ZS_PARAM("error", WSAGetLastError()))
       } else {
-        auto selectResult = WSAEventSelect(socket, eventHandle, toNetworkEvents(events));
+        ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, eventHandle, toNetworkEvents(events));
+        ZS_MAYBE_USED(selectResult);
         ZS_ASSERT(0 == selectResult);
       }
       mOfficialHandleSet[mOfficialCount] = eventHandle;
