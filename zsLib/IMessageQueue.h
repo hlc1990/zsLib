@@ -38,29 +38,29 @@ namespace zsLib
 {
   interaction IMessageQueueMessage
   {
-    virtual const char *getDelegateName() const = 0;
-    virtual const char *getMethodName() const = 0;
+    virtual const char *getDelegateName() const noexcept = 0;
+    virtual const char *getMethodName() const noexcept = 0;
 
-    virtual void processMessage() = 0;
+    virtual void processMessage() noexcept = 0;
 
-    virtual ~IMessageQueueMessage() {}
+    virtual ~IMessageQueueMessage() noexcept {}
   };
   
   template <class Closure>
   interaction IMessageQueueMessageClosure : public IMessageQueueMessage
   {
-    explicit IMessageQueueMessageClosure(const Closure &closure) : mClosure(closure) {}
+    explicit IMessageQueueMessageClosure(const Closure &closure) noexcept : mClosure(closure) {}
 
-    virtual const char *getDelegateName() const {return __func__;}
-    virtual const char *getMethodName() const {return __func__;}
-    virtual void processMessage() {mClosure();}
+    virtual const char *getDelegateName() const noexcept {return __func__;}
+    virtual const char *getMethodName() const noexcept {return __func__;}
+    virtual void processMessage() noexcept {mClosure();}
 
     Closure mClosure;
   };
 
   interaction IMessageQueueNotify
   {
-    virtual void notifyMessagePosted() = 0;
+    virtual void notifyMessagePosted() noexcept = 0;
   };
 
   interaction IMessageQueue
@@ -72,13 +72,13 @@ namespace zsLib
 
     typedef size_t size_type;
 
-    static IMessageQueuePtr create(IMessageQueueNotifyPtr notify);
+    static IMessageQueuePtr create(IMessageQueueNotifyPtr notify) noexcept;
 
-    virtual void post(IMessageQueueMessageUniPtr message) = 0;
+    virtual void post(IMessageQueueMessageUniPtr message) noexcept(false) = 0;
 
     template <class Closure>
-    void postClosure(const Closure &closure) {post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
+    void postClosure(const Closure &closure) noexcept(false) {post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
 
-    virtual size_type getTotalUnprocessedMessages() const = 0;
+    virtual size_type getTotalUnprocessedMessages() const noexcept = 0;
   };
 }

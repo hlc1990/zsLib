@@ -40,9 +40,9 @@ namespace zsLib
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IFactory<XFACTORYINTERFACE>
-  #pragma mark
+  //
+  // IFactory<XFACTORYINTERFACE>
+  //
 
   template<typename XFACTORYINTERFACE>
   interaction IFactory : public XFACTORYINTERFACE,
@@ -53,12 +53,12 @@ namespace zsLib
     ZS_DECLARE_TYPEDEF_PTR(IFactory, UseFactory);
 
   public:
-    static void override(UseFactoryInterfacePtr override)
+    static void override(UseFactoryInterfacePtr override) noexcept
     {
       singletonFactory().mOverride = override;
     }
 
-    static UseFactoryInterface &singleton()
+    static UseFactoryInterface &singleton() noexcept
     {
       UseFactory &factory = singletonFactory();
       if (factory.mOverride) return (*factory.mOverride);
@@ -66,7 +66,7 @@ namespace zsLib
     }
 
   private:
-    static UseFactory &singletonFactory()
+    static UseFactory &singletonFactory() noexcept
     {
       static Singleton<UseFactory, false> factory;
       return factory.singleton();

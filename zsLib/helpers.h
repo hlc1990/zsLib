@@ -41,96 +41,96 @@
 namespace zsLib
 {
   //---------------------------------------------------------------------------
-  PUID createPUID();
-  UUID createUUID();
+  PUID createPUID() noexcept;
+  UUID createUUID() noexcept;
 
   //---------------------------------------------------------------------------
-  void debugSetCurrentThreadName(const char *name);
+  void debugSetCurrentThreadName(const char *name) noexcept;
 
   // see: http://stackoverflow.com/questions/8357240/how-to-automatically-convert-strongly-typed-enum-into-int
   template <typename E>
-  constexpr typename std::underlying_type<E>::type to_underlying(E e) {
+  constexpr typename std::underlying_type<E>::type to_underlying(E e) noexcept {
     return static_cast<typename std::underlying_type<E>::type>(e);
   }
 
   //---------------------------------------------------------------------------
-  Time now();
+  Time now() noexcept;
 
   template <typename duration_type>
-  inline duration_type timeSinceEpoch(Time time)
+  inline duration_type timeSinceEpoch(Time time) noexcept
   {
     if (Time() == time) return duration_type();
     return std::chrono::duration_cast<duration_type>(time.time_since_epoch());
   }
 
   template <typename duration_type>
-  inline Time timeSinceEpoch(duration_type duration)
+  inline Time timeSinceEpoch(duration_type duration) noexcept
   {
     if (decltype(duration)() == duration) return Time();
     return Time(duration);
   }
 
-  inline Days toDays(const Days &v) {return v;}
-  inline Days toDays(const Hours &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Minutes &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Seconds &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Milliseconds &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Microseconds &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Nanoseconds &v) {return std::chrono::duration_cast<Days>(v);}
-  inline Days toDays(const Time &v) { return Days(std::chrono::time_point_cast<Days>(v).time_since_epoch()); }
+  inline Days toDays(const Days &v) noexcept {return v;}
+  inline Days toDays(const Hours &v) noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Minutes &v) noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Seconds &v) noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Microseconds &v) noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Nanoseconds &v)noexcept {return std::chrono::duration_cast<Days>(v);}
+  inline Days toDays(const Time &v) noexcept { return Days(std::chrono::time_point_cast<Days>(v).time_since_epoch()); }
 
-  inline Hours toHours(const Days &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Hours &v) {return v;}
-  inline Hours toHours(const Minutes &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Seconds &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Milliseconds &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Microseconds &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Nanoseconds &v) {return std::chrono::duration_cast<Hours>(v);}
-  inline Hours toHours(const Time &v) { return Hours(std::chrono::time_point_cast<Hours>(v).time_since_epoch()); }
+  inline Hours toHours(const Days &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Hours &v) noexcept {return v;}
+  inline Hours toHours(const Minutes &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Seconds &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Microseconds &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Nanoseconds &v) noexcept {return std::chrono::duration_cast<Hours>(v);}
+  inline Hours toHours(const Time &v) noexcept { return Hours(std::chrono::time_point_cast<Hours>(v).time_since_epoch()); }
 
-  inline Minutes toMinutes(const Days &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Hours &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Minutes &v) {return v;}
-  inline Minutes toMinutes(const Seconds &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Milliseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Microseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Nanoseconds &v) {return std::chrono::duration_cast<Minutes>(v);}
-  inline Minutes toMinutes(const Time &v) { return Minutes(std::chrono::time_point_cast<Minutes>(v).time_since_epoch()); }
+  inline Minutes toMinutes(const Days &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Hours &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Minutes &v) noexcept {return v;}
+  inline Minutes toMinutes(const Seconds &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Microseconds &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Nanoseconds &v) noexcept {return std::chrono::duration_cast<Minutes>(v);}
+  inline Minutes toMinutes(const Time &v) noexcept { return Minutes(std::chrono::time_point_cast<Minutes>(v).time_since_epoch()); }
 
-  inline Seconds toSeconds(const Days &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Hours &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Minutes &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Seconds &v) {return v;}
-  inline Seconds toSeconds(const Milliseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Microseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Nanoseconds &v) {return std::chrono::duration_cast<Seconds>(v);}
-  inline Seconds toSeconds(const Time &v) { return Seconds(std::chrono::time_point_cast<Seconds>(v).time_since_epoch()); }
+  inline Seconds toSeconds(const Days &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Hours &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Minutes &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Seconds &v) noexcept {return v;}
+  inline Seconds toSeconds(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Microseconds &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Nanoseconds &v) noexcept {return std::chrono::duration_cast<Seconds>(v);}
+  inline Seconds toSeconds(const Time &v) noexcept { return Seconds(std::chrono::time_point_cast<Seconds>(v).time_since_epoch()); }
 
-  inline Milliseconds toMilliseconds(const Days &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Hours &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Minutes &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Seconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Milliseconds &v) {return v;}
-  inline Milliseconds toMilliseconds(const Microseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Milliseconds>(v);}
-  inline Milliseconds toMilliseconds(const Time &v) { return Milliseconds(std::chrono::time_point_cast<Milliseconds>(v).time_since_epoch()); }
+  inline Milliseconds toMilliseconds(const Days &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Hours &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Minutes &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Seconds &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Milliseconds &v) noexcept {return v;}
+  inline Milliseconds toMilliseconds(const Microseconds &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Nanoseconds &v) noexcept {return std::chrono::duration_cast<Milliseconds>(v);}
+  inline Milliseconds toMilliseconds(const Time &v) noexcept { return Milliseconds(std::chrono::time_point_cast<Milliseconds>(v).time_since_epoch()); }
 
-  inline Microseconds toMicroseconds(const Days &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Hours &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Minutes &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Seconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Milliseconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Microseconds &v) {return v;}
-  inline Microseconds toMicroseconds(const Nanoseconds &v) {return std::chrono::duration_cast<Microseconds>(v);}
-  inline Microseconds toMicroseconds(const Time &v) { return Microseconds(std::chrono::time_point_cast<Microseconds>(v).time_since_epoch()); }
+  inline Microseconds toMicroseconds(const Days &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Hours &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Minutes &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Seconds &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Microseconds &v) noexcept {return v;}
+  inline Microseconds toMicroseconds(const Nanoseconds &v) noexcept {return std::chrono::duration_cast<Microseconds>(v);}
+  inline Microseconds toMicroseconds(const Time &v) noexcept { return Microseconds(std::chrono::time_point_cast<Microseconds>(v).time_since_epoch()); }
 
-  inline Nanoseconds toNanoseconds(const Days &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Hours &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Minutes &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Seconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Milliseconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Microseconds &v) {return std::chrono::duration_cast<Nanoseconds>(v);}
-  inline Nanoseconds toNanoseconds(const Nanoseconds &v) {return v;}
-  inline Nanoseconds toNanoseconds(const Time &v) { return Nanoseconds(std::chrono::time_point_cast<Nanoseconds>(v).time_since_epoch()); }
+  inline Nanoseconds toNanoseconds(const Days &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Hours &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Minutes &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Seconds &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Milliseconds &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Microseconds &v) noexcept {return std::chrono::duration_cast<Nanoseconds>(v);}
+  inline Nanoseconds toNanoseconds(const Nanoseconds &v) noexcept {return v;}
+  inline Nanoseconds toNanoseconds(const Time &v) noexcept { return Nanoseconds(std::chrono::time_point_cast<Nanoseconds>(v).time_since_epoch()); }
 
 } // namespace zsLib

@@ -43,10 +43,10 @@ namespace zsLib
     bool convert(const String &input, LONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base);
     bool convert(const String &input, ULONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base);
     bool convert(const String &input, bool &outResult, bool ignoreWhiteSpace);
-    bool convert(const String &input, float &outResult, bool ignoreWhiteSpace);
-    bool convert(const String &input, double &outResult, bool ignoreWhiteSpace);
-    bool convert(const String &input, UUID &outResult, bool ignoreWhiteSpace);
-    bool convert(const String &input, Time &outResult, bool ignoreWhiteSpace);
+    bool convert(const String &input, float &outResult, bool ignoreWhiteSpace) noexcept;
+    bool convert(const String &input, double &outResult, bool ignoreWhiteSpace) noexcept;
+    bool convert(const String &input, UUID &outResult, bool ignoreWhiteSpace) noexcept;
+    bool convert(const String &input, Time &outResult, bool ignoreWhiteSpace) noexcept;
   }
 }
 
@@ -62,34 +62,34 @@ namespace zsLib
 namespace zsLib
 {
   template<>
-  void Numeric<bool>::get(bool &outValue) const throw (ValueOutOfRange);
+  void Numeric<bool>::get(bool &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<float>::get(float &outValue) const throw (ValueOutOfRange);
+  void Numeric<float>::get(float &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<double>::get(double &outValue) const throw (ValueOutOfRange);
+  void Numeric<double>::get(double &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<UUID>::get(UUID &outValue) const throw (ValueOutOfRange);
+  void Numeric<UUID>::get(UUID &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Time>::get(Time &outValue) const throw (ValueOutOfRange);
+  void Numeric<Time>::get(Time &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Hours>::get(Hours &outValue) const throw (ValueOutOfRange);
+  void Numeric<Hours>::get(Hours &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Seconds>::get(Seconds &outValue) const throw (ValueOutOfRange);
+  void Numeric<Seconds>::get(Seconds &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Milliseconds>::get(Milliseconds &outValue) const throw (ValueOutOfRange);
+  void Numeric<Milliseconds>::get(Milliseconds &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Microseconds>::get(Microseconds &outValue) const throw (ValueOutOfRange);
+  void Numeric<Microseconds>::get(Microseconds &outValue) const noexcept(false);  // throws ValueOutOfRange
 
   template<>
-  void Numeric<Nanoseconds>::get(Nanoseconds &outValue) const throw (ValueOutOfRange);
+  void Numeric<Nanoseconds>::get(Nanoseconds &outValue) const noexcept(false);  // throws ValueOutOfRange
 }
 
 #ifdef _WIN32

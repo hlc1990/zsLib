@@ -49,15 +49,17 @@ using zsLib::WORD;
 #define TEST_UNICODE_2_DIGIT 0x00A9
 #define TEST_UNICODE_3_DIGIT 0x2260
 
+#if 0
 static void testReverseEndian(wchar_t &value)
 {
-  if (sizeof(WORD) != sizeof(wchar_t)) return;
+  if constexpr (sizeof(WORD) != sizeof(wchar_t)) return;
 
   BYTE *buffer = (BYTE *)&value;
   BYTE tmp = buffer[0];
   buffer[0] = buffer[1];
   buffer[1] = tmp;
 }
+#endif //0
 
 void testString1()
 
@@ -107,12 +109,12 @@ void testString1()
     0x7FF,
     0x800,
     0xFFFF,
-    (wchar_t)(zsLib::DWORD)0x10000,
-    (wchar_t)(zsLib::DWORD)0x1FFFFF,
-    (wchar_t)(zsLib::DWORD)0x200000,
-    (wchar_t)(zsLib::DWORD)0x3FFFFFF,
-    (wchar_t)(zsLib::DWORD)0x4000000,
-    (wchar_t)(zsLib::DWORD)0x7FFFFFFF,
+    static_cast<wchar_t>((zsLib::DWORD)0x10000),
+    static_cast<wchar_t>((zsLib::DWORD)0x1FFFFF),
+    static_cast<wchar_t>((zsLib::DWORD)0x200000),
+    static_cast<wchar_t>((zsLib::DWORD)0x3FFFFFF),
+    static_cast<wchar_t>((zsLib::DWORD)0x4000000),
+    static_cast<wchar_t>((zsLib::DWORD)0x7FFFFFFF),
     0x0
   };
 
@@ -229,7 +231,7 @@ void testString1()
   bool equal6 = (0 == strcmp(str6, "Τη γλώσσα μου έδωσαν ελληνική"));  // I have no idea what this says so if it is bad or insulting, my apologies!
   TESTING_CHECK(equal6);
   TESTING_EQUAL(str7, buffer7);
-  if (sizeof(wchar_t) == sizeof(zsLib::WORD)) {
+  if constexpr (sizeof(wchar_t) == sizeof(zsLib::WORD)) {
     TESTING_EQUAL(wstr7[0], TEST_UNICODE_1_DIGIT);
     TESTING_EQUAL(wstr7[1], TEST_UNICODE_2_DIGIT);
     TESTING_EQUAL(wstr7[2], TEST_UNICODE_3_DIGIT);
@@ -246,7 +248,7 @@ void testString1()
     TESTING_EQUAL(wstr8[9], wbuffer8_utf16[9]);
     TESTING_EQUAL(wstr8[10], wbuffer8_utf16[10]);
   }
-  if (sizeof(wchar_t) == sizeof(zsLib::DWORD)) {
+  if constexpr (sizeof(wchar_t) == sizeof(zsLib::DWORD)) {
     for (size_t loop = 0; loop < 13; ++loop) {
       bool equal = (wstr8[loop] == wbuffer8[loop]);
       TESTING_CHECK(equal)
@@ -433,10 +435,10 @@ static wchar_t gWGetAtArray1[] =
   0x7FF,
   0x800,
   0xFFFF,
-  (wchar_t)(DWORD)0x10000, //  0x10000 // 0xD800, 0xDC00,
-  (wchar_t)(DWORD)0x10FC00, // 0x10FC00 //0xDBFF, 0xDC00,
-  (wchar_t)(DWORD)0x103FF, //  0x103FF // 0xD800, 0xDFFF,
-  (wchar_t)(DWORD)0x10FFFF, // 0x10FFFF // 0xDBFF, 0xDFFF,
+  static_cast<wchar_t>((DWORD)0x10000), //  0x10000 // 0xD800, 0xDC00,
+  static_cast<wchar_t>((DWORD)0x10FC00), // 0x10FC00 //0xDBFF, 0xDC00,
+  static_cast<wchar_t>((DWORD)0x103FF), //  0x103FF // 0xD800, 0xDFFF,
+  static_cast<wchar_t>((DWORD)0x10FFFF), // 0x10FFFF // 0xDBFF, 0xDFFF,
   0xE000,
   0xEFFF,
   0xF000,
@@ -732,7 +734,7 @@ void testString2()
       TESTING_CHECK(0 == memcmp((CSTR)result, gMidTests[loop].mContents, gMidTests[loop].mLength))
     }
   }
-  if (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
+  if constexpr (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
   {
     // test convert to unicode with right endian and back
     CWSTR wStr = &(gWArray3[0]);
@@ -748,7 +750,7 @@ void testString2()
     TESTING_CHECK(0 == memcmp((void *)utf16Str, &(gWArray3[0]), sizeof(gWArray3)))
     TESTING_CHECK(string.lengthUnicodeSafe() == gTEST_ARRAY_3_LINE_LENGTH)
   }
-  if (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
+  if constexpr (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
   {
     // test convert to unicode with wrong endian and back
     CWSTR wStr = &(gWArray2[0]);
@@ -764,7 +766,7 @@ void testString2()
     TESTING_CHECK(0 == memcmp((void *)utf16Str, &(gWArray2[0]), sizeof(gWArray2)))
     TESTING_CHECK(string.lengthUnicodeSafe() == gTEST_ARRAY_2_LINE_LENGTH)
   }
-  if (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
+  if constexpr (sizeof(WORD) == sizeof(WCHAR))  // this test if for UTF-16 systems only, new test requried for UTF-32 systems
   {
     // test convert to unicode with right endian and back
     CWSTR wStr = &(gWArray6[0]);

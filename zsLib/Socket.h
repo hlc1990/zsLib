@@ -174,69 +174,46 @@ namespace zsLib
   public:
     static void ignoreSIGPIPEOnThisThread();
 
-    static SocketPtr create() throw(Exceptions::Unspecified);
-    static SocketPtr createUDP(Create::Family inFamily = Create::IPv4) throw(Exceptions::Unspecified);
-    static SocketPtr createTCP(Create::Family inFamily = Create::IPv4) throw(Exceptions::Unspecified);
-    static SocketPtr create(Create::Family inFamily, Create::Type inType, Create::Protocol inProtocol) throw(Exceptions::Unspecified);
+    static SocketPtr create() noexcept(false); // throws Exceptions::Unspecified
+    static SocketPtr createUDP(Create::Family inFamily = Create::IPv4) noexcept(false); // throws Exceptions::Unspecified
+    static SocketPtr createTCP(Create::Family inFamily = Create::IPv4) noexcept(false); // throws Exceptions::Unspecified
+    static SocketPtr create(Create::Family inFamily, Create::Type inType, Create::Protocol inProtocol) noexcept(false); // throws Exceptions::Unspecified
 
-    ~Socket() throw(
-                    Exceptions::WouldBlock,
-                    Exceptions::Unspecified
-                    );
+    ~Socket() noexcept(false); // throws Exceptions::WouldBlock, Exceptions::Unspecified
 
-    SOCKET getSocket() const;
-    SOCKET orphan();                                                      // orphaning a socket will automatically remove any socket monitor
-    void adopt(SOCKET inSocket);
+    SOCKET getSocket() const noexcept;
+    SOCKET orphan() noexcept;                                                      // orphaning a socket will automatically remove any socket monitor
+    void adopt(SOCKET inSocket) noexcept;
 
-    virtual bool isValid() const;
+    virtual bool isValid() const noexcept;
 
     // socket must be valid in order to monitor the socket or an exception will be thrown
-    virtual void setDelegate(ISocketDelegatePtr delegate = ISocketDelegatePtr()) throw (Exceptions::InvalidSocket);
-    virtual void monitor(Monitor::Options options = Monitor::All);
+    virtual void setDelegate(ISocketDelegatePtr delegate = ISocketDelegatePtr()) noexcept(false); // throws Exceptions::InvalidSocket
+    virtual void monitor(Monitor::Options options = Monitor::All) noexcept;
 
-    virtual void close() throw(Exceptions::WouldBlock, Exceptions::Unspecified);  // closing a socket will automaticlaly remove any socket monitor
+    virtual void close() noexcept(false); // throws Exceptions::WouldBlock, Exceptions::Unspecified  // closing a socket will automaticlaly remove any socket monitor
 
-    virtual IPAddress getLocalAddress() const throw (Exceptions::InvalidSocket, Exceptions::Unspecified);
-    virtual IPAddress getRemoteAddress() const throw (Exceptions::InvalidSocket, Exceptions::Unspecified);
+    virtual IPAddress getLocalAddress() const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::Unspecified
+    virtual IPAddress getRemoteAddress() const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::Unspecified
 
     void bind(
               const IPAddress &inBindIP,
               int *noThrowErrorResult = NULL
-              ) const throw(
-                            Exceptions::InvalidSocket,
-                            Exceptions::AddressInUse,
-                            Exceptions::Unspecified
-                            );
+              ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::AddressInUse, Exceptions::Unspecified
 
-    virtual void listen() const throw(
-                                      Exceptions::InvalidSocket,
-                                      Exceptions::AddressInUse,
-                                      Exceptions::Unspecified
-                                      );
+    virtual void listen() const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::AddressInUse, Exceptions::Unspecified
 
     virtual SocketPtr accept(
                              IPAddress &outRemoteIP,
                              bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                              int *noThrowErrorResult = NULL
-                             ) const throw(
-                                           Exceptions::InvalidSocket,
-                                           Exceptions::ConnectionReset,
-                                           Exceptions::Unspecified
-                                           );
+                             ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::ConnectionReset, Exceptions::Unspecified
 
     virtual void connect(
                          const IPAddress &inDestination,     // destination of the connection
                          bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                          int *noThrowErrorResult = NULL
-                         ) const throw(
-                                       Exceptions::InvalidSocket,
-                                       Exceptions::WouldBlock,
-                                       Exceptions::AddressInUse,
-                                       Exceptions::NetworkNotReachable,
-                                       Exceptions::HostNotReachable,
-                                       Exceptions::Timeout,
-                                       Exceptions::Unspecified
-                                       );
+                         ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::WouldBlock, Exceptions::AddressInUse, Exceptions::NetworkNotReachable, Exceptions::HostNotReachable, Exceptions::Timeout, Exceptions::Unspecified
 
     virtual size_t receive(
                            BYTE *ioBuffer,
@@ -244,16 +221,7 @@ namespace zsLib
                            bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                            ULONG flags = (ULONG)(Receive::None),
                            int *noThrowErrorResult = NULL
-                           ) const throw(
-                                         Exceptions::InvalidSocket,
-                                         Exceptions::WouldBlock,
-                                         Exceptions::Shutdown,
-                                         Exceptions::ConnectionReset,
-                                         Exceptions::ConnectionAborted,
-                                         Exceptions::Timeout,
-                                         Exceptions::BufferTooSmall,
-                                         Exceptions::Unspecified
-                                         );
+                           ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::WouldBlock, Exceptions::Shutdown, Exceptions::ConnectionReset, Exceptions::ConnectionAborted, Exceptions::Timeout, Exceptions::BufferTooSmall, Exceptions::Unspecified
 
     virtual size_t receiveFrom(
                                IPAddress &outRemoteIP,
@@ -262,15 +230,7 @@ namespace zsLib
                                bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                                ULONG flags = (ULONG)(Receive::None),
                                int *noThrowErrorResult = NULL
-                               ) const throw(
-                                             Exceptions::InvalidSocket,
-                                             Exceptions::WouldBlock,
-                                             Exceptions::Shutdown,
-                                             Exceptions::ConnectionReset,
-                                             Exceptions::Timeout,
-                                             Exceptions::BufferTooSmall,
-                                             Exceptions::Unspecified
-                                             );
+                               ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::WouldBlock, Exceptions::Shutdown, Exceptions::ConnectionReset, Exceptions::Timeout, Exceptions::BufferTooSmall, Exceptions::Unspecified
 
     virtual size_t send(
                         const BYTE *inBuffer,
@@ -278,17 +238,7 @@ namespace zsLib
                         bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                         ULONG flags = (ULONG)(Send::None),
                         int *noThrowErrorResult = NULL
-                        ) const throw(
-                                      Exceptions::InvalidSocket,
-                                      Exceptions::WouldBlock,
-                                      Exceptions::Shutdown,
-                                      Exceptions::HostNotReachable,
-                                      Exceptions::ConnectionAborted,
-                                      Exceptions::ConnectionReset,
-                                      Exceptions::Timeout,
-                                      Exceptions::BufferTooSmall,
-                                      Exceptions::Unspecified
-                                      );
+                        ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::WouldBlock, Exceptions::Shutdown, Exceptions::HostNotReachable, Exceptions::ConnectionAborted, Exceptions::ConnectionReset, Exceptions::Timeout, Exceptions::BufferTooSmall, Exceptions::Unspecified
 
     virtual size_t sendTo(
                           const IPAddress &inDestination,
@@ -297,35 +247,24 @@ namespace zsLib
                           bool *outWouldBlock = NULL,         // if this param is used, will return the "would block" as a result rather than throwing an exception
                           ULONG flags = (ULONG)(Send::None),
                           int *noThrowErrorResult = NULL
-                          ) const throw(
-                                        Exceptions::InvalidSocket,
-                                        Exceptions::WouldBlock,
-                                        Exceptions::Shutdown,
-                                        Exceptions::Timeout,
-                                        Exceptions::HostNotReachable,
-                                        Exceptions::ConnectionAborted,
-                                        Exceptions::ConnectionReset,
-                                        Exceptions::Timeout,
-                                        Exceptions::BufferTooSmall,
-                                        Exceptions::Unspecified
-                                        );
+                          ) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::WouldBlock, Exceptions::Shutdown, Exceptions::Timeout, Exceptions::HostNotReachable, Exceptions::ConnectionAborted, Exceptions::ConnectionReset, Exceptions::Timeout, Exceptions::BufferTooSmall, Exceptions::Unspecified
 
-    virtual void shutdown(Shutdown::Options inOptions = Shutdown::Both) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified);
+    virtual void shutdown(Shutdown::Options inOptions = Shutdown::Both) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::Unspecified
 
-    virtual void setBlocking(bool enabled) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified);
+    virtual void setBlocking(bool enabled) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::Unspecified
 
-    virtual void setOptionFlag(SetOptionFlag::Options inOption, bool inEnabled) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
-    virtual void setOptionValue(SetOptionValue::Options inOption, ULONG inValue) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
+    virtual void setOptionFlag(SetOptionFlag::Options inOption, bool inEnabled) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified
+    virtual void setOptionValue(SetOptionValue::Options inOption, ULONG inValue) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified
 
-    virtual bool getOptionFlag(GetOptionFlag::Options inOption) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
-    virtual ULONG getOptionValue(GetOptionValue::Options inOption) const throw(Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified);
+    virtual bool getOptionFlag(GetOptionFlag::Options inOption) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified
+    virtual ULONG getOptionValue(GetOptionValue::Options inOption) const noexcept(false); // throws Exceptions::InvalidSocket, Exceptions::UnsupportedSocketOption, Exceptions::Unspecified
 
-    virtual void onReadReadyReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified);
-    virtual void onWriteReadyReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified);
-    virtual void onExceptionReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified);
+    virtual void onReadReadyReset() const noexcept(false); // throws Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified
+    virtual void onWriteReadyReset() const noexcept(false); // throws Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified
+    virtual void onExceptionReset() const noexcept(false); // throws Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified
 
   protected:
-    Socket() throw(Exceptions::Unspecified);
+    Socket() noexcept(false); // throws Exceptions::Unspecified
 
   protected:
     SOCKET mSocket;

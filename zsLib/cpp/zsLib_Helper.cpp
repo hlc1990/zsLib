@@ -63,9 +63,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (forwards)
-    #pragma mark
+    //
+    // (forwards)
+    //
 
     void setup();
 #ifdef WINUWP
@@ -104,26 +104,26 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark zsLib::IHelper
-  #pragma mark
+  //
+  // zsLib::IHelper
+  //
 
   //---------------------------------------------------------------------------
-  void IHelper::setup()
+  void IHelper::setup() noexcept
   {
     internal::setup();
   }
 
 #ifdef WINUWP
   //---------------------------------------------------------------------------
-  void IHelper::setup(Windows::UI::Core::CoreDispatcher ^dispatcher)
+  void IHelper::setup(Windows::UI::Core::CoreDispatcher ^dispatcher) noexcept
   {
     internal::setup(dispatcher);
   }
 #endif //WINUWP
 
   //---------------------------------------------------------------------------
-  RecursiveLockPtr IHelper::getGlobalLock()
+  RecursiveLockPtr IHelper::getGlobalLock() noexcept
   {
     static SingletonLazySharedPtr<RecursiveLock> singleton(make_shared<RecursiveLock>());
     return singleton.singleton();
@@ -133,11 +133,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 bool &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -152,11 +153,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 CHAR &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -171,11 +173,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 UCHAR &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -190,11 +193,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 SHORT &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -209,11 +213,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 USHORT &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -228,11 +233,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 LONG &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -247,11 +253,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 ULONG &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -266,11 +273,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 LONGLONG &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -285,11 +293,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 ULONGLONG &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -304,11 +313,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 INT &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -323,11 +333,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 UINT &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -342,11 +353,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 FLOAT &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -361,11 +373,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 DOUBLE &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -380,11 +393,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 String &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     outValue = getElementTextAndDecode(elem->findFirstChildElement(subElementName));
   }
@@ -392,11 +406,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Time &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -411,11 +426,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Milliseconds &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -430,11 +446,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Microseconds &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -449,11 +466,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<bool> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -468,11 +486,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<CHAR> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -487,11 +506,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<UCHAR> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -506,11 +526,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<SHORT> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -525,11 +546,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<USHORT> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -544,11 +566,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<LONG> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -563,11 +586,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<ULONG> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -582,11 +606,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<LONGLONG> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -601,11 +626,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<ULONGLONG> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -620,11 +646,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<INT> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -639,11 +666,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<UINT> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -658,11 +686,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<FLOAT> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -677,11 +706,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<DOUBLE> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -696,11 +726,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<String> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     ElementPtr subEl = elem->findFirstChildElement(subElementName);
     if (subEl) {
@@ -711,11 +742,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<Time> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -730,11 +762,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<Milliseconds> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -749,11 +782,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void IHelper::getElementValue(
                                 ElementPtr elem,
-                                const char *logObjectName,
+                                ZS_MAYBE_USED() const char *logObjectName,
                                 const char *subElementName,
                                 Optional<Microseconds> &outValue
-                                )
+                                ) noexcept
   {
+    ZS_MAYBE_USED(logObjectName);
     if (!elem) return;
     String str = getElementText(elem->findFirstChildElement(subElementName));
     if (str.hasData()) {
@@ -770,7 +804,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   bool value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -781,7 +815,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   CHAR value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(static_cast<INT>(value))));
@@ -792,7 +826,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   UCHAR value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -803,7 +837,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   SHORT value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -814,7 +848,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   USHORT value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -825,7 +859,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   LONG value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -836,7 +870,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   ULONG value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -847,7 +881,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   LONGLONG value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -858,7 +892,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   ULONGLONG value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -869,7 +903,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   INT value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -880,7 +914,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   UINT value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -891,7 +925,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   FLOAT value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -902,7 +936,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   DOUBLE value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     elem->adoptAsLastChild(createElementWithNumber(subElementName, string(value)));
@@ -914,7 +948,7 @@ namespace zsLib
                                   const char *subElementName,
                                   const String &value,
                                   bool adoptEmptyValue
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
 
@@ -929,7 +963,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Time &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (Time() == value) return;
@@ -941,7 +975,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Milliseconds &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (Milliseconds() == value) return;
@@ -953,7 +987,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Microseconds &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (Microseconds() == value) return;
@@ -965,7 +999,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<bool> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -977,7 +1011,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<CHAR> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -989,7 +1023,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<UCHAR> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1001,7 +1035,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<SHORT> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1013,7 +1047,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<USHORT> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1025,7 +1059,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<LONG> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1037,7 +1071,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<ULONG> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1049,7 +1083,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<LONGLONG> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1061,7 +1095,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<ULONGLONG> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1073,7 +1107,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<INT> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1085,7 +1119,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<UINT> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1097,7 +1131,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<FLOAT> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1109,7 +1143,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<DOUBLE> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1121,7 +1155,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<String> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1133,7 +1167,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<Time> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1145,7 +1179,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<Milliseconds> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1157,7 +1191,7 @@ namespace zsLib
                                   ElementPtr elem,
                                   const char *subElementName,
                                   const Optional<Microseconds> &value
-                                  )
+                                  ) noexcept
   {
     if (!elem) return;
     if (!value.hasValue()) return;
@@ -1165,10 +1199,10 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const char *value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const char *value) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
-    ZS_THROW_INVALID_ARGUMENT_IF(!name)
+    ZS_ASSERT(parentEl);
+    ZS_ASSERT(name);
 
     if (!value) return;
     if ('\0' == *value) return;
@@ -1183,10 +1217,10 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const String &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const String &value) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
-    ZS_THROW_INVALID_ARGUMENT_IF(!name)
+    ZS_ASSERT(parentEl);
+    ZS_ASSERT(name);
 
     if (value.isEmpty()) return;
 
@@ -1200,10 +1234,10 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppendNumber(ElementPtr &parentEl, const char *name, const String &value)
+  void IHelper::debugAppendNumber(ElementPtr &parentEl, const char *name, const String &value) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
-    ZS_THROW_INVALID_ARGUMENT_IF(!name)
+    ZS_ASSERT(parentEl);
+    ZS_ASSERT(name);
 
     if (value.isEmpty()) return;
 
@@ -1217,9 +1251,9 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, bool value, bool ignoreIfFalse)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, bool value, bool ignoreIfFalse) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!name)
+    ZS_ASSERT(name);
 
     if (ignoreIfFalse) {
       if (!value) return;
@@ -1229,9 +1263,9 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const Log::Param &param)
+  void IHelper::debugAppend(ElementPtr &parentEl, const Log::Param &param) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
+    ZS_ASSERT(parentEl);
 
     if (!param.param()) return;
 
@@ -1239,10 +1273,10 @@ namespace zsLib
   }
       
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ElementPtr childEl)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ElementPtr childEl) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
-    ZS_THROW_INVALID_ARGUMENT_IF(!name)
+    ZS_ASSERT(parentEl);
+    ZS_ASSERT(name);
 
     if (!childEl) return;
 
@@ -1252,141 +1286,141 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, ElementPtr childEl)
+  void IHelper::debugAppend(ElementPtr &parentEl, ElementPtr childEl) noexcept
   {
-    ZS_THROW_INVALID_ARGUMENT_IF(!parentEl)
+    ZS_ASSERT(parentEl);
     if (!childEl) return;
     parentEl->adoptAsLastChild(childEl);
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, CHAR value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, CHAR value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string((INT)value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, UCHAR value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, UCHAR value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string((UINT)value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, SHORT value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, SHORT value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string((INT)value));
   }
 
   //-------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, USHORT value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, USHORT value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string((UINT)value));
   }
 
   //-------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, INT value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, INT value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, UINT value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, UINT value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, LONG value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, LONG value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ULONG value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ULONG value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, LONGLONG value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, LONGLONG value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ULONGLONG value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, ULONGLONG value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, FLOAT value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, FLOAT value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0.0f == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, DOUBLE value, bool ignoreIfZero)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, DOUBLE value, bool ignoreIfZero) noexcept
   {
     if (ignoreIfZero) if (0.0 == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Time &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Time &value) noexcept
   {
     if (Time() == value) return;
     debugAppendNumber(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Hours &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Hours &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Minutes &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Minutes &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Seconds &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Seconds &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Milliseconds &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Milliseconds &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Microseconds &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Microseconds &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Nanoseconds &value)
+  void IHelper::debugAppend(ElementPtr &parentEl, const char *name, const Nanoseconds &value) noexcept
   {
     if (Hours() == value) return;
     debugAppend(parentEl, name, zsLib::string(value));
@@ -1396,7 +1430,7 @@ namespace zsLib
   String IHelper::toString(
                            ElementPtr element,
                            bool formatAsJson
-                           )
+                           ) noexcept
   {
     if (!element) return String();
 
@@ -1414,7 +1448,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ElementPtr IHelper::toJSON(const char *str)
+  ElementPtr IHelper::toJSON(const char *str) noexcept
   {
     if (!str) return ElementPtr();
 
@@ -1428,7 +1462,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ElementPtr IHelper::toXML(const char *str)
+  ElementPtr IHelper::toXML(const char *str) noexcept
   {
     if (!str) return ElementPtr();
 
@@ -1442,20 +1476,20 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String IHelper::getAttributeID(ElementPtr el)
+  String IHelper::getAttributeID(ElementPtr el) noexcept
   {
     return IHelper::getAttribute(el, "id");
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::setAttributeIDWithText(ElementPtr elem, const String &value)
+  void IHelper::setAttributeIDWithText(ElementPtr elem, const String &value) noexcept
   {
     if (value.isEmpty()) return;
     IHelper::setAttributeWithText(elem, "id", value);
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::setAttributeIDWithNumber(ElementPtr elem, const String &value)
+  void IHelper::setAttributeIDWithNumber(ElementPtr elem, const String &value) noexcept
   {
     if (value.isEmpty()) return;
     IHelper::setAttributeWithNumber(elem, "id", value);
@@ -1465,7 +1499,7 @@ namespace zsLib
   String IHelper::getAttribute(
                               ElementPtr node,
                               const String &attributeName
-                              )
+                              ) noexcept
   {
     if (!node) return String();
 
@@ -1480,7 +1514,7 @@ namespace zsLib
                                     ElementPtr elem,
                                     const String &attrName,
                                     const String &value
-                                    )
+                                    ) noexcept
   {
     if (!elem) return;
     if (value.isEmpty()) return;
@@ -1497,7 +1531,7 @@ namespace zsLib
                                       ElementPtr elem,
                                       const String &attrName,
                                       const String &value
-                                      )
+                                      ) noexcept
   {
     if (!elem) return;
     if (value.isEmpty()) return;
@@ -1511,7 +1545,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ElementPtr IHelper::createElement(const String &elName)
+  ElementPtr IHelper::createElement(const String &elName) noexcept
   {
     ElementPtr tmp = Element::create();
     tmp->setValue(elName);
@@ -1522,7 +1556,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithText(
                                             const String &elName,
                                             const String &textVal
-                                            )
+                                            ) noexcept
   {
     ElementPtr tmp = Element::create(elName);
 
@@ -1540,7 +1574,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithNumber(
                                               const String &elName,
                                               const String &numberAsStringValue
-                                              )
+                                              ) noexcept
   {
     ElementPtr tmp = Element::create(elName);
 
@@ -1562,7 +1596,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithTime(
                                             const String &elName,
                                             Time time
-                                            )
+                                            ) noexcept
   {
     return createElementWithNumber(elName, IHelper::timeToString(time));
   }
@@ -1571,7 +1605,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithTextAndJSONEncode(
                                                          const String &elName,
                                                          const String &textVal
-                                                         )
+                                                         ) noexcept
   {
     ElementPtr tmp = Element::create(elName);
     if (textVal.isEmpty()) return tmp;
@@ -1586,7 +1620,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithTextID(
                                               const String &elName,
                                               const String &idValue
-                                              )
+                                              ) noexcept
   {
     ElementPtr tmp = createElement(elName);
 
@@ -1600,7 +1634,7 @@ namespace zsLib
   ElementPtr IHelper::createElementWithNumberID(
                                                 const String &elName,
                                                 const String &idValue
-                                                )
+                                                ) noexcept
   {
     ElementPtr tmp = createElement(elName);
 
@@ -1611,7 +1645,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  TextPtr IHelper::createText(const String &textVal)
+  TextPtr IHelper::createText(const String &textVal) noexcept
   {
     TextPtr tmpTxt = Text::create();
     tmpTxt->setValue(textVal);
@@ -1620,28 +1654,28 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String IHelper::getElementText(ElementPtr el)
+  String IHelper::getElementText(ElementPtr el) noexcept
   {
     if (!el) return String();
     return el->getText();
   }
 
   //---------------------------------------------------------------------------
-  String IHelper::getElementTextAndDecode(ElementPtr el)
+  String IHelper::getElementTextAndDecode(ElementPtr el) noexcept
   {
     if (!el) return String();
     return el->getTextDecoded();
   }
 
   //---------------------------------------------------------------------------
-  String IHelper::timeToString(const Time &value)
+  String IHelper::timeToString(const Time &value) noexcept
   {
     if (Time() == value) return String();
     return string(value);
   }
 
   //---------------------------------------------------------------------------
-  Time IHelper::stringToTime(const String &str)
+  Time IHelper::stringToTime(const String &str) noexcept
   {
     if (str.isEmpty()) return Time();
     if ("0" == str) return Time();
@@ -1656,7 +1690,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ElementPtr IHelper::cloneAsCanonicalJSON(ElementPtr element)
+  ElementPtr IHelper::cloneAsCanonicalJSON(ElementPtr element) noexcept
   {
     if (!element) return element;
 
@@ -1665,7 +1699,7 @@ namespace zsLib
     public:
       Walker() {}
 
-      bool onElementEnter(ElementPtr inElement) override
+      bool onElementEnter(ElementPtr inElement) noexcept override
       {
         typedef std::list<NodePtr> ChildrenList;
         typedef std::list<AttributePtr> ChildrenAttributeList;
@@ -1732,7 +1766,7 @@ namespace zsLib
             lastInsert = currentEl;
           }
 
-          ZS_THROW_BAD_STATE_IF(children.size() > 0)
+          ZS_ASSERT(children.size() < 1);
         }
 
         // sort the attributes
@@ -1783,7 +1817,7 @@ namespace zsLib
             inElement->getLastAttributeChecked()->adoptAsNextSibling(current);
           }
 
-          ZS_THROW_BAD_STATE_IF(children.size() > 0)
+          ZS_ASSERT(children.size() < 1);
         }
 
         return false;
@@ -1827,7 +1861,7 @@ namespace zsLib
                       const String &input,
                       SplitMap &outResult,
                       char splitChar
-                      )
+                      ) noexcept
   {
     if (0 == input.size()) return;
 
@@ -1875,7 +1909,7 @@ namespace zsLib
                       const String &input,
                       SplitMap &outResult,
                       const char *inSplitStr
-                      )
+                      ) noexcept
   {
     String splitStr(inSplitStr);
 
@@ -1929,7 +1963,7 @@ namespace zsLib
   void IHelper::splitPruneEmpty(
                                 SplitMap &ioResult,
                                 bool reindex
-                                )
+                                ) noexcept
   {
     if (!reindex) {
       for (auto iter_doNotUse = ioResult.begin(); iter_doNotUse != ioResult.end();) {
@@ -1957,7 +1991,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::splitTrim(SplitMap &ioResult)
+  void IHelper::splitTrim(SplitMap &ioResult) noexcept
   {
     for (auto iter = ioResult.begin(); iter != ioResult.end(); ++iter) {
       auto &value = (*iter).second;
@@ -1969,7 +2003,7 @@ namespace zsLib
   String IHelper::combine(
                           const SplitMap &input,
                           const char *combineStr
-                          )
+                          ) noexcept
   {
     String result;
     String spacer(combineStr);
@@ -1988,7 +2022,7 @@ namespace zsLib
   String IHelper::combine(
                           const StringList &input,
                           const char *combineStr
-                          )
+                          ) noexcept
   {
     String result;
     String spacer(combineStr);
@@ -2007,7 +2041,7 @@ namespace zsLib
   const String &IHelper::get(
                              const SplitMap &inResult,
                              Index index
-                             )
+                             ) noexcept
   {
     static String empty;
     SplitMap::const_iterator found = inResult.find(index);
@@ -2021,15 +2055,15 @@ namespace zsLib
                                  size_t bufferSizeInBytes,
                                  size_t bytesPerGroup,
                                  size_t maxLineLength
-                                 )
+                                 ) noexcept
   {
     static char convertArray[16] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
 
     if (!buffer) return String();
     if (0 == bufferSizeInBytes) return String();
 
-    ZS_THROW_INVALID_ARGUMENT_IF(bytesPerGroup < 1)
-    ZS_THROW_INVALID_ARGUMENT_IF(maxLineLength < 1)
+    ZS_ASSERT(bytesPerGroup > 0);
+    ZS_ASSERT(maxLineLength > 0);
 
     // two chars needed, one for new line, one for NUL byte
     char bufferFillLine[255+2];
@@ -2114,14 +2148,14 @@ namespace zsLib
   }
   
   //---------------------------------------------------------------------------
-  WORD IHelper::getBE16(const void* memory)
+  WORD IHelper::getBE16(const void* memory) noexcept
   {
     return static_cast<WORD>((internal::get8(memory, 0) << 8) |
                              (internal::get8(memory, 1) << 0));
   }
 
   //---------------------------------------------------------------------------
-  DWORD IHelper::getBE32(const void* memory)
+  DWORD IHelper::getBE32(const void* memory) noexcept
   {
     return (static_cast<DWORD>(internal::get8(memory, 0)) << 24) |
            (static_cast<DWORD>(internal::get8(memory, 1)) << 16) |
@@ -2130,7 +2164,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  QWORD IHelper::getBE64(const void* memory)
+  QWORD IHelper::getBE64(const void* memory) noexcept
   {
     return (static_cast<QWORD>(internal::get8(memory, 0)) << 56) |
            (static_cast<QWORD>(internal::get8(memory, 1)) << 48) |
@@ -2143,14 +2177,14 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::setBE16(void* memory, WORD v)
+  void IHelper::setBE16(void* memory, WORD v) noexcept
   {
     internal::set8(memory, 0, static_cast<BYTE>(v >> 8));
     internal::set8(memory, 1, static_cast<BYTE>(v >> 0));
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::setBE32(void* memory, DWORD v)
+  void IHelper::setBE32(void* memory, DWORD v) noexcept
   {
     internal::set8(memory, 0, static_cast<BYTE>(v >> 24));
     internal::set8(memory, 1, static_cast<BYTE>(v >> 16));
@@ -2159,7 +2193,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IHelper::setBE64(void* memory, QWORD v)
+  void IHelper::setBE64(void* memory, QWORD v) noexcept
   {
     internal::set8(memory, 0, static_cast<BYTE>(v >> 56));
     internal::set8(memory, 1, static_cast<BYTE>(v >> 48));
@@ -2177,7 +2211,7 @@ namespace zsLib
                          const String  &ipList,
                          IPAddressSet &outIPs,
                          char splitChar
-                         )
+                         ) noexcept
   {
     outIPs.clear();
 
@@ -2207,7 +2241,7 @@ namespace zsLib
                            const IPAddressSet &inIPs,
                            const IPAddress &inIP,
                            bool emptySetReturns
-                           )
+                           ) noexcept
   {
     if (inIPs.size() < 1) return emptySetReturns;
 

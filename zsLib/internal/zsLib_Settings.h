@@ -51,9 +51,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Settings
-    #pragma mark
+    //
+    // Settings
+    //
 
     class Settings : public ISettings
     {
@@ -86,87 +86,87 @@ namespace zsLib
       ZS_DECLARE_PTR(DefaultsDelegatesList);
 
     public:
-      Settings(const make_private &);
+      Settings(const make_private &) noexcept;
 
     public:
-      ~Settings() override;
+      ~Settings() noexcept override;
 
     protected:
-      static SettingsPtr convert(ISettingsPtr setttings);
+      static SettingsPtr convert(ISettingsPtr setttings) noexcept;
 
-      static SettingsPtr create();
+      static SettingsPtr create() noexcept;
 
-      static SettingsPtr singleton();
+      static SettingsPtr singleton() noexcept;
 
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark Settings => ISettings
-      #pragma mark
+      //
+      // Settings => ISettings
+      //
 
-      virtual void setup(ISettingsDelegatePtr delegate);
+      virtual void setup(ISettingsDelegatePtr delegate) noexcept;
 
-      virtual String getString(const char *key) const;
-      virtual LONG getInt(const char *key) const;
-      virtual ULONG getUInt(const char *key) const;
-      virtual bool getBool(const char *key) const;
-      virtual float getFloat(const char *key) const;
-      virtual double getDouble(const char *key) const;
+      virtual String getString(const char *key) const noexcept;
+      virtual LONG getInt(const char *key) const noexcept;
+      virtual ULONG getUInt(const char *key) const noexcept;
+      virtual bool getBool(const char *key) const noexcept;
+      virtual float getFloat(const char *key) const noexcept;
+      virtual double getDouble(const char *key) const noexcept;
 
       virtual void setString(
                               const char *key,
                               const char *value
-                              );
+                              ) noexcept;
       virtual void setInt(
                           const char *key,
                           LONG value
-                          );
+                          ) noexcept;
       virtual void setUInt(
                             const char *key,
                             ULONG value
-                            );
+                            ) noexcept;
       virtual void setBool(
                             const char *key,
                             bool value
-                            );
+                            ) noexcept;
       virtual void setFloat(
                             const char *key,
                             float value
-                            );
+                            ) noexcept;
       virtual void setDouble(
                               const char *key,
                               double value
-                              );
+                              ) noexcept;
 
-      virtual void clear(const char *key);
+      virtual void clear(const char *key) noexcept;
 
-      virtual bool apply(const char *jsonSettings);
+      virtual bool apply(const char *jsonSettings) noexcept;
 
-      virtual void applyDefaults();
-      virtual void installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate);
-      virtual void removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate);
+      virtual void applyDefaults() noexcept;
+      virtual void installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate) noexcept;
+      virtual void removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate) noexcept;
 
-      virtual void clearAll();
+      virtual void clearAll() noexcept;
 
-      virtual void verifySettingExists(const char *key) throw (InvalidUsage);
+      virtual void verifySettingExists(const char *key) noexcept(false); //throws InvalidUsage
 
-      virtual void verifyRequiredSettings() throw (InvalidUsage);
-
-    protected:
-      //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark Settings => (internal)
-      #pragma mark
-
-      Params log(const char *message) const;
-      static Params slog(const char *message);
-
-      void applyDefaultsIfNoDelegatePresent();
+      virtual void verifyRequiredSettings() noexcept(false); // throws InvalidUsage
 
     protected:
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark Settings => (data)
-      #pragma mark
+      //
+      // Settings => (internal)
+      //
+
+      Params log(const char *message) const noexcept;
+      static Params slog(const char *message) noexcept;
+
+      void applyDefaultsIfNoDelegatePresent() noexcept;
+
+    protected:
+      //---------------------------------------------------------------------
+      //
+      // Settings => (data)
+      //
 
       mutable RecursiveLock mLock;
       AutoPUID mID;

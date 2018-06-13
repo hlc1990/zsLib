@@ -47,7 +47,7 @@ namespace zsLib
     void setThreadPriority(
                            Thread::native_handle_type handle,
                            ThreadPriorities threadPriority
-                           )
+                           ) noexcept
     {
 #ifndef _WIN32
       const int policy = SCHED_RR;
@@ -84,7 +84,7 @@ namespace zsLib
       }
 #ifndef WINUWP
 		  auto result = SetThreadPriority(handle, priority);
-      assert(0 != result);
+      ZS_ASSERT(0 != result);
 #endif //ndef WINUWP
 
 #endif //_WIN32
@@ -98,7 +98,7 @@ namespace zsLib
     };
 
     //-------------------------------------------------------------------------
-    static StrToPriority *getPriorities()
+    static StrToPriority *getPriorities() noexcept
     {
       static StrToPriority gPriorities[] = {
         {
@@ -141,18 +141,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThread
-    #pragma mark
+    //
+    // MessageQueueThread
+    //
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThread::createBasic(const char *threadName, ThreadPriorities threadPriority)
+    MessageQueueThreadPtr MessageQueueThread::createBasic(const char *threadName, ThreadPriorities threadPriority) noexcept
     {
-      return internal::MessageQueueThreadBasic::create(threadName);
+      return internal::MessageQueueThreadBasic::create(threadName, threadPriority);
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue()
+    MessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
     {
 #ifdef _WIN32
       return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton();
@@ -176,22 +176,23 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
-  const char *toString(ThreadPriorities priority)
+  const char *toString(ThreadPriorities priority) noexcept
   {
     switch (priority) {
-    case ThreadPriority_LowPriority:      return "Low";
-    case ThreadPriority_NormalPriority:   return "Normal";
-    case ThreadPriority_HighPriority:     return "High";
-    case ThreadPriority_HighestPriority:  return "Highest";
-    case ThreadPriority_RealtimePriority: return "Real-time";
+      case ThreadPriority_LowPriority:      return "Low";
+      case ThreadPriority_NormalPriority:   return "Normal";
+      case ThreadPriority_HighPriority:     return "High";
+      case ThreadPriority_HighestPriority:  return "Highest";
+      case ThreadPriority_RealtimePriority: return "Real-time";
     }
+    ZS_ASSERT_FAIL("unknown thread priority");
     return "UNDEFINED";
   }
 
   using internal::StrToPriority;
 
   //---------------------------------------------------------------------------
-  ThreadPriorities threadPriorityFromString(const char *str)
+  ThreadPriorities threadPriorityFromString(const char *str) noexcept
   {
     if (!str) return ThreadPriority_NormalPriority;
 
@@ -215,7 +216,7 @@ namespace zsLib
   void setThreadPriority(
                          Thread &thread,
                          ThreadPriorities threadPriority
-                         )
+                         ) noexcept
   {
     internal::setThreadPriority(thread.native_handle(), threadPriority);
   }
@@ -224,21 +225,21 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark MessageQueueThread
-  #pragma mark
+  //
+  // MessageQueueThread
+  //
 
   //---------------------------------------------------------------------------
   IMessageQueueThreadPtr IMessageQueueThread::createBasic(
                                                           const char *threadName,
                                                           ThreadPriorities threadPriority
-                                                          )
+                                                          ) noexcept
   {
     return internal::MessageQueueThread::createBasic(threadName, threadPriority);
   }
 
   //---------------------------------------------------------------------------
-  IMessageQueueThreadPtr IMessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue()
+  IMessageQueueThreadPtr IMessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
   {
     return internal::MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue();
   }

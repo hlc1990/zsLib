@@ -37,18 +37,18 @@ namespace zsLib
 {
   namespace internal
   {
-    void throwRangeSelectionInvalidArgumentStartStopStr(const String &startStr, const String &endStr)
+    void throwRangeSelectionInvalidArgumentStartStopStr(const String &startStr, const String &endStr) noexcept(false)
     {
       ZS_THROW_INVALID_ARGUMENT(String("range not legal: \"") + startStr + "\" \"" + endStr + "\"");
     }
 
-    void throwRangeSelectionBadStateIf(bool result, const char *str)
+    void throwRangeSelectionBadStateIf(bool result, const char *str) noexcept(false)
     {
       if (!result) return;
       ZS_THROW_BAD_STATE(str);
     }
 
-    void throwRangeSelectionBadState(const char *str)
+    void throwRangeSelectionBadState(const char *str) noexcept(false)
     {
       ZS_THROW_BAD_STATE(str);
     }

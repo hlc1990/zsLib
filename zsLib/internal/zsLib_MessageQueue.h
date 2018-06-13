@@ -47,9 +47,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark 
-    #pragma mark MessageQueue
-    #pragma mark 
+    // 
+    // MessageQueue
+    // 
 
     class MessageQueue : public IMessageQueue
     {
@@ -61,35 +61,35 @@ namespace zsLib
       MessageQueue(
                    const make_private &,
                    IMessageQueueNotifyPtr notify
-                   );
-      ~MessageQueue();
+                   ) noexcept;
+      ~MessageQueue() noexcept;
 
     public:
       //-----------------------------------------------------------------------
-      #pragma mark 
-      #pragma mark MessageQueue => IMessageQueue
-      #pragma mark 
+      // 
+      // MessageQueue => IMessageQueue
+      // 
 
-      static MessageQueuePtr create(IMessageQueueNotifyPtr notify);
+      static MessageQueuePtr create(IMessageQueueNotifyPtr notify) noexcept;
 
-      void post(IMessageQueueMessageUniPtr message) override;
+      void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
 
-      size_type getTotalUnprocessedMessages() const override;
+      size_type getTotalUnprocessedMessages() const noexcept override;
 
     public:
       //-----------------------------------------------------------------------
-      #pragma mark 
-      #pragma mark MessageQueue => (friends)
-      #pragma mark 
+      // 
+      // MessageQueue => (friends)
+      // 
 
-      void process();
-      void processOnlyOneMessage();
+      void process() noexcept;
+      void processOnlyOneMessage() noexcept;
 
     protected:
       //-----------------------------------------------------------------------
-      #pragma mark 
-      #pragma mark MessageQueue => (data)
-      #pragma mark 
+      // 
+      // MessageQueue => (data)
+      // 
 
       mutable Lock mLock;
       std::queue<IMessageQueueMessageUniPtr> mMessages;

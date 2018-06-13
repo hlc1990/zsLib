@@ -159,7 +159,7 @@ namespace zsLib
     //     // NOTE: delegate is already destroyed - can clean up this delegate proxy now
     //   }
     //
-    static DelegatePtr createNoop(IMessageQueuePtr queue, bool throwsDelegateGone = false, int line = __LINE__, const char *fileName = __FILE__)                                   {return DelegatePtr()->proxy_implementation_for_this_interface_is_not_defined();}
+    static DelegatePtr createNoop(IMessageQueuePtr queue, bool throwsDelegateGone = false, int line = __LINE__, const char *fileName = __FILE__)                                    {return DelegatePtr()->proxy_implementation_for_this_interface_is_not_defined();}
 
     //------------------------------------------------------------------------
     // PURPOSE: Returns true if the delegate passed in is a proxy.
@@ -168,7 +168,7 @@ namespace zsLib
     // void Object::subscribeEvents(IDelegatePtr delegate) {
     //   bool isProxy = zsLib::Proxy<IDelegate>::isProxy(delegate);
     //
-    static bool isProxy(DelegatePtr delegate)                                                                                                                             {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
+    static bool isProxy(DelegatePtr delegate) noexcept                                                                                                                              {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
 
     //------------------------------------------------------------------------
     // PURPOSE: Returns the original delegate from a proxy (or if the object
@@ -179,7 +179,7 @@ namespace zsLib
     // void Object::subscribeEvents(IDelegatePtr delegate) {
     //   IDelegatePtr originalDelegatePtr = zsLib::Proxy<IDelegate>::original(delegate);
     //
-    static DelegatePtr original(DelegatePtr delegate, bool throwDelegateGone = false)                                                                                     {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
+    static DelegatePtr original(DelegatePtr delegate, bool throwDelegateGone = false)                                                                                               {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
 
     //------------------------------------------------------------------------
     // PURPOSE: Returns the associated message queue from a proxy (or NULL if
@@ -189,7 +189,7 @@ namespace zsLib
     // void Object::subscribeEvents(IDelegatePtr delegate) {
     //   IMessageQueuePtr queue = zsLib::Proxy<IDelegate>::getAssociatedMessageQueue(delegate);
     //
-    static IMessageQueuePtr getAssociatedMessageQueue(DelegatePtr delegate)                                                                                               {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
+    static IMessageQueuePtr getAssociatedMessageQueue(DelegatePtr delegate) noexcept                                                                                                {return delegate->proxy_implementation_for_this_interface_is_not_defined();}
   };
 }
 

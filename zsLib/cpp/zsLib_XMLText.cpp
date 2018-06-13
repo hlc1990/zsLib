@@ -46,24 +46,24 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::intenral::Text
-      #pragma mark
+      //
+      // XML::intenral::Text
+      //
 
       //-----------------------------------------------------------------------
-      Text::Text() :
+      Text::Text() noexcept :
         mFormat(XML::Text::Format_EntityEncoded),
         mOutputFormat(XML::Text::Format_EntityEncoded)
       {
       }
 
       //-----------------------------------------------------------------------
-      Text::~Text()
+      Text::~Text() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      void Text::parse(XML::ParserPos &ioPos)
+      void Text::parse(XML::ParserPos &ioPos) noexcept
       {
         Parser::AutoStack stack(ioPos);
 
@@ -109,7 +109,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Text::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Text::getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept
       {
         bool normalizeCDATA = (0 != (XML::Generator::XMLWriteFlag_NormalizeCDATA & inGenerator->getXMLWriteFlags()));
         bool encode0xDCharactersInText = (0 != (XML::Generator::XMLWriteFlag_EntityEncode0xDInText & inGenerator->getXMLWriteFlags()));
@@ -144,7 +144,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Text::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Text::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         bool normalizeCDATA = (0 != (XML::Generator::XMLWriteFlag_NormalizeCDATA & inGenerator->getXMLWriteFlags()));
         bool encode0xDCharactersInText = (0 != (XML::Generator::XMLWriteFlag_EntityEncode0xDInText & inGenerator->getXMLWriteFlags()));
@@ -175,7 +175,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Text::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Text::getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept
       {
         bool normalizeCDATA = (0 != (XML::Generator::XMLWriteFlag_NormalizeCDATA & inGenerator->getXMLWriteFlags()));
         String value = getValueInFormat(XML::Text::Format_JSONNumberEncoded == mFormat ? XML::Text::Format_JSONNumberEncoded : XML::Text::Format_JSONStringEncoded, normalizeCDATA);
@@ -186,7 +186,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Text::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Text::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         bool normalizeCDATA = (0 != (XML::Generator::XMLWriteFlag_NormalizeCDATA & inGenerator->getXMLWriteFlags()));
 
@@ -195,7 +195,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Text::cloneAssignParent(NodePtr inParent) const
+      NodePtr Text::cloneAssignParent(NodePtr inParent) const noexcept
       {
         TextPtr newObject(XML::Text::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -211,7 +211,7 @@ namespace zsLib
                                     UINT outputFormat,
                                     bool normalize,
                                     bool encode0xDCharactersInText
-                                    ) const
+                                    ) const noexcept
       {
         String value = mValue;
 
@@ -268,12 +268,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Text
-    #pragma mark
+    //
+    // XML::Text
+    //
 
     //-------------------------------------------------------------------------
-    TextPtr Text::create()
+    TextPtr Text::create() noexcept
     {
       TextPtr object(make_shared<Text>(make_private{}));
       object->mThis = object;
@@ -281,13 +281,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Text::Text(const make_private &) :
+    Text::Text(const make_private &) noexcept :
       internal::Text()
     {
     }
 
     //-------------------------------------------------------------------------
-    void Text::setValue(const String &inText, Formats format)
+    void Text::setValue(const String &inText, Formats format) noexcept
     {
       mFormat = format;
       mOutputFormat = format;
@@ -296,7 +296,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Text::setValueAndEntityEncode(const String &inText)
+    void Text::setValueAndEntityEncode(const String &inText) noexcept
     {
       mFormat = Format_EntityEncoded;
       mOutputFormat = Format_EntityEncoded;
@@ -305,7 +305,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Text::setValueAndJSONEncode(const String &inText)
+    void Text::setValueAndJSONEncode(const String &inText) noexcept
     {
       mFormat = Format_JSONStringEncoded;
       mOutputFormat = Format_JSONStringEncoded;
@@ -314,42 +314,42 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Text::Formats Text::getFormat() const
+    Text::Formats Text::getFormat() const noexcept
     {
       return static_cast<Text::Formats>(mFormat);
     }
 
     //-------------------------------------------------------------------------
-    Text::Formats Text::getOutputFormat() const
+    Text::Formats Text::getOutputFormat() const noexcept
     {
       return static_cast<Text::Formats>(mOutputFormat);
     }
 
     //-------------------------------------------------------------------------
-    void Text::setOutputFormat(Formats format)
+    void Text::setOutputFormat(Formats format) noexcept
     {
       mOutputFormat = format;
     }
 
     //-------------------------------------------------------------------------
-    bool Text::hasChildren()
+    bool Text::hasChildren() noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    void Text::removeChildren()
+    void Text::removeChildren() noexcept
     {      
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Text::clone() const
+    NodePtr Text::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Text::clear()
+    void Text::clear() noexcept
     {
       mValue.clear();
       mFormat = Format_EntityEncoded;
@@ -357,13 +357,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Text::getValue() const
+    String Text::getValue() const noexcept
     {
       return mValue;
     }
 
     //-------------------------------------------------------------------------
-    String Text::getValueDecoded() const
+    String Text::getValueDecoded() const noexcept
     {
       if (Format_EntityEncoded == mFormat)
         return Parser::convertFromEntities(getValue());
@@ -380,43 +380,43 @@ namespace zsLib
                                   Formats outputFormat,
                                   bool normalize,
                                   bool encode0xDCharactersInText
-                                  ) const
+                                  ) const noexcept
     {
       return internal::Text::getValueInFormat((UINT)outputFormat, normalize, encode0xDCharactersInText);
     }
 
     //-------------------------------------------------------------------------
-    void Text::adoptAsFirstChild(NodePtr inNode)
+    void Text::adoptAsFirstChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("text blocks cannot have children")
+      ZS_ASSERT_FAIL("text blocks cannot have children");
     }
 
     //-------------------------------------------------------------------------
-    void Text::adoptAsLastChild(NodePtr inNode)
+    void Text::adoptAsLastChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("text blocks cannot have children")
+      ZS_ASSERT_FAIL("text blocks cannot have children");
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Text::getNodeType()
+    Node::NodeType::Type Text::getNodeType() const noexcept
     {
       return NodeType::Text;
     }
 
     //-------------------------------------------------------------------------
-    bool Text::isText() const
+    bool Text::isText() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Text::toNode() const
+    NodePtr Text::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    TextPtr Text::toText() const
+    TextPtr Text::toText() const noexcept
     {
       return mThis.lock();
     }

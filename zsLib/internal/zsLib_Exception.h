@@ -53,7 +53,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression) \
     { \
     } \
 \
@@ -64,7 +64,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression) \
     { \
     } \
 \
@@ -75,7 +75,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : Exception(subsystem, params, function, pathName, lineNumber, expression) \
+    ) noexcept : Exception(subsystem, params, function, pathName, lineNumber, expression) \
     { \
     } \
   };
@@ -93,7 +93,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
     { \
     } \
 \
@@ -105,7 +105,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
     { \
     } \
 \
@@ -117,7 +117,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
+    ) noexcept : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1) \
     { \
     } \
 \
@@ -139,7 +139,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
     { \
     } \
 \
@@ -152,7 +152,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
     { \
     } \
 \
@@ -165,7 +165,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
+    ) noexcept : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2) \
     { \
     } \
 \
@@ -191,7 +191,7 @@
       xType1 inValue1, \
       xType2 inValue2, \
       xType3 inValue3 \
-    ) : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2), m_##xName3(inValue3) \
+    ) noexcept : Exception(subsystem, message, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2), m_##xName3(inValue3) \
     { \
     } \
 \
@@ -219,7 +219,7 @@
       xType1 inValue1, \
       xType2 inValue2, \
       xType3 inValue3 \
-    ) : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2), m_##xName3(inValue3) \
+    ) noexcept : Exception(subsystem, params, function, pathName, lineNumber, expression), m_##xName1(inValue1), m_##xName2(inValue2), m_##xName3(inValue3) \
     { \
     } \
 \
@@ -239,7 +239,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression) \
     { \
     } \
 \
@@ -250,7 +250,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression) \
     { \
     } \
 \
@@ -261,7 +261,7 @@
       ::zsLib::CSTR pathName, \
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression = NULL \
-    ) : xBase(subsystem, params, function, pathName, lineNumber, expression) \
+    ) noexcept : xBase(subsystem, params, function, pathName, lineNumber, expression) \
     { \
     } \
   };
@@ -278,7 +278,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1) \
     { \
     } \
 \
@@ -290,7 +290,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1) \
     { \
     } \
 \
@@ -302,7 +302,7 @@
       ::zsLib::ULONG lineNumber, \
       ::zsLib::CSTR expression, \
       xType1 inValue1 \
-    ) : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1) \
+    ) noexcept : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1) \
     { \
     } \
   };
@@ -320,7 +320,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2) \
   { \
   } \
 \
@@ -333,7 +333,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2) \
   { \
   } \
 \
@@ -346,7 +346,7 @@
       ::zsLib::CSTR expression, \
       xType1 inValue1, \
       xType2 inValue2 \
-    ) : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1, inValue2) \
+    ) noexcept : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1, inValue2) \
   { \
   } \
 };
@@ -365,7 +365,7 @@
       xType1 inValue1, \
       xType2 inValue2, \
       xType3 inValue3, \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
     { \
     } \
 \
@@ -379,7 +379,7 @@
       xType1 inValue1, \
       xType2 inValue2, \
       xType3 inValue3, \
-    ) : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
+    ) noexcept : xBase(subsystem, message, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
     { \
     } \
 \
@@ -393,7 +393,7 @@
       xType1 inValue1, \
       xType2 inValue2, \
       xType3 inValue3, \
-    ) : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
+    ) noexcept : xBase(subsystem, params, function, pathName, lineNumber, expression, inValue1, inValue2, inValue3) \
     { \
     } \
   };

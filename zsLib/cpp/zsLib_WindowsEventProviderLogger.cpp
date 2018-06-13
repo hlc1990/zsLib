@@ -47,9 +47,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark WindowsEventProviderLogger
-    #pragma mark
+    //
+    // WindowsEventProviderLogger
+    //
 
     class WindowsEventProviderLogger : public RecursiveLock,
                                        public ILogEventingDelegate,
@@ -76,7 +76,7 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      static WindowsEventProviderLoggerPtr create(bool &outCreated)
+      static WindowsEventProviderLoggerPtr create(bool &outCreated) noexcept
       {
         auto pThis(make_shared<WindowsEventProviderLogger>(make_private{}));
         pThis->mThisWeak = pThis;
@@ -86,23 +86,23 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void init()
+      void init() noexcept
       {
       }
 
-      void installEventListener()
+      void installEventListener() noexcept
       {
         zsLib::Log::addEventingProviderListener(mThisWeak.lock());
       }
 
     public:
       //-----------------------------------------------------------------------
-      WindowsEventProviderLogger(const make_private &)
+      WindowsEventProviderLogger(const make_private &) noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      ~WindowsEventProviderLogger()
+      ~WindowsEventProviderLogger() noexcept
       {
         mThisWeak.reset();
 
@@ -116,7 +116,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static WindowsEventProviderLoggerPtr singleton()
+      static WindowsEventProviderLoggerPtr singleton() noexcept
       {
         bool created {};
         static SingletonLazySharedPtr<WindowsEventProviderLogger> singleton(create(created));
@@ -132,22 +132,26 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark WindowsEventProviderLogger => ILogEventingDelegate
-      #pragma mark
+      //
+      // WindowsEventProviderLogger => ILogEventingDelegate
+      //
 
       //-----------------------------------------------------------------------
       virtual void notifyWriteEvent(
-                                    ProviderHandle handle,
+                                    ZS_MAYBE_USED() ProviderHandle handle,
                                     EventingAtomDataArray eventingAtomDataArray,
-                                    Severity severity,
-                                    Level level,
+                                    ZS_MAYBE_USED() Severity severity,
+                                    ZS_MAYBE_USED() Level level,
                                     EVENT_DESCRIPTOR_HANDLE descriptor,
-                                    EVENT_PARAMETER_DESCRIPTOR_HANDLE paramDescriptor,
+                                    ZS_MAYBE_USED() EVENT_PARAMETER_DESCRIPTOR_HANDLE paramDescriptor,
                                     EVENT_DATA_DESCRIPTOR_HANDLE dataDescriptor,
                                     size_t dataDescriptorCount
-                                    ) override
+                                    ) noexcept override
       {
+        ZS_MAYBE_USED(handle);
+        ZS_MAYBE_USED(severity);
+        ZS_MAYBE_USED(level);
+        ZS_MAYBE_USED(paramDescriptor);
         EventingAtomIndex index = mAtomIndex;
         if (0 == index) return;
 
@@ -163,15 +167,15 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark WindowsEventProviderLogger => ILogEventingDelegate
-      #pragma mark
+      //
+      // WindowsEventProviderLogger => ILogEventingDelegate
+      //
 
       //-----------------------------------------------------------------------
       virtual void notifyEventingProviderRegistered(
                                                     ProviderHandle handle,
                                                     EventingAtomDataArray eventingAtomDataArray
-                                                    ) override
+                                                    ) noexcept override
       {
         if (0 == mAtomIndex) {
           mAtomIndex = zsLib::Log::registerEventingAtom("org.zsLib.WindowsEventProviderLogger");
@@ -204,10 +208,11 @@ namespace zsLib
 
       //-----------------------------------------------------------------------
       virtual void notifyEventingProviderUnregistered(
-                                                      ProviderHandle handle,
+                                                      ZS_MAYBE_USED() ProviderHandle handle,
                                                       EventingAtomDataArray eventingAtomDataArray
-                                                      ) override
+                                                      ) noexcept override
       {
+        ZS_MAYBE_USED(handle);
         //mCleanupList
         EventingAtomIndex index = mAtomIndex;
         if (0 == index) return;
@@ -227,12 +232,12 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark WindowsEventProviderLogger => ISingletonManagerDelegate
-      #pragma mark
+      //
+      // WindowsEventProviderLogger => ISingletonManagerDelegate
+      //
 
       //-----------------------------------------------------------------------
-      virtual void notifySingletonCleanup() override
+      virtual void notifySingletonCleanup() noexcept override
       {
         zsLib::Log::removeEventingProviderListener(mThisWeak.lock());
       }
@@ -242,21 +247,26 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark WindowsEventProviderLogger => (internal)
-      #pragma mark
+      //
+      // WindowsEventProviderLogger => (internal)
+      //
 
       //-----------------------------------------------------------------------
       static void NTAPI eventWriterEnableCallback(
-        _In_     LPCGUID                  SourceId,
-        _In_     ULONG                    IsEnabled,
-        _In_     UCHAR                    Level,
-        _In_     ULONGLONG                MatchAnyKeyword,
-        _In_     ULONGLONG                MatchAllKeywords,
-        _In_opt_ PEVENT_FILTER_DESCRIPTOR FilterData,
-        _In_opt_ PVOID                    CallbackContext
-      )
+        _In_     ZS_MAYBE_USED() LPCGUID                  SourceId,
+        _In_     ULONG                                    IsEnabled,
+        _In_     ZS_MAYBE_USED() UCHAR                    Level,
+        _In_     ULONGLONG                                MatchAnyKeyword,
+        _In_     ZS_MAYBE_USED() ULONGLONG                MatchAllKeywords,
+        _In_opt_ ZS_MAYBE_USED() PEVENT_FILTER_DESCRIPTOR FilterData,
+        _In_opt_ PVOID                                    CallbackContext
+      ) noexcept
       {
+        ZS_MAYBE_USED(SourceId);
+        ZS_MAYBE_USED(Level);
+        ZS_MAYBE_USED(MatchAnyKeyword);
+        ZS_MAYBE_USED(MatchAllKeywords);
+        ZS_MAYBE_USED(FilterData);
         // see https://msdn.microsoft.com/en-us/library/windows/desktop/aa363707(v=vs.85).aspx
         // for some reason these constants are not defined in the header file
 #ifndef EVENT_CONTROL_CODE_DISABLE_PROVIDER
@@ -301,9 +311,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark WindowsEventProviderLogger => (date)
-      #pragma mark
+      //
+      // WindowsEventProviderLogger => (date)
+      //
 
       AutoPUID mID;
       WindowsEventProviderLoggerWeakPtr mThisWeak;
@@ -314,7 +324,7 @@ namespace zsLib
       ProviderSet mCleanupList;
     };
 
-    void initWindowsEventProviderLogger()
+    void initWindowsEventProviderLogger() noexcept
     {
       WindowsEventProviderLogger::singleton();
     }

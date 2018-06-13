@@ -49,9 +49,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThreadPool
-    #pragma mark
+    //
+    // MessageQueueThreadPool
+    //
 
     class MessageQueueThreadPool : public IMessageQueueThreadPool
     {
@@ -69,31 +69,31 @@ namespace zsLib
     protected:
 
     public:
-      MessageQueueThreadPool(const make_private &);
-      ~MessageQueueThreadPool();
+      MessageQueueThreadPool(const make_private &) noexcept;
+      ~MessageQueueThreadPool() noexcept;
 
     protected:
-      static MessageQueueThreadPoolPtr create();
+      static MessageQueueThreadPoolPtr create() noexcept;
 
       void createThread(
                         const char *threadName = NULL,
                         ThreadPriorities threadPriority = ThreadPriority_NormalPriority
-                        ) override;
+                        ) noexcept override;
 
-      void waitForShutdown() override;
+      void waitForShutdown() noexcept override;
 
-      bool hasPendingMessages() override;
+      bool hasPendingMessages() noexcept override;
 
-      IMessageQueuePtr createQueue() override;
+      IMessageQueuePtr createQueue() noexcept override;
 
-      void setThreadPriority(ThreadPriorities threadPriority) override;
+      void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
     protected:
-      void init();
+      void init() noexcept;
 
-      void notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue);
-      void notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher);
-      void processOneQueue();
+      void notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue) noexcept;
+      void notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher) noexcept;
+      void processOneQueue() noexcept;
 
     protected:
       MessageQueueThreadPoolWeakPtr mThisWeak;

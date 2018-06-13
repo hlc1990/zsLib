@@ -54,40 +54,34 @@ namespace zsLib
     {
       friend class MessageQueueThreadUsingBlackberryChannelsWrapper;
 
-    public:
-      struct Exceptions
-      {
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
-      };
-
     protected:
-      MessageQueueThreadUsingBlackberryChannels();
-      static MessageQueueThreadUsingBlackberryChannelsPtr create();
-      void setup();
+      MessageQueueThreadUsingBlackberryChannels() noexcept;
+      static MessageQueueThreadUsingBlackberryChannelsPtr create() noexcept;
+      void setup() noexcept;
 
     public:
-      ~MessageQueueThreadUsingBlackberryChannels();
+      ~MessageQueueThreadUsingBlackberryChannels() noexcept;
 
-      static MessageQueueThreadUsingBlackberryChannelsPtr singleton();
+      static MessageQueueThreadUsingBlackberryChannelsPtr singleton() noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message);
+      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
 
-      virtual size_type getTotalUnprocessedMessages() const;
+      virtual size_type getTotalUnprocessedMessages() const noexcept;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted();
+      virtual void notifyMessagePosted() noexcept;
 
       // IMessageQueueThread
-      virtual void waitForShutdown();
+      virtual void waitForShutdown() noexcept;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority);
+      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
 
       // IQtCrossThreadNotifierDelegate
-      virtual void processMessageFromThread();
+      virtual void processMessageFromThread() noexcept;
 
     public:
-      virtual void process();
+      virtual void process() noexcept;
 
     protected:
       mutable Lock mLock;

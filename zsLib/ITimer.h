@@ -59,7 +59,7 @@ namespace zsLib
                             Microseconds timeout,
                             bool repeat = true,
                             size_t maxFiringTimerAtOnce = ZSLIB_MAX_TIMER_FIRED_AT_ONCE
-                            );
+                            ) noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Helper creation routine for specifying an alternative time unit
@@ -70,7 +70,7 @@ namespace zsLib
                             TimeUnit timeout,
                             bool repeat = true,
                             size_t maxFiringTimerAtOnce = ZSLIB_MAX_TIMER_FIRED_AT_ONCE
-                            ) {
+                            ) noexcept {
       return create(delegate, std::chrono::duration_cast<Microseconds>(timeout), repeat, maxFiringTimerAtOnce);
     }
 
@@ -79,12 +79,12 @@ namespace zsLib
     static ITimerPtr create(
                             ITimerDelegatePtr delegate,
                             Time timeout
-                            );
+                            ) noexcept;
 
-    virtual PUID getID() const = 0;
-    virtual void cancel() = 0;      // cancel a timer (it is no longer needed)
+    virtual PUID getID() const noexcept = 0;
+    virtual void cancel() noexcept = 0;      // cancel a timer (it is no longer needed)
 
-    virtual void background(bool background = true) = 0;  // background the timer (will run until timer is cancelled even if reference to object is forgotten)
+    virtual void background(bool background = true) noexcept = 0;  // background the timer (will run until timer is cancelled even if reference to object is forgotten)
   };
 
   interaction ITimerDelegate

@@ -2386,7 +2386,7 @@ public:
       if (NULL == resultWarning)
       {
         // found more warnings than results
-        TESTING_CHECK(NULL == "more actual warnings than expected")
+        TESTING_CHECK(!"more actual warnings than expected")
 
         for (; iter != actualWarnings.end(); ++iter)
         {
@@ -2408,7 +2408,7 @@ public:
         const zsLib::XML::ParserPos &pos = (*iter2).mPos;
         if (NULL == resultWarning[loop2+1].mSearchStr)
         {
-          TESTING_CHECK(NULL == "found too many warning positions")
+          TESTING_CHECK(!"found too many warning positions")
           break;
         }
 
@@ -2427,7 +2427,7 @@ public:
         TESTING_CHECK(pos.mColumn == resultWarningDetail.mColumn)
       }
 
-      TESTING_CHECK(actualWarning.mWarningType == resultWarning[loop2].mWarningType)
+      TESTING_EQUAL(static_cast<decltype(resultWarning[loop2].mWarningType)>(actualWarning.mWarningType), resultWarning[loop2].mWarningType)
 
       TESTING_CHECK(0 == strcmp(warningText, resultWarning[loop2].mSearchStr))
       TESTING_STDOUT() << "--- SOR:WARNING(compare) -- \n" << resultWarning[loop2].mSearchStr << "\n--- EOR:WARNING(compare) ---\n";
@@ -2467,7 +2467,7 @@ public:
       case zsLib::XML::Node::NodeType::Element:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parent must be another element or document
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2480,7 +2480,7 @@ public:
       case zsLib::XML::Node::NodeType::Attribute:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parents has to be an element or a declaration
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2514,7 +2514,7 @@ public:
       case zsLib::XML::Node::NodeType::Text:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parent must be another element or document
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2528,7 +2528,7 @@ public:
       case zsLib::XML::Node::NodeType::Comment:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parent must be another element or document
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2542,7 +2542,7 @@ public:
       case zsLib::XML::Node::NodeType::Declaration:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parent must be another element or document
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2559,7 +2559,7 @@ public:
       case zsLib::XML::Node::NodeType::Unknown:
       {
         // must have a parent
-        TESTING_CHECK(inNode->getParent())
+        TESTING_CHECK(nullptr != inNode->getParent())
 
         // parent must be another element or document
         TESTING_CHECK((inNode->getParent()->isElement()) ||
@@ -2622,7 +2622,7 @@ public:
       bool isLastChild = false;
 
       // must have a last child, since a first child was found
-      TESTING_CHECK(inLastChild)
+      TESTING_CHECK(nullptr != inLastChild)
 
       // if this is the first child, make sure it does not have a previous
       if (child.get() == inFirstChild.get())
@@ -2655,17 +2655,17 @@ public:
         else
         {
           // first child must have a next and last child must have a previous
-          TESTING_CHECK(inFirstChild->getNextSibling())
-          TESTING_CHECK(inLastChild->getPreviousSibling())
+          TESTING_CHECK(nullptr != inFirstChild->getNextSibling())
+          TESTING_CHECK(nullptr != inLastChild->getPreviousSibling())
         }
 
       // if its not the first child, must have a previous sibling
       if (!isFirstChild) {
-        TESTING_CHECK(child->getPreviousSibling())
+        TESTING_CHECK(nullptr != child->getPreviousSibling())
       }
       // if its not the last child, must have a next sibling
       if (!isLastChild) {
-        TESTING_CHECK(child->getNextSibling())
+        TESTING_CHECK(nullptr != child->getNextSibling())
       }
 
       // parent must be this node
@@ -2685,7 +2685,9 @@ public:
   void generate()
   {
     zsLib::XML::AttributePtr attribute7(::zsLib::XML::Attribute::create());
+#if 0
     bool caught = false;
+#endif //0
 
     static CSTR gOutput =
     "<?xml value12=\"12\" value2=\"2\" value1=\"1\" value3=\"foo4\" value11=\"11\" value10=\"10\" ?>\n"
@@ -2771,6 +2773,7 @@ public:
     zsLib::XML::TextPtr bogusText(::zsLib::XML::Text::create());
     bogusText->setValue(zsLib::String("bogus"));
 
+#if 0
     caught = false;
     try {(declaration1->toNode())->adoptAsFirstChild(bogusText);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
@@ -2778,6 +2781,7 @@ public:
     caught = false;
     try {(declaration1->toNode())->adoptAsLastChild(bogusText);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
+#endif //0
 
     treeWalkChecker(document);
 
@@ -2833,12 +2837,14 @@ public:
 
     treeWalkChecker(document);
 
+#if 0
     caught = false;
     try {(attribute6->toNode())->adoptAsFirstChild(attribute7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
     caught = false;
     try {(attribute6->toNode())->adoptAsLastChild(attribute7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
+#endif //0
 
     treeWalkChecker(document);
 
@@ -2874,6 +2880,7 @@ public:
     zsLib::XML::TextPtr text7(::zsLib::XML::Text::create());
     text7->setValue(zsLib::String("text7"));
 
+#if 0
     caught = false;
     try {attribute4->adoptAsNextSibling(text7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
@@ -2883,6 +2890,7 @@ public:
     caught = false;
     try {attribute4->adoptAsPreviousSibling(text7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
+#endif //0
 
     treeWalkChecker(document);
 
@@ -3005,12 +3013,14 @@ public:
     zsLib::XML::UnknownPtr unknown1(::zsLib::XML::Unknown::create());
     unknown1->setValue(zsLib::String("!unknown!"));
     TESTING_CHECK(0 == strcmp(unknown1->getValue(), "!unknown!"))
+#if 0
     caught = false;
     try {(unknown1->toNode())->adoptAsFirstChild(attribute7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
     caught = false;
     try {(unknown1->toNode())->adoptAsLastChild(attribute7);} catch(...) {caught = true;}
     TESTING_CHECK(caught)
+#endif //0
     element4->adoptAsNextSibling(unknown1);
     treeWalkChecker(document);
 

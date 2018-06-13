@@ -49,9 +49,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark ProxySubscriptions
-    #pragma mark
+    //
+    // ProxySubscriptions
+    //
 
     template <typename XINTERFACE, typename SUBSCRIPTIONBASECLASS>
     class ProxySubscriptions
@@ -149,9 +149,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark ProxySubscriptions::Subscription
-      #pragma mark
+      //
+      // ProxySubscriptions::Subscription
+      //
 
       class Subscription : public SUBSCRIPTIONBASECLASS
       {
@@ -189,9 +189,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark ProxySubscriptions::DelegateImpl
-      #pragma mark
+      //
+      // ProxySubscriptions::DelegateImpl
+      //
 
       class DelegateImpl : public XINTERFACE
       {
@@ -202,8 +202,9 @@ namespace zsLib
         ~DelegateImpl() {}
 
         template<typename PARAM>
-        static void fillWithSubscription(PARAM &, SubscriptionWeakPtr &, SubscriptionPtr &, bool &filled)
+        static void fillWithSubscription(PARAM &, SubscriptionWeakPtr &, SubscriptionPtr &, ZS_MAYBE_USED() bool &filled)
         {
+          ZS_MAYBE_USED(filled);
         }
 
         template<typename PARAM>
@@ -270,9 +271,9 @@ namespace zsLib
 
     public:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark ProxySubscriptions => (data)
-      #pragma mark
+      //
+      // ProxySubscriptions => (data)
+      //
 
       DelegateImplPtr mDelegateImpl;
     };

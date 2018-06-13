@@ -46,22 +46,22 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::intenral::Unknown
-      #pragma mark
+      //
+      // XML::intenral::Unknown
+      //
 
       //-----------------------------------------------------------------------
-      Unknown::Unknown()
+      Unknown::Unknown() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      Unknown::~Unknown()
+      Unknown::~Unknown() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      void Unknown::parse(XML::ParserPos &ioPos, const char *start, const char *ending)
+      void Unknown::parse(XML::ParserPos &ioPos, const char *start, const char *ending) noexcept
       {
         Parser::AutoStack stack(ioPos);
 
@@ -71,11 +71,11 @@ namespace zsLib
 
         mValue.clear();
 
-        ZS_THROW_BAD_STATE_IF('<' != *ioPos)
+        ZS_ASSERT('<' == *ioPos);
 
         if (start) {
           size_t startLength = strlen(start);
-          ZS_THROW_BAD_STATE_IF(0 != strncmp(ioPos, start, startLength))
+          ZS_ASSERT(0 == strncmp(ioPos, start, startLength));
           ioPos += startLength;
           mValue = start+1; // insert all but the starting '<'
         } else {
@@ -118,8 +118,9 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Unknown::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Unknown::getOutputSizeXML(ZS_MAYBE_USED() const GeneratorPtr &inGenerator) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         size_t result = 0;
         result += strlen("<");
         result += mValue.getLength();
@@ -128,27 +129,30 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Unknown::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Unknown::writeBufferXML(ZS_MAYBE_USED() const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         Generator::writeBuffer(ioPos, "<");
         Generator::writeBuffer(ioPos, mValue);
         Generator::writeBuffer(ioPos, ">");
       }
 
       //-----------------------------------------------------------------------
-      size_t Unknown::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Unknown::getOutputSizeJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator) const noexcept
       {
-        size_t result = 0;
-        return result;
+        ZS_MAYBE_USED(inGenerator);
+        return 0;
       }
 
       //-----------------------------------------------------------------------
-      void Unknown::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Unknown::writeBufferJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator, ZS_MAYBE_USED() char * &ioPos) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
+        ZS_MAYBE_USED(ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Unknown::cloneAssignParent(NodePtr inParent) const
+      NodePtr Unknown::cloneAssignParent(NodePtr inParent) const noexcept
       {
         UnknownPtr newObject(XML::Unknown::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -163,18 +167,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Unknown
-    #pragma mark
+    //
+    // XML::Unknown
+    //
 
     //-------------------------------------------------------------------------
-    Unknown::Unknown(const make_private &) :
+    Unknown::Unknown(const make_private &) noexcept :
       internal::Unknown()
     {
     }
 
     //-------------------------------------------------------------------------
-    UnknownPtr Unknown::create()
+    UnknownPtr Unknown::create() noexcept
     {
       UnknownPtr object(make_shared<Unknown>(make_private{}));
       object->mThis = object;
@@ -182,67 +186,67 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Unknown::hasChildren()
+    bool Unknown::hasChildren() noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    void Unknown::removeChildren()
+    void Unknown::removeChildren() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Unknown::clone() const
+    NodePtr Unknown::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Unknown::clear()
+    void Unknown::clear() noexcept
     {
       mValue.clear();
       Node::clear();
     }
 
     //-------------------------------------------------------------------------
-    String Unknown::getValue() const
+    String Unknown::getValue() const noexcept
     {
       return mValue;
     }
 
     //-------------------------------------------------------------------------
-    void Unknown::adoptAsFirstChild(NodePtr inNode)
+    void Unknown::adoptAsFirstChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("unknown elements cannot have child nodes")
+      ZS_ASSERT_FAIL("unknown elements cannot have child nodes");
     }
 
     //-------------------------------------------------------------------------
-    void Unknown::adoptAsLastChild(NodePtr inNode)
+    void Unknown::adoptAsLastChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("unknown elements cannot have child nodes")
+      ZS_ASSERT_FAIL("unknown elements cannot have child nodes");
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Unknown::getNodeType()
+    Node::NodeType::Type Unknown::getNodeType() const noexcept
     {
       return NodeType::Unknown;
     }
 
     //-------------------------------------------------------------------------
-    bool Unknown::isUnknown() const
+    bool Unknown::isUnknown() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Unknown::toNode() const
+    NodePtr Unknown::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    UnknownPtr Unknown::toUnknown() const
+    UnknownPtr Unknown::toUnknown() const noexcept
     {
       return mThis.lock();
     }

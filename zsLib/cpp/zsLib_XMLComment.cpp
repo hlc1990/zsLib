@@ -47,28 +47,28 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Comment
-      #pragma mark
+      //
+      // XML::internal::Comment
+      //
 
       //-----------------------------------------------------------------------
-      Comment::Comment()
+      Comment::Comment() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      Comment::~Comment()
+      Comment::~Comment() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      void Comment::parse(XML::ParserPos &ioPos)
+      void Comment::parse(XML::ParserPos &ioPos) noexcept
       {
         Parser::AutoStack stack(ioPos);
 
         mValue.clear();
 
-        ZS_THROW_BAD_STATE_IF(!ioPos.isString("<!--"))
+        ZS_ASSERT(ioPos.isString("<!--"));
 
         ioPos += strlen("<!--");
 
@@ -91,8 +91,9 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Comment::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Comment::getOutputSizeXML(ZS_MAYBE_USED() const GeneratorPtr &inGenerator) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         size_t result = 0;
         result += strlen("<!--");
         result += mValue.getLength();
@@ -101,27 +102,31 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Comment::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Comment::writeBufferXML(ZS_MAYBE_USED() const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         Generator::writeBuffer(ioPos, "<!--");
         Generator::writeBuffer(ioPos, mValue);
         Generator::writeBuffer(ioPos, "-->");
       }
 
       //-----------------------------------------------------------------------
-      size_t Comment::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Comment::getOutputSizeJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         size_t result = 0;
         return result;
       }
 
       //-----------------------------------------------------------------------
-      void Comment::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Comment::writeBufferJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator, ZS_MAYBE_USED() char * &ioPos) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
+        ZS_MAYBE_USED(ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Comment::cloneAssignParent(NodePtr inParent) const
+      NodePtr Comment::cloneAssignParent(NodePtr inParent) const noexcept
       {
         CommentPtr newObject(XML::Comment::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -136,18 +141,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Comment
-    #pragma mark
+    //
+    // XML::Comment
+    //
 
     //-------------------------------------------------------------------------
-    Comment::Comment(const make_private &) :
+    Comment::Comment(const make_private &) noexcept :
       internal::Comment()
     {
     }
 
     //-------------------------------------------------------------------------
-    CommentPtr Comment::create()
+    CommentPtr Comment::create() noexcept
     {
       CommentPtr object(make_shared<Comment>(make_private{}));
       object->mThis = object;
@@ -155,66 +160,66 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Comment::hasChildren()
+    bool Comment::hasChildren() noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    void Comment::removeChildren()
+    void Comment::removeChildren() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Comment::clone() const
+    NodePtr Comment::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Comment::clear()
+    void Comment::clear() noexcept
     {
       mValue.clear();
     }
 
     //-------------------------------------------------------------------------
-    String Comment::getValue() const
+    String Comment::getValue() const noexcept
     {
       return mValue;
     }
 
     //-------------------------------------------------------------------------
-    void Comment::adoptAsFirstChild(NodePtr inNode)
+    void Comment::adoptAsFirstChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("comments are not allowed to have child nodes")
+      ZS_ASSERT_FAIL("comments are not allowed to have child nodes");
     }
 
     //-------------------------------------------------------------------------
-    void Comment::adoptAsLastChild(NodePtr inNode)
+    void Comment::adoptAsLastChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("comments are not allowed to have child nodes")
+      ZS_ASSERT_FAIL("comments are not allowed to have child nodes");
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Comment::getNodeType()
+    Node::NodeType::Type Comment::getNodeType() const noexcept
     {
       return NodeType::Comment;
     }
 
     //-------------------------------------------------------------------------
-    bool Comment::isComment() const
+    bool Comment::isComment() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Comment::toNode() const
+    NodePtr Comment::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    CommentPtr Comment::toComment() const
+    CommentPtr Comment::toComment() const noexcept
     {
       return mThis.lock();
     }

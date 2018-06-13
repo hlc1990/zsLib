@@ -41,9 +41,9 @@ namespace zsLib
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IMessageQueueManager
-  #pragma mark
+  //
+  // IMessageQueueManager
+  //
 
   interaction IMessageQueueManager
   {
@@ -57,13 +57,13 @@ namespace zsLib
     // WARNING: This method MUST be called first on the GUI thread before
     //          any other thread may use this method otherwise unpredictable
     //          results may occur.
-    static IMessageQueuePtr getMessageQueueForGUIThread();
+    static IMessageQueuePtr getMessageQueueForGUIThread() noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Obtains an existing message queue for for registered queues
     //          or creates a new message queue thread if no such queue name
     //          exists.
-    static IMessageQueuePtr getMessageQueue(const char *assignedQueueName);
+    static IMessageQueuePtr getMessageQueue(const char *assignedQueueName) noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Create a message queue for a pool
@@ -71,7 +71,7 @@ namespace zsLib
                                                 const char *assignedThreadPoolQueueName,
                                                 const char *registeredQueueName = NULL,
                                                 size_t minThreadsRequired = 4
-                                                );
+                                                ) noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Registers the thread priority to use for a thread that may
@@ -82,29 +82,29 @@ namespace zsLib
     //          the "getMessageQueue" or "getThreadPoolQueue" method or
     //          the thread priority will be ignored.
     static void registerMessageQueueThreadPriority(
-                                                    const char *assignedQueueName,
-                                                    ThreadPriorities priority
-                                                    );
+                                                   const char *assignedQueueName,
+                                                   ThreadPriorities priority
+                                                   ) noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Obtain a list of all queues registered in the manager
-    static MessageQueueMapPtr getRegisteredQueues();
+    static MessageQueueMapPtr getRegisteredQueues() noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Count the number of unprocessed messages in each queue and
     //          return the summary total
-    static size_t getTotalUnprocessedMessages();
+    static size_t getTotalUnprocessedMessages() noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Shutdown all threads now
     //
     // WARNING: The total unprocessed messages in all the queues should be
     //          "0" to ensure all pending work is completed
-    static void shutdownAllQueues();
+    static void shutdownAllQueues() noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: block current thread until all non-GUI threads are completed.
-    static void blockUntilDone();
+    static void blockUntilDone() noexcept;
   };
 
 } // namespace zsLib

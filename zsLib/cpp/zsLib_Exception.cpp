@@ -56,9 +56,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Exception
-  #pragma mark
+  //
+  // Exception
+  //
 
   //---------------------------------------------------------------------------
   Exception::Exception(
@@ -68,7 +68,7 @@ namespace zsLib
                        CSTR filePath,
                        ULONG lineNumber,
                        const char *expression
-                       ) :
+                       ) noexcept :
     mSubsystem(subsystem),
     mMessage(message),
     mFunction(function),
@@ -93,7 +93,7 @@ namespace zsLib
                        CSTR filePath,
                        ULONG lineNumber,
                        const char *expression
-                       ) :
+                       ) noexcept :
     mSubsystem(subsystem),
     mMessage(message),
     mFunction(function),
@@ -118,7 +118,7 @@ namespace zsLib
                        CSTR filePath,
                        ULONG lineNumber,
                        const char *expression
-                       ) :
+                       ) noexcept :
     mSubsystem(subsystem),
     mMessage(params.message()),
     mFunction(function),
@@ -137,7 +137,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Exception::Exception(const Exception &op2) :
+  Exception::Exception(const Exception &op2) noexcept :
     mSubsystem(op2.mSubsystem),
     mMessage(op2.mMessage),
     mFunction(op2.mFunction),
@@ -148,13 +148,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  const char *Exception::what() const throw()
+  const char *Exception::what() const
   {
     return mMessage.c_str();
   }
 
   //---------------------------------------------------------------------------
-  Log::Params Exception::params() const
+  Log::Params Exception::params() const noexcept
   {
     return mParams;
   }

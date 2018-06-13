@@ -39,15 +39,15 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark BoxedAllocation<T>
-  #pragma mark
+  //
+  // BoxedAllocation<T>
+  //
 
   template <typename T, bool allowDestroy = true>
   class BoxedAllocation
   {
   public:
-    BoxedAllocation()
+    BoxedAllocation() noexcept
     {
       BYTE *buffer = (&(mBuffer[0]));
       auto alignment = alignof(T);
@@ -59,19 +59,19 @@ namespace zsLib
       mObject = new (alignedBuffer) T;
     }
 
-    ~BoxedAllocation()
+    ~BoxedAllocation() noexcept
     {
       if (!allowDestroy) return;
 
       mObject->~T();
     }
 
-    T &ref()
+    T &ref() noexcept
     {
       return *mObject;
     }
 
-    const T &ref() const
+    const T &ref() const noexcept
     {
       return *mObject;
     }
@@ -85,15 +85,15 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Singleton<T>
-  #pragma mark
+  //
+  // Singleton<T>
+  //
 
   template <typename T, bool allowDestroy = true>
   class Singleton : BoxedAllocation<T, allowDestroy>
   {
   public:
-    T &singleton()
+    T &singleton() noexcept
     {
       return BoxedAllocation<T, allowDestroy>::ref();
     }
@@ -105,9 +105,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark SingletonLazySharedPtr<T, bool allowDestroy>
-  #pragma mark
+  //
+  // SingletonLazySharedPtr<T, bool allowDestroy>
+  //
 
   template <typename T, bool allowDestroy = true>
   class SingletonLazySharedPtr : BoxedAllocation< std::weak_ptr<T>, false >
@@ -116,7 +116,7 @@ namespace zsLib
     ZS_DECLARE_PTR(T)
 
   public:
-    SingletonLazySharedPtr(TPtr pThis)
+    SingletonLazySharedPtr(TPtr pThis) noexcept
     {
       mThis = pThis;
       weakRef() = pThis;
@@ -128,13 +128,13 @@ namespace zsLib
       }
     }
 
-    TPtr singleton()
+    TPtr singleton() noexcept
     {
       return weakRef().lock();
     }
 
   private:
-    TWeakPtr &weakRef()
+    TWeakPtr &weakRef() noexcept
     {
       return BoxedAllocation< TWeakPtr, false >::ref();
     }
@@ -147,18 +147,18 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark SingletonManager
-  #pragma mark
+  //
+  // SingletonManager
+  //
 
   class SingletonManager : public internal::SingletonManager
   {
   public:
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Initializer
-    #pragma mark
+    //
+    // Initializer
+    //
 
     class Initializer : public internal::SingletonManager::Initializer
     {
@@ -170,14 +170,14 @@ namespace zsLib
       //          lifetime all singletons will be notified to clean-up.
       //          Typically an instance of this class is declared inside
       //          "main(...)"
-      Initializer();
-      ~Initializer();
+      Initializer() noexcept;
+      ~Initializer() noexcept;
     };
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Register
-    #pragma mark
+    //
+    // Register
+    //
 
     class Register : public internal::SingletonManager::Register
     {
@@ -193,12 +193,12 @@ namespace zsLib
       Register(
                const char *uniqueNamespacedID,
                ISingletonManagerDelegatePtr singleton
-               );
-      ~Register();
+               ) noexcept;
+      ~Register() noexcept;
 
       //-----------------------------------------------------------------------
       // PURPOSE: Find a previously registered singleton
-      static ISingletonManagerDelegatePtr find(const char *uniqueNamespacedID);
+      static ISingletonManagerDelegatePtr find(const char *uniqueNamespacedID) noexcept;
     };
   };
 
@@ -206,13 +206,13 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ISingletonManagerDelegate
-  #pragma mark
+  //
+  // ISingletonManagerDelegate
+  //
 
   interaction ISingletonManagerDelegate
   {
-    virtual void notifySingletonCleanup() = 0;
+    virtual void notifySingletonCleanup() noexcept = 0;
   };
 
 } // namespace zsLib

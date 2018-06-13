@@ -45,7 +45,7 @@ namespace zsLib
               CSTR filePath,
               ULONG lineNumber,
               const char *expression = NULL
-              );
+              ) noexcept;
     Exception(
               const Subsystem &subsystem,
               const String &message,
@@ -53,7 +53,7 @@ namespace zsLib
               CSTR filePath,
               ULONG lineNumber,
               const char *expression = NULL
-              );
+              ) noexcept;
     Exception(
               const Subsystem &subsystem,
               const Log::Params &params,
@@ -61,19 +61,19 @@ namespace zsLib
               CSTR filePath,
               ULONG lineNumber,
               const char *expression = NULL
-              );
-    Exception(const Exception &op2);
+              ) noexcept;
+    Exception(const Exception &op2) noexcept;
 
-    ~Exception() throw() {}
+    ~Exception() noexcept {}
 
-    virtual const char *what() const throw();
+    virtual const char *what() const;
 
-    const Subsystem &subsystem() const {return mSubsystem;}
-    const String &message() const {return mMessage;}
-    CSTR function() const {return mFunction;}
-    CSTR filePath() const {return mFilePath;}
-    ULONG lineNumber() const {return mLineNumber;}
-    Log::Params params() const;
+    const Subsystem &subsystem() const noexcept {return mSubsystem;}
+    const String &message() const noexcept {return mMessage;}
+    CSTR function() const noexcept {return mFunction;}
+    CSTR filePath() const noexcept {return mFilePath;}
+    ULONG lineNumber() const noexcept {return mLineNumber;}
+    Log::Params params() const noexcept;
 
     Exception &operator=(const Exception &) = delete;
 

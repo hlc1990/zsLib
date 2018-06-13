@@ -38,20 +38,20 @@ namespace zsLib
 {
   interaction IMessageQueueThreadPool
   {
-    static IMessageQueueThreadPoolPtr create();
+    static IMessageQueueThreadPoolPtr create() noexcept;
 
     virtual void createThread(
                               const char *threadName = NULL,
                               ThreadPriorities threadPriority = ThreadPriority_NormalPriority
-                              ) = 0;
+                              ) noexcept = 0;
 
-    virtual void waitForShutdown() = 0;
+    virtual void waitForShutdown() noexcept = 0;
 
-    virtual bool hasPendingMessages() = 0;
+    virtual bool hasPendingMessages() noexcept = 0;
 
-    virtual IMessageQueuePtr createQueue() = 0;
+    virtual IMessageQueuePtr createQueue() noexcept = 0;
 
-    virtual void setThreadPriority(ThreadPriorities threadPriority) = 0;
+    virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept = 0;
   };
 
 } // namespace zsLib

@@ -43,15 +43,15 @@ namespace zsLib
     void setThreadPriority(
                            Thread::native_handle_type handle,
                            ThreadPriorities threadPriority
-                           );
+                           ) noexcept;
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThread
-    #pragma mark
+    //
+    // MessageQueueThread
+    //
 
     class MessageQueueThread : public IMessageQueueThread
     {
@@ -59,8 +59,8 @@ namespace zsLib
       friend interaction IMessageQueueThread;
 
     protected:
-      static MessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority);
-      static MessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue();
+      static MessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority) noexcept;
+      static MessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue() noexcept;
     };
   }
 }

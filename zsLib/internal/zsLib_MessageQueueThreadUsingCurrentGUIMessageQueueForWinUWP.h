@@ -60,32 +60,32 @@ namespace zsLib
       };
 
     protected:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWindows();
-      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr create(CoreDispatcher ^dispatcher);
-      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr queue);
+      MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept;
+      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr create(CoreDispatcher ^dispatcher) noexcept;
+      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr queue) noexcept;
 
     public:
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows();
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept;
 
-      static MessageQueueThreadPtr singleton();
-      static CoreDispatcher ^setupDispatcher(CoreDispatcher ^dispatcher = nullptr);
+      static MessageQueueThreadPtr singleton() noexcept;
+      static CoreDispatcher ^setupDispatcher(CoreDispatcher ^dispatcher = nullptr) noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message);
+      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
 
-      virtual size_type getTotalUnprocessedMessages() const;
+      virtual size_type getTotalUnprocessedMessages() const noexcept;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted();
+      virtual void notifyMessagePosted() noexcept;
 
       // IMessageQueueThread
-      virtual void waitForShutdown();
+      virtual void waitForShutdown() noexcept;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority);
+      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
 
     public:
-      virtual void process();
-      virtual void processMessagesFromThread();
+      virtual void process() noexcept;
+      virtual void processMessagesFromThread() noexcept;
 
     protected:
       mutable Lock mLock;

@@ -39,9 +39,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark RangeSelection
-  #pragma mark
+  //
+  // RangeSelection
+  //
 
   template <
     typename RangeType,
@@ -57,19 +57,19 @@ namespace zsLib
 
   public:
     //-------------------------------------------------------------------------
-    RangeSelection(const RangeSelection &op2) :
+    RangeSelection(const RangeSelection &op2) noexcept :
       range_(op2.range_)
     {
     }
 
     //-------------------------------------------------------------------------
-    RangeSelection() {}
+    RangeSelection() noexcept {}
 
     //-------------------------------------------------------------------------
-    ~RangeSelection() {}
+    ~RangeSelection() noexcept {}
 
     //-------------------------------------------------------------------------
-    static RangeSelection createFromString(const char *previousExportString)
+    static RangeSelection createFromString(const char *previousExportString) noexcept(false)
     {
       RangeSelection result;
       result.importFromString(previousExportString);
@@ -77,7 +77,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    static RangeSelection createFromSetting(const char *key)
+    static RangeSelection createFromSetting(const char *key) noexcept(false)
     {
       RangeSelection result;
       result.importFromSetting(key);
@@ -85,38 +85,38 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    RangeSelection &operator=(const RangeSelection &op2)
+    RangeSelection &operator=(const RangeSelection &op2) noexcept
     {
       range_ = op2.range_;
       return *this;
     }
 
     //-------------------------------------------------------------------------
-    void importFromSetting(const char *key) throw (zsLib::Exceptions::InvalidArgument)
+    void importFromSetting(const char *key) noexcept(false) // throws zsLib::Exceptions::InvalidArgument
     {
       range_.importFromSetting(key);
     }
 
     //-------------------------------------------------------------------------
-    void importFromString(const char *previousExportString) throw (zsLib::Exceptions::InvalidArgument)
+    void importFromString(const char *previousExportString) noexcept(false) // throws zsLib::Exceptions::InvalidArgument
     {
       range_.importFromString(previousExportString);
     }
 
     //-------------------------------------------------------------------------
-    void exportToSetting(const char *key) const
+    void exportToSetting(const char *key) const noexcept
     {
       range_.exportToSetting(key);
     }
 
     //-------------------------------------------------------------------------
-    String exportToString() const
+    String exportToString() const noexcept
     {
       return range_.exportToString();
     }
 
     //-------------------------------------------------------------------------
-    void reset()
+    void reset() noexcept
     {
       range_.reset();
     }
@@ -125,7 +125,7 @@ namespace zsLib
     void allow(
                 UseRangeType from,
                 UseRangeType to
-                )
+                ) noexcept
     {
       range_.allow(from, to);
     }
@@ -134,7 +134,7 @@ namespace zsLib
     void deny(
               UseRangeType from,
               UseRangeType to
-              )
+              ) noexcept
     {
       range_.deny(from, to);
     }
@@ -143,7 +143,7 @@ namespace zsLib
     void removeAllow(
                       UseRangeType from,
                       UseRangeType to
-                      )
+                      ) noexcept
     {
       range_.removeAllow(from, to);
     }
@@ -152,19 +152,19 @@ namespace zsLib
     void removeDeny(
                     UseRangeType from,
                     UseRangeType to
-                    )
+                    ) noexcept
     {
       range_.removeDeny(from, to);
     }
 
     //-------------------------------------------------------------------------
-    UseRangeType getRandomPosition(UseLargeUnsignedType randomInputValue) throw(::zsLib::Exceptions::BadState)
+    UseRangeType getRandomPosition(UseLargeUnsignedType randomInputValue) noexcept(false) // throws ::zsLib::Exceptions::BadState
     {
       return range_.getRandomPosition(randomInputValue);
     }
 
     //-------------------------------------------------------------------------
-    bool isAllowed(UseRangeType value)
+    bool isAllowed(UseRangeType value) noexcept
     {
       return range_.isAllowed(value);
     }

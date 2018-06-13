@@ -49,20 +49,20 @@ namespace zsLib
     typedef t_type NumericType;
 
   public:
-    Numeric(bool ignoreWhitespace = true, size_t base = 10) : mIngoreWhitespace(ignoreWhitespace), mBase(base)                                          {}
-    Numeric(CSTR value, bool ignoreWhitespace = true, size_t base = 10) : mData(value), mIngoreWhitespace(ignoreWhitespace), mBase(base)                {}
-    Numeric(const String &value, bool ignoreWhitespace = true, size_t base = 10) : mData(value), mIngoreWhitespace(ignoreWhitespace), mBase(base)       {}
-    Numeric(const Numeric &value, bool ignoreWhitespace = true, size_t base = 10) : mData(value.mData),mIngoreWhitespace(ignoreWhitespace), mBase(base) {}
+    Numeric(bool ignoreWhitespace = true, size_t base = 10) noexcept : mIngoreWhitespace(ignoreWhitespace), mBase(base)                                          {}
+    Numeric(CSTR value, bool ignoreWhitespace = true, size_t base = 10) noexcept : mData(value), mIngoreWhitespace(ignoreWhitespace), mBase(base)                {}
+    Numeric(const String &value, bool ignoreWhitespace = true, size_t base = 10) noexcept : mData(value), mIngoreWhitespace(ignoreWhitespace), mBase(base)       {}
+    Numeric(const Numeric &value, bool ignoreWhitespace = true, size_t base = 10) noexcept : mData(value.mData),mIngoreWhitespace(ignoreWhitespace), mBase(base) {}
 
-    Numeric &operator=(const String &value)         {mData = value; return *this;}
-    Numeric &operator=(const Numeric &value)        {mData = value.mData; return *this;}
+    Numeric &operator=(const String &value) noexcept    {mData = value; return *this;}
+    Numeric &operator=(const Numeric &value) noexcept   {mData = value.mData; return *this;}
 
-    void get(t_type &outValue) const throw (ValueOutOfRange);
+    void get(t_type &outValue) const noexcept(false);   // throws ValueOutOfRange
 
-    bool ignoreSpace() const                        {return mIngoreWhitespace;}
-    int getBase() const                             {return mBase;}
+    bool ignoreSpace() const noexcept                   {return mIngoreWhitespace;}
+    int getBase() const noexcept                        {return mBase;}
 
-    operator t_type() const                         {t_type value; get(value); return value;}
+    operator t_type() const noexcept(false)             {t_type value; get(value); return value;}
 
   private:
 

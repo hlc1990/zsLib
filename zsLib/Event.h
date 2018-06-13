@@ -45,14 +45,14 @@ namespace zsLib
       Reset_Auto,
     };
 
-    static EventPtr create(bool manualReset = true);
-    static EventPtr create(Resets resets) { return create(resets == Reset_Manual); }
+    static EventPtr create(bool manualReset = true) noexcept;
+    static EventPtr create(Resets resets) noexcept { return create(resets == Reset_Manual); }
 
-    Event(bool manualReset = true) : internal::Event(manualReset) {}
-    Event(Resets resets) : internal::Event(resets == Reset_Manual) {}
+    Event(bool manualReset = true) noexcept : internal::Event(manualReset) {}
+    Event(Resets resets) noexcept : internal::Event(resets == Reset_Manual) {}
 
-    void reset();   // after an event has been notified, reset must be called to cause the wait to happen again
-    void wait();    // once an event is notified via "notify()", "wait()" will no longer wait until "reset()" is called
-    void notify();  // breaks the wait from executing until the reset is called
+    void reset() noexcept;   // after an event has been notified, reset must be called to cause the wait to happen again
+    void wait() noexcept;    // once an event is notified via "notify()", "wait()" will no longer wait until "reset()" is called
+    void notify() noexcept;  // breaks the wait from executing until the reset is called
   };
 }

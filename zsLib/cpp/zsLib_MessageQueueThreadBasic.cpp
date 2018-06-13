@@ -42,7 +42,7 @@ namespace zsLib
   namespace internal
   {
     //-------------------------------------------------------------------------
-    MessageQueueThreadBasicPtr MessageQueueThreadBasic::create(const char *threadName, ThreadPriorities threadPriority)
+    MessageQueueThreadBasicPtr MessageQueueThreadBasic::create(const char *threadName, ThreadPriorities threadPriority) noexcept
     {
       MessageQueueThreadBasicPtr thread(new MessageQueueThreadBasic(threadName));
       thread->mQueue = MessageQueue::create(thread);
@@ -54,18 +54,18 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadBasic::MessageQueueThreadBasic(const char *threadName) :
+    MessageQueueThreadBasic::MessageQueueThreadBasic(const char *threadName) noexcept :
       mThreadName(threadName)
     {
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadBasic::~MessageQueueThreadBasic()
+    MessageQueueThreadBasic::~MessageQueueThreadBasic() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::operator()()
+    void MessageQueueThreadBasic::operator()() noexcept
     {
       bool shouldShutdown = false;
 
@@ -95,16 +95,16 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::post(IMessageQueueMessageUniPtr message)
+    void MessageQueueThreadBasic::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       if (mIsShutdown) {
-        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
+        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.");
       }
       mQueue->post(std::move(message));
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadBasic::getTotalUnprocessedMessages() const
+    IMessageQueue::size_type MessageQueueThreadBasic::getTotalUnprocessedMessages() const noexcept
     {
       AutoLock lock(mLock);
       if (!mQueue) return 0;
@@ -112,13 +112,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::notifyMessagePosted()
+    void MessageQueueThreadBasic::notifyMessagePosted() noexcept
     {
       mEvent.notify();
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::waitForShutdown()
+    void MessageQueueThreadBasic::waitForShutdown() noexcept
     {
       ThreadPtr thread;
       {
@@ -141,7 +141,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::setThreadPriority(ThreadPriorities threadPriority)
+    void MessageQueueThreadBasic::setThreadPriority(ThreadPriorities threadPriority) noexcept
     {
       AutoLock lock(mLock);
       if (!mThread) return;
@@ -154,7 +154,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadBasic::processMessagesFromThread()
+    void MessageQueueThreadBasic::processMessagesFromThread() noexcept
     {
       if (mIsShutdown) return;
       mQueue->process();

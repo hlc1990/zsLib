@@ -314,12 +314,12 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Parser::AutoStack
-      #pragma mark
+      //
+      // XML::internal::Parser::AutoStack
+      //
 
       //-----------------------------------------------------------------------
-      Parser::AutoStack::AutoStack(const XML::ParserPos &inPos) :
+      Parser::AutoStack::AutoStack(const XML::ParserPos &inPos) noexcept :
         mParser(inPos.getParser())
       {
         if (mParser)
@@ -327,7 +327,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      Parser::AutoStack::~AutoStack()
+      Parser::AutoStack::~AutoStack() noexcept
       {
         if (mParser)
           mParser->popPos();
@@ -337,12 +337,12 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Parser
-      #pragma mark
+      //
+      // XML::internal::Parser
+      //
 
       //-----------------------------------------------------------------------
-      Parser::Parser() :
+      Parser::Parser() noexcept :
         mParserMode(ParserMode_XML),
         mTabSize(ZS_INTERNAL_XML_DEFAULT_TAB_SIZE),
         mSOF(NULL),
@@ -353,26 +353,26 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      Parser::~Parser()
+      Parser::~Parser() noexcept
       {
       }
       
       //-----------------------------------------------------------------------
-      void Parser::clearStack()
+      void Parser::clearStack() noexcept
       {
         mParserStack.clear();
       }
 
       //-----------------------------------------------------------------------
-      void Parser::pushPos(const XML::ParserPos &inPos)
+      void Parser::pushPos(const XML::ParserPos &inPos) noexcept
       {
         mParserStack.push_back(inPos);
       }
 
       //-----------------------------------------------------------------------
-      XML::ParserPos Parser::popPos()
+      XML::ParserPos Parser::popPos() noexcept
       {
-        ZS_THROW_BAD_STATE_IF(mParserStack.size() < 1)
+        ZS_ASSERT(mParserStack.size() > 0);
 
         XML::ParserPos temp;
         temp = mParserStack.back();
@@ -381,7 +381,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Parser::addWarning(ParserWarningTypes inWarning)
+      void Parser::addWarning(ParserWarningTypes inWarning) noexcept
       {
         if (mEnableWarnings)
         {
@@ -391,7 +391,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Parser::addWarning(ParserWarningTypes inWarning, const XML::ParserPos &inPos)
+      void Parser::addWarning(ParserWarningTypes inWarning, const XML::ParserPos &inPos) noexcept
       {
         if (mEnableWarnings)
         {
@@ -402,7 +402,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isAlpha(char inLetter)
+      bool Parser::isAlpha(char inLetter) noexcept
       {
         if (inLetter < 0)
           return false;
@@ -410,7 +410,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isDigit(char inLetter)
+      bool Parser::isDigit(char inLetter) noexcept
       {
         if (inLetter < 0)
           return false;
@@ -418,7 +418,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isAlphaNumeric(char inLetter)
+      bool Parser::isAlphaNumeric(char inLetter) noexcept
       {
         if (inLetter < 0)
           return false;
@@ -426,7 +426,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isHexDigit(char inLetter)
+      bool Parser::isHexDigit(char inLetter) noexcept
       {
         return (((inLetter >= 'A') && (inLetter <= 'F')) ||
                 ((inLetter >= 'a') && (inLetter <= 'f')) ||
@@ -434,7 +434,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isLegalName(char inLetter, bool inFirstLetter)
+      bool Parser::isLegalName(char inLetter, bool inFirstLetter) noexcept
       {
         BYTE letter = (BYTE)inLetter;
         if (letter >= 127)
@@ -458,7 +458,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      WCHAR Parser::findEntity(const String &inLookup)
+      WCHAR Parser::findEntity(const String &inLookup) noexcept
       {
         for (ULONG loop = 0; NULL != internal::gEntities[loop].mEntityName; ++loop)
         {
@@ -469,7 +469,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isWhiteSpace(char inLetter)
+      bool Parser::isWhiteSpace(char inLetter) noexcept
       {
         switch (inLetter)
         {
@@ -487,13 +487,13 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::isWhiteSpace(const XML::ParserPos &inPos)
+      bool Parser::isWhiteSpace(const XML::ParserPos &inPos) noexcept
       {
         return isWhiteSpace(*inPos);
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::skipWhiteSpace(XML::ParserPos &inPos)
+      bool Parser::skipWhiteSpace(XML::ParserPos &inPos) noexcept
       {
         bool skipped = false;
         while (isWhiteSpace(inPos))
@@ -505,7 +505,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::parseAnyExceptElement(XML::ParserPos &ioPos, NodePtr parent)
+      bool Parser::parseAnyExceptElement(XML::ParserPos &ioPos, NodePtr parent) noexcept
       {
         AutoStack stack(ioPos);
 
@@ -624,7 +624,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      String Parser::parseLegalName(XML::ParserPos &inPos)
+      String Parser::parseLegalName(XML::ParserPos &inPos) noexcept
       {
         String result;
         while (isLegalName(*inPos, result.isEmpty()))
@@ -636,7 +636,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Parser::skipMismatchedEndTag(XML::ParserPos &ioPos)
+      bool Parser::skipMismatchedEndTag(XML::ParserPos &ioPos) noexcept
       {
         // this is an end of element, except there is no matching element
         AutoStack stack(ioPos);
@@ -664,7 +664,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      String Parser::compressWhiteSpace(const String &inString)
+      String Parser::compressWhiteSpace(const String &inString) noexcept
       {
         std::unique_ptr<char[]> temp(new char[inString.getLength()+1]);
 
@@ -705,7 +705,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Parser::cloneAssignParent(NodePtr inNewParent, NodePtr inExistingChild)
+      NodePtr Parser::cloneAssignParent(NodePtr inNewParent, NodePtr inExistingChild) noexcept
       {
         if (!inExistingChild)
           return NodePtr();
@@ -721,25 +721,25 @@ namespace zsLib
           case XML::Node::NodeType::Unknown:       return inExistingChild->toUnknown()->cloneAssignParent(inNewParent);
           default:
           {
-            ZS_THROW_BAD_STATE("missing node type in cloneAssignParent table")
+            ZS_ASSERT_FAIL("missing node type in cloneAssignParent table");
           }
         }
         return NodePtr();
       }
 
       //-----------------------------------------------------------------------
-      void Parser::safeAdoptAsLastChild(NodePtr inParent, NodePtr inNewChild)
+      void Parser::safeAdoptAsLastChild(NodePtr inParent, NodePtr inNewChild) noexcept
       {
         if (!inParent)
           return;
 
-        ZS_THROW_BAD_STATE_IF(!inNewChild)
+        ZS_ASSERT(inNewChild);
 
         inParent->adoptAsLastChild(inNewChild);
       }
 
       //-----------------------------------------------------------------------
-      String Parser::parseJSONString(XML::ParserPos &ioPos)
+      String Parser::parseJSONString(XML::ParserPos &ioPos) noexcept
       {
         AutoStack stack(ioPos);
 
@@ -811,7 +811,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      String Parser::parseJSONNumber(XML::ParserPos &ioPos)
+      String Parser::parseJSONNumber(XML::ParserPos &ioPos) noexcept
       {
         AutoStack stack(ioPos);
 
@@ -882,7 +882,7 @@ namespace zsLib
                                         XML::ParserPos &ioPos,
                                         String &outResult,
                                         bool &outIsQuoted
-                                        )
+                                        ) noexcept
       {
         outIsQuoted = false;
         switch (*ioPos) {
@@ -924,12 +924,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Parser
-    #pragma mark
+    //
+    // XML::Parser
+    //
 
     //-------------------------------------------------------------------------
-    ParserPtr Parser::createXMLParser()
+    ParserPtr Parser::createXMLParser() noexcept
     {
       ParserPtr pThis(make_shared<Parser>(make_private {}));
       pThis->mThis = pThis;
@@ -941,7 +941,7 @@ namespace zsLib
     ParserPtr Parser::createJSONParser(
                                        const char *forcedText,
                                        char attributePrefix
-                                       )
+                                       ) noexcept
     {
       ParserPtr pThis(make_shared<Parser>(make_private{}));
       pThis->mThis = pThis;
@@ -954,7 +954,7 @@ namespace zsLib
     ParserPtr Parser::createAutoDetectParser(
                                              const char *jsonForcedText,
                                              char jsonAttributePrefix
-                                             )
+                                             ) noexcept
     {
       ParserPtr pThis(make_shared<Parser>(make_private{}));
       pThis->mThis = pThis;
@@ -965,7 +965,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Parser::Parser(const make_private &) :
+    Parser::Parser(const make_private &) noexcept :
       internal::Parser()
     {
     }
@@ -988,9 +988,9 @@ namespace zsLib
                               const char *inDocument,
                               bool inElementNameIsCaseSensative,
                               bool inAttributeNameIsCaseSensative
-                              )
+                              ) noexcept
     {
-      ZS_THROW_INVALID_ARGUMENT_IF(!inDocument)
+      ZS_ASSERT(inDocument);
 
       DocumentPtr outDocument = Document::create(inElementNameIsCaseSensative, inAttributeNameIsCaseSensative);
 
@@ -1021,7 +1021,7 @@ namespace zsLib
       switch (mParserMode)
       {
         case ParserMode_AutoDetect: {
-          ZS_THROW_BAD_STATE("auto detect is an illegal parser mode")
+          ZS_ASSERT_FAIL("auto detect is an illegal parser mode");
         }
         //.....................................................................
         case ParserMode_XML: {
@@ -1350,37 +1350,37 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Parser::clearWarnings()
+    void Parser::clearWarnings() noexcept
     {
       mWarnings.clear();
     }
 
     //-------------------------------------------------------------------------
-    const Parser::Warnings &Parser::getWarnings() const
+    const Parser::Warnings &Parser::getWarnings() const noexcept
     {
       return mWarnings;
     }
 
     //-------------------------------------------------------------------------
-    ULONG Parser::getTabSize() const
+    ULONG Parser::getTabSize() const noexcept
     {
       return mTabSize;
     }
 
     //-------------------------------------------------------------------------
-    void Parser::setTabSize(ULONG inTabSize)
+    void Parser::setTabSize(ULONG inTabSize) noexcept
     {
       mTabSize = inTabSize;
     }
 
     //-------------------------------------------------------------------------
-    void Parser::setNoChildrenElements(const NoChildrenElementList &noChildrenElementList)
+    void Parser::setNoChildrenElements(const NoChildrenElementList &noChildrenElementList) noexcept
     {
       mSingleElements = noChildrenElementList;
     }
 
     //-------------------------------------------------------------------------
-    String Parser::convertFromEntities(const String &inString)
+    String Parser::convertFromEntities(const String &inString) noexcept
     {
       std::unique_ptr<char[]> result(new char[inString.getLength()*ZS_INTERNAL_UTF8_MAX_CHARACTER_ENCODED_BYTE_SIZE+1]);
       memset(result.get(), 0, sizeof(char)*(inString.getLength()*ZS_INTERNAL_UTF8_MAX_CHARACTER_ENCODED_BYTE_SIZE+1));
@@ -1494,7 +1494,7 @@ namespace zsLib
 #define ZS_INTERNAL_LONGEST_MANDITORY_ENTITY "&quot;"
 
     //-------------------------------------------------------------------------
-    String Parser::makeTextEntitySafe(const String &inString, bool entityEncode0xD)
+    String Parser::makeTextEntitySafe(const String &inString, bool entityEncode0xD) noexcept
     {
       std::unique_ptr<char[]>buffer(new char[(inString.getLength()*strlen(ZS_INTERNAL_LONGEST_MANDITORY_ENTITY))+1]);
 
@@ -1548,7 +1548,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Parser::makeAttributeEntitySafe(const String &inString, char willUseSurroundingQuotes)
+    String Parser::makeAttributeEntitySafe(const String &inString, char willUseSurroundingQuotes) noexcept
     {
       bool escapeDoubleQuote = false;
       bool escapeSingleQuote = false;
@@ -1559,7 +1559,7 @@ namespace zsLib
         } else if (willUseSurroundingQuotes == '\'') {
           escapeSingleQuote = true;
         } else {
-          ZS_THROW_INVALID_USAGE("Must specify \' or \" only surrounding attribute")
+          ZS_ASSERT_FAIL("Must specify \' or \" only surrounding attribute");
         }
       } else {
         if (String::npos != inString.find('\"'))
@@ -1663,7 +1663,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Parser::convertFromJSONEncoding(const String &inString)
+    String Parser::convertFromJSONEncoding(const String &inString) noexcept
     {
       std::unique_ptr<char[]> temp(new char[inString.getLength()+1]);
 
@@ -1734,7 +1734,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Parser::convertToJSONEncoding(const String &inString)
+    String Parser::convertToJSONEncoding(const String &inString) noexcept
     {
       std::unique_ptr<char[]> temp(new char[(inString.getLength()*2)+1]);
 

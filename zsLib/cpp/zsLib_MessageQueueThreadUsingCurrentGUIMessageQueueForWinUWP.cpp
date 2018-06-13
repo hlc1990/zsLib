@@ -61,7 +61,7 @@ namespace zsLib
 
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton()
+    MessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton() noexcept
     {
       CoreDispatcher ^dispatcher = setupDispatcher();
 
@@ -75,70 +75,70 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Windows::UI::Core::CoreDispatcher ^MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setupDispatcher(CoreDispatcher ^dispatcher)
+    Windows::UI::Core::CoreDispatcher ^MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setupDispatcher(CoreDispatcher ^dispatcher) noexcept
     {
       static CoreDispatcher ^gDispatcher = dispatcher;
       return gDispatcher;
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::create(CoreDispatcher ^dispatcher)
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::create(CoreDispatcher ^dispatcher) noexcept
     {
       MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr thread(new MessageQueueThreadUsingCurrentGUIMessageQueueForWindows);
       thread->mThisWeak = thread;
       thread->mQueue = MessageQueue::create(thread);
       thread->mDispatcher = dispatcher;
-      assert(thread->mDispatcher);
+      ZS_ASSERT(thread->mDispatcher);
       return thread;
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr queue)
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr queue) noexcept
     {
       queue->process();
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows()
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows()
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept
     {
       mThisWeak.reset();
       mDispatcher = nullptr;
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::process()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::process() noexcept
     {
       mQueue->processOnlyOneMessage(); // process only one message at a time since this must be syncrhonized through the GUI message queue
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::processMessagesFromThread()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::processMessagesFromThread() noexcept
     {
       mQueue->process();
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::post(IMessageQueueMessageUniPtr message)
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       if (mIsShutdown) {
-        ZS_THROW_CUSTOM(Exceptions::MessageQueueAlreadyDeleted, "message posted to message queue after message queue was deleted.")
+        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
       }
       mQueue->post(std::move(message));
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::getTotalUnprocessedMessages() const
+    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::getTotalUnprocessedMessages() const noexcept
     {
       return mQueue->getTotalUnprocessedMessages();
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::notifyMessagePosted()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::notifyMessagePosted() noexcept
     {
       CoreDispatcher ^dispatcher;
       MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr queue;
@@ -146,9 +146,8 @@ namespace zsLib
       {
         AutoLock lock(mLock);
 
-        if (nullptr == mDispatcher) {
-          ZS_THROW_CUSTOM(Exceptions::MessageQueueAlreadyDeleted, "message posted to message queue after message queue was deleted.")
-        }
+        ZS_ASSERT(nullptr != mDispatcher);
+
         dispatcher = mDispatcher;
         queue = mThisWeak.lock();
       }
@@ -162,13 +161,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::waitForShutdown()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::waitForShutdown() noexcept
     {
       mIsShutdown = true;
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ThreadPriorities threadPriority)
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ThreadPriorities threadPriority) noexcept
     {
       // no-op
     }

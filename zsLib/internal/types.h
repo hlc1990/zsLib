@@ -43,6 +43,47 @@
 #endif //DEBUG
 #endif //_DEBUG
 
+// see https://stackoverflow.com/questions/2124339/c-preprocessor-va-args-number-of-arguments
+#ifdef _MSC_VER
+
+#define ZS_INTERNAL_MACRO_GET_COUNT(...)  ZS_INTERNAL_MACRO_EXPAND_ARGS_PRIVATE(ZS_INTERNAL_MACRO_ARGS_AUGMENTER(__VA_ARGS__))
+
+#define ZS_INTERNAL_MACRO_ARGS_AUGMENTER(...) unused, __VA_ARGS__
+#define ZS_INTERNAL_MACRO_EXPAND(x) x
+#define ZS_INTERNAL_MACRO_EXPAND_ARGS_PRIVATE(...) ZS_INTERNAL_MACRO_EXPAND(ZS_INTERNAL_MACRO_GET_ARG_COUNT_PRIVATE(__VA_ARGS__, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
+#define ZS_INTERNAL_MACRO_GET_ARG_COUNT_PRIVATE(_1_, _2_, _3_, _4_, _5_, _6_, _7_, _8_, _9_, _10_, _11_, _12_, _13_, _14_, _15_, _16_, _17_, _18_, _19_, _20_, _21_, _22_, _23_, _24_, _25_, _26_, _27_, _28_, _29_, _30_, _31_, _32_, _33_, _34_, _35_, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70, count, ...) count
+
+#else // _MSC_VER
+
+#define ZS_INTERNAL_MACRO_GET_COUNT(...) ZS_INTERNAL_MACRO_GET_ARG_COUNT_PRIVATE(0, ## __VA_ARGS__, 70, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define ZS_INTERNAL_MACRO_GET_ARG_COUNT_PRIVATE(_0, _1_, _2_, _3_, _4_, _5_, _6_, _7_, _8_, _9_, _10_, _11_, _12_, _13_, _14_, _15_, _16_, _17_, _18_, _19_, _20_, _21_, _22_, _23_, _24_, _25_, _26_, _27_, _28_, _29_, _30_, _31_, _32_, _33_, _34_, _35_, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70, count, ...) count
+
+#endif // _MSC_VER
+
+// see https://stackoverflow.com/questions/2124339/c-preprocessor-va-args-number-of-arguments
+#define ZS_INTERNAL_MACRO_CAT( A, B ) A ## B
+#define ZS_INTERNAL_MACRO_VA_SELECT( NAME, NUM ) ZS_INTERNAL_MACRO_CAT( NAME ## _, NUM )
+
+#define ZS_INTERNAL_MACRO_SELECT( NAME, ... ) ZS_INTERNAL_MACRO_VA_SELECT( NAME, ZS_INTERNAL_MACRO_GET_COUNT(__VA_ARGS__) )(__VA_ARGS__)
+
+
+#if __cplusplus >= 201703L // || ((defined(_MSC_VER ) && __cplusplus > 201703L))
+// If you are having trouble with Visual Studio c++17 and this macro please see:
+// https://blogs.msdn.microsoft.com/vcblog/2018/04/09/msvc-now-correctly-reports-__cplusplus/
+// NOTE: specify /Zc:__cplusplus for c++17 on MSVC
+#define ZS_INTERNAL_MAYBE_USED_0() [[maybe_unused]]
+#else
+#define ZS_INTERNAL_MAYBE_USED_0() 
+#endif //__cplusplus >= 201703L
+
+#define ZS_INTERNAL_MAYBE_USED_1(xVariable) ((void)xVariable);
+
+#define ZS_INTERNAL_MAYBE_USED(...) ZS_INTERNAL_MACRO_SELECT(ZS_INTERNAL_MAYBE_USED, __VA_ARGS__)
+
+#define ZS_INTERNAL_ASSERT(xCondition) assert(xCondition);
+#define ZS_INTERNAL_ASSERT_MESSAGE(xCondition, xMsg) assert((xCondition) && xMsg);
+#define ZS_INTERNAL_ASSERT_FAIL(xMsg) assert(false && xMsg);
+
 #ifdef _WIN32
 
 #ifdef __cplusplus_winrt
@@ -58,6 +99,7 @@
 #include <stdint.h>
 #endif //_WIN32
 
+#include <assert.h>
 #include <atomic>
 #include <limits.h>
 #include <chrono>

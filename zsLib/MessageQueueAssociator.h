@@ -39,13 +39,13 @@ namespace zsLib
   class MessageQueueAssociator
   {
   public:
-    MessageQueueAssociator(IMessageQueuePtr queue);
-    ~MessageQueueAssociator();
+    MessageQueueAssociator(IMessageQueuePtr queue) noexcept;
+    ~MessageQueueAssociator() noexcept;
 
-    IMessageQueuePtr getAssociatedMessageQueue() const {return mQueue;}
+    IMessageQueuePtr getAssociatedMessageQueue() const noexcept {return mQueue;}
 
     template <class Closure>
-    void postClosure(const Closure &closure) {mQueue->post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
+    void postClosure(const Closure &closure) noexcept {mQueue->post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
 
   private:
     IMessageQueuePtr mQueue;

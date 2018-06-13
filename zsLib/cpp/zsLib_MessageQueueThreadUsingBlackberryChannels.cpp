@@ -50,20 +50,20 @@ namespace zsLib
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThreadUsingBlackberryChannelsWrapper
-    #pragma mark
+    //
+    // MessageQueueThreadUsingBlackberryChannelsWrapper
+    //
 
     ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingBlackberryChannelsWrapper)
 
     class MessageQueueThreadUsingBlackberryChannelsWrapper
     {
     public:
-      MessageQueueThreadUsingBlackberryChannelsWrapper() : mThreadQueue(MessageQueueThreadUsingBlackberryChannels::create())
+      MessageQueueThreadUsingBlackberryChannelsWrapper() noexcept : mThreadQueue(MessageQueueThreadUsingBlackberryChannels::create())
       {
         mThreadQueue->setup();
       }
-      ~MessageQueueThreadUsingBlackberryChannelsWrapper()
+      ~MessageQueueThreadUsingBlackberryChannelsWrapper() noexcept
       {
         mThreadQueue->waitForShutdown();
 
@@ -80,7 +80,7 @@ namespace zsLib
 
     //-----------------------------------------------------------------------
 
-    void messageQueueKeyDestructor(void* value) {
+    void messageQueueKeyDestructor(void* value) noexcept {
       MessageQueueThreadUsingBlackberryChannelsWrapperPtr *ptr = (MessageQueueThreadUsingBlackberryChannelsWrapperPtr *) value;
       (*ptr).reset();
       delete ptr;
@@ -89,12 +89,12 @@ namespace zsLib
 
     //-----------------------------------------------------------------------
 
-    void makeMessageQueueKeyOnce() {
+    void makeMessageQueueKeyOnce() noexcept {
       pthread_key_create(&messageQueueKey, messageQueueKeyDestructor);
     }
 
     //-----------------------------------------------------------------------
-    static MessageQueueThreadUsingBlackberryChannelsPtr getThreadMessageQueue()
+    static MessageQueueThreadUsingBlackberryChannelsPtr getThreadMessageQueue() noexcept
     {
       pthread_once(&messageQueueKeyOnce, makeMessageQueueKeyOnce);
 
@@ -108,13 +108,13 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    MessageQueueThreadUsingBlackberryChannelsPtr MessageQueueThreadUsingBlackberryChannels::singleton()
+    MessageQueueThreadUsingBlackberryChannelsPtr MessageQueueThreadUsingBlackberryChannels::singleton() noexcept
     {
       return getThreadMessageQueue();
     }
 
     //-----------------------------------------------------------------------
-    MessageQueueThreadUsingBlackberryChannelsPtr MessageQueueThreadUsingBlackberryChannels::create()
+    MessageQueueThreadUsingBlackberryChannelsPtr MessageQueueThreadUsingBlackberryChannels::create() noexcept
     {
       MessageQueueThreadUsingBlackberryChannelsPtr thread(new MessageQueueThreadUsingBlackberryChannels);
       thread->mQueue = MessageQueue::create(thread);
@@ -125,29 +125,29 @@ namespace zsLib
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    #pragma mark
-    #pragma mark zsLib::internal::MessageQueueThreadUsingBlackberryChannels
-    #pragma mark
+    //
+    // zsLib::internal::MessageQueueThreadUsingBlackberryChannels
+    //
 
     //-----------------------------------------------------------------------
-    MessageQueueThreadUsingBlackberryChannels::MessageQueueThreadUsingBlackberryChannels()
+    MessageQueueThreadUsingBlackberryChannels::MessageQueueThreadUsingBlackberryChannels() noexcept
     {
     }
 
     //-----------------------------------------------------------------------
-    MessageQueueThreadUsingBlackberryChannels::~MessageQueueThreadUsingBlackberryChannels()
+    MessageQueueThreadUsingBlackberryChannels::~MessageQueueThreadUsingBlackberryChannels() noexcept
     {
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::setup()
+    void MessageQueueThreadUsingBlackberryChannels::setup() noexcept
     {
       // NOTE!!! Must be called for the main thread.
       mCrossThreadNotifier = IQtCrossThreadNotifier::createNotifier();
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::process()
+    void MessageQueueThreadUsingBlackberryChannels::process() noexcept
     {
       MessageQueuePtr queue;
 
@@ -162,21 +162,21 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::post(IMessageQueueMessageUniPtr message)
+    void MessageQueueThreadUsingBlackberryChannels::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       MessageQueuePtr queue;
       {
         AutoLock lock(mLock);
         queue = mQueue;
         if (!queue) {
-          ZS_THROW_CUSTOM(Exceptions::MessageQueueAlreadyDeleted, "message posted to message queue after message queue was deleted.")
+          ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
         }
       }
       queue->post(std::move(message));
     }
 
     //-----------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadUsingBlackberryChannels::getTotalUnprocessedMessages() const
+    IMessageQueue::size_type MessageQueueThreadUsingBlackberryChannels::getTotalUnprocessedMessages() const noexcept
     {
       AutoLock lock(mLock);
       if (!mQueue)
@@ -186,7 +186,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::notifyMessagePosted()
+    void MessageQueueThreadUsingBlackberryChannels::notifyMessagePosted() noexcept
     {
       {
         AutoLock lock(mLock);
@@ -196,7 +196,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::waitForShutdown()
+    void MessageQueueThreadUsingBlackberryChannels::waitForShutdown() noexcept
     {
       AutoLock lock(mLock);
       mQueue.reset();
@@ -208,13 +208,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::setThreadPriority(ThreadPriorities threadPriority)
+    void MessageQueueThreadUsingBlackberryChannels::setThreadPriority(ThreadPriorities threadPriority) noexcept
     {
       // no-op
     }
 
     //-----------------------------------------------------------------------
-    void MessageQueueThreadUsingBlackberryChannels::processMessageFromThread()
+    void MessageQueueThreadUsingBlackberryChannels::processMessageFromThread() noexcept
     {
       MessageQueueThreadUsingBlackberryChannelsPtr queue(getThreadMessageQueue());
       queue->process();

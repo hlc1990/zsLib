@@ -114,9 +114,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Log
-  #pragma mark
+  //
+  // Log
+  //
 
   class Log : public internal::Log
   {
@@ -169,9 +169,9 @@ namespace zsLib
     static Level toLevel(const char *levelStr) noexcept(false); // throw (Exceptions::InvalidArgument);
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log::Param
-    #pragma mark
+    //
+    // Log::Param
+    //
 
     class Param
     {
@@ -210,9 +210,9 @@ namespace zsLib
     };
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log::Params
-    #pragma mark
+    //
+    // Log::Params
+    //
 
     class Params
     {
@@ -247,17 +247,17 @@ namespace zsLib
     ~Log();
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log => (helper routines)
-    #pragma mark
+    //
+    // Log => (helper routines)
+    //
 
     static QWORD getCurrentThreadID() noexcept;
     static QWORD getCurrentTimestampMS() noexcept;
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log => (output methods)
-    #pragma mark
+    //
+    // Log => (output methods)
+    //
 
     static void addOutputListener(ILogOutputDelegatePtr delegate);
     static void removeOutputListener(ILogOutputDelegatePtr delegate);
@@ -289,9 +289,9 @@ namespace zsLib
                     );
 
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log => (eventing methods)
-    #pragma mark
+    //
+    // Log => (eventing methods)
+    //
 
     static void addEventingListener(ILogEventingDelegatePtr delegate);
     static void removeEventingListener(ILogEventingDelegatePtr delegate);
@@ -373,35 +373,35 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ILogOutputDelegate
-  #pragma mark
+  //
+  // ILogOutputDelegate
+  //
 
   interaction ILogOutputDelegate
   {
   public:
     // notification that a new subsystem exists
-    virtual void notifyNewSubsystem(zsLib::Subsystem &inSubsystem) {}
+    virtual void notifyNewSubsystem(ZS_MAYBE_USED() zsLib::Subsystem & inSubsystem) noexcept { ZS_MAYBE_USED(inSubsystem); }
 
     // notification of a log event
     virtual void notifyLog(
-                           const zsLib::Subsystem &inSubsystem,
-                           zsLib::Log::Severity inSeverity,
-                           zsLib::Log::Level inLevel,
-                           zsLib::CSTR inFunction,
-                           zsLib::CSTR inFilePath,
-                           zsLib::ULONG inLineNumber,
-                           const zsLib::Log::Params &params
-                           ) {}
+                           ZS_MAYBE_USED() const zsLib::Subsystem &inSubsystem,
+                           ZS_MAYBE_USED() zsLib::Log::Severity inSeverity,
+                           ZS_MAYBE_USED() zsLib::Log::Level inLevel,
+                           ZS_MAYBE_USED() zsLib::CSTR inFunction,
+                           ZS_MAYBE_USED() zsLib::CSTR inFilePath,
+                           ZS_MAYBE_USED() zsLib::ULONG inLineNumber,
+                           ZS_MAYBE_USED() const zsLib::Log::Params &params
+                           ) noexcept { ZS_MAYBE_USED(inSubsystem); ZS_MAYBE_USED(inSeverity); ZS_MAYBE_USED(inLevel);  ZS_MAYBE_USED(inFunction); ZS_MAYBE_USED(inFilePath); ZS_MAYBE_USED(inLineNumber); ZS_MAYBE_USED(params); }
   };
 
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ILogEventingProviderDelegate
-  #pragma mark
+  //
+  // ILogEventingProviderDelegate
+  //
 
   interaction ILogEventingProviderDelegate
   {
@@ -411,32 +411,32 @@ namespace zsLib
     typedef Log::KeywordBitmaskType KeywordBitmaskType;
 
     // notification that a new subsystem exists
-    virtual void notifyNewSubsystem(zsLib::Subsystem &inSubsystem) {}
+    virtual void notifyNewSubsystem(ZS_MAYBE_USED() zsLib::Subsystem &inSubsystem) noexcept { ZS_MAYBE_USED(inSubsystem); }
 
     // notification of a log event
     virtual void notifyEventingProviderRegistered(
-                                                  ProviderHandle handle,
-                                                  EventingAtomDataArray eventingAtomDataArray
-                                                  ) {}
+                                                  ZS_MAYBE_USED() ProviderHandle handle,
+                                                  ZS_MAYBE_USED() EventingAtomDataArray eventingAtomDataArray
+                                                  ) noexcept { ZS_MAYBE_USED(handle); ZS_MAYBE_USED(eventingAtomDataArray); }
     virtual void notifyEventingProviderUnregistered(
-                                                    ProviderHandle handle,
-                                                    EventingAtomDataArray eventingAtomDataArray
-                                                    ) {}
+                                                    ZS_MAYBE_USED() ProviderHandle handle,
+                                                    ZS_MAYBE_USED() EventingAtomDataArray eventingAtomDataArray
+                                                    ) noexcept { ZS_MAYBE_USED(handle); ZS_MAYBE_USED(eventingAtomDataArray); }
     
     virtual void notifyEventingProviderLoggingStateChanged(
-                                                           ProviderHandle handle,
-                                                           EventingAtomDataArray eventingAtomDataArray,
-                                                           KeywordBitmaskType keywords
-                                                           ) {}
+                                                           ZS_MAYBE_USED() ProviderHandle handle,
+                                                           ZS_MAYBE_USED() EventingAtomDataArray eventingAtomDataArray,
+                                                           ZS_MAYBE_USED() KeywordBitmaskType keywords
+                                                           ) noexcept { ZS_MAYBE_USED(handle); ZS_MAYBE_USED(eventingAtomDataArray); ZS_MAYBE_USED(keywords); }
   };
 
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ILogEventingDelegate
-  #pragma mark
+  //
+  // ILogEventingDelegate
+  //
 
   interaction ILogEventingDelegate
   {
@@ -451,28 +451,28 @@ namespace zsLib
     typedef Log::Level Level;
 
     // notification that a new subsystem exists
-    virtual void notifyNewSubsystem(zsLib::Subsystem &inSubsystem) {}
+    virtual void notifyNewSubsystem(ZS_MAYBE_USED() zsLib::Subsystem &inSubsystem) noexcept { ZS_MAYBE_USED(inSubsystem); }
 
     // notification of a log event
     virtual void notifyWriteEvent(
-                                  ProviderHandle handle,
-                                  EventingAtomDataArray eventingAtomDataArray,
-                                  Severity severity,
-                                  Level level,
-                                  EVENT_DESCRIPTOR_HANDLE descriptor,
-                                  EVENT_PARAMETER_DESCRIPTOR_HANDLE paramDescriptor,
-                                  EVENT_DATA_DESCRIPTOR_HANDLE dataDescriptor,
-                                  size_t dataDescriptorCount
-                                  ) {}
+                                  ZS_MAYBE_USED() ProviderHandle handle,
+                                  ZS_MAYBE_USED() EventingAtomDataArray eventingAtomDataArray,
+                                  ZS_MAYBE_USED() Severity severity,
+                                  ZS_MAYBE_USED() Level level,
+                                  ZS_MAYBE_USED() EVENT_DESCRIPTOR_HANDLE descriptor,
+                                  ZS_MAYBE_USED() EVENT_PARAMETER_DESCRIPTOR_HANDLE paramDescriptor,
+                                  ZS_MAYBE_USED() EVENT_DATA_DESCRIPTOR_HANDLE dataDescriptor,
+                                  ZS_MAYBE_USED() size_t dataDescriptorCount
+                                  ) noexcept { ZS_MAYBE_USED(handle); ZS_MAYBE_USED(eventingAtomDataArray); ZS_MAYBE_USED(severity); ZS_MAYBE_USED(level); ZS_MAYBE_USED(descriptor); ZS_MAYBE_USED(paramDescriptor); ZS_MAYBE_USED(dataDescriptor); ZS_MAYBE_USED(dataDescriptorCount); }
   };
 
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Subsystem
-  #pragma mark
+  //
+  // Subsystem
+  //
 
   class Subsystem
   {
@@ -484,17 +484,17 @@ namespace zsLib
               CSTR inName,
               Log::Level inOutputLevel = Log::Basic,
               Log::Level inEventingLevel = Log::None
-              );
-    CSTR getName() const {return mSubsystem;}
+              ) noexcept;
+    CSTR getName() const noexcept {return mSubsystem;}
 
-    void setOutputLevel(Log::Level inLevel);
-    Log::Level getOutputLevel() const;
+    void setOutputLevel(Log::Level inLevel) noexcept;
+    Log::Level getOutputLevel() const noexcept;
 
-    void setEventingLevel(Log::Level inLevel);
-    Log::Level getEventingLevel() const;
+    void setEventingLevel(Log::Level inLevel) noexcept;
+    Log::Level getEventingLevel() const noexcept;
 
   protected:
-    virtual void notifyNewSubsystem();
+    virtual void notifyNewSubsystem() noexcept;
 
   private:
     CSTR mSubsystem;

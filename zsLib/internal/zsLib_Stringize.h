@@ -40,38 +40,42 @@
 #include <objbase.h>
 #endif //_WIN32
 
-#ifdef _WIN32
-#include <assert.h>
-#endif //_WIN32
-
 namespace zsLib
 {
   namespace internal
   {
-    String convert(ULONGLONG value, size_t base);
+    String convert(ULONGLONG value, size_t base) noexcept;
 
-    String timeToString(const Time &value);
+    String timeToString(const Time &value) noexcept;
 
     String durationToString(
                             const Seconds &secPart,
                             std::intmax_t fractionalPart,
                             std::intmax_t den
-                            );
+                            ) noexcept;
+
+    //template <typename duration_type>
+    //constexpr bool biggerSize(decltype(duration_type::period::den) den, decltype(duration_type::period::num) num) noexcept { return den > num; }
 
     template <typename duration_type>
-    String durationToString(const duration_type &value)
+    String durationToString(const duration_type &value) noexcept
     {
       Seconds seconds = toSeconds(value);
       duration_type remainder = value - std::chrono::duration_cast<duration_type>(seconds);
 
-      if (duration_type::period::den > duration_type::period::num) {
+      const auto den = duration_type::period::den;
+      const auto num = duration_type::period::num;
+
+      auto biggerConstExpr = [&] { return den > num; };
+
+      if (biggerConstExpr()) {
         return durationToString(seconds, remainder.count(), duration_type::period::den);
       }
 
       return std::to_string(value.count());
     }
 
-    void trimTrailingZeros(std::string &value);
+    void trimTrailingZeros(std::string &value) noexcept;
   }
 } // namespace zsLib
 
@@ -82,7 +86,7 @@ namespace zsLib
 namespace zsLib
 {
   template<typename t_type>
-  inline Stringize<t_type>::operator String() const
+  inline Stringize<t_type>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -91,19 +95,19 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<bool>::operator String() const
+  inline Stringize<bool>::operator String() const noexcept
   {
     return mValue ? String("true") : String("false");
   }
 
   template<>
-  inline Stringize<const char *>::operator String() const
+  inline Stringize<const char *>::operator String() const noexcept
   {
     return mValue ? String(mValue) : String();
   }
 
   template<>
-  inline Stringize<CHAR>::operator String() const
+  inline Stringize<CHAR>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string((int)mValue);
@@ -111,7 +115,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<UCHAR>::operator String() const
+  inline Stringize<UCHAR>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string((UINT)mValue);
@@ -119,7 +123,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<SHORT>::operator String() const
+  inline Stringize<SHORT>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string((INT)mValue);
@@ -127,7 +131,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<USHORT>::operator String() const
+  inline Stringize<USHORT>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string((UINT)mValue);
@@ -135,7 +139,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<INT>::operator String() const
+  inline Stringize<INT>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -143,7 +147,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<UINT>::operator String() const
+  inline Stringize<UINT>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -151,7 +155,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<LONG>::operator String() const
+  inline Stringize<LONG>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -159,7 +163,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<ULONG>::operator String() const
+  inline Stringize<ULONG>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -167,7 +171,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<LONGLONG>::operator String() const
+  inline Stringize<LONGLONG>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -175,7 +179,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<ULONGLONG>::operator String() const
+  inline Stringize<ULONGLONG>::operator String() const noexcept
   {
     if (10 == mBase)
       return std::to_string(mValue);
@@ -183,7 +187,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<float>::operator String() const
+  inline Stringize<float>::operator String() const noexcept
   {
     std::string result = std::to_string(mValue);
     internal::trimTrailingZeros(result);
@@ -191,7 +195,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<double>::operator String() const
+  inline Stringize<double>::operator String() const noexcept
   {
     std::string result = std::to_string(mValue);
     internal::trimTrailingZeros(result);
@@ -199,7 +203,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<long double>::operator String() const
+  inline Stringize<long double>::operator String() const noexcept
   {
     std::string result = std::to_string(mValue);
     internal::trimTrailingZeros(result);
@@ -207,7 +211,7 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<UUID>::operator String() const
+  inline Stringize<UUID>::operator String() const noexcept
   {
 #ifndef _WIN32
 	char buffer[(sizeof(mValue)*3)+3];  // allow for 00-FF and '{', '}', '-' and nul at end
@@ -216,7 +220,8 @@ namespace zsLib
 #else
 	wchar_t buffer[(sizeof(mValue)*3)+3];
 	int result = StringFromGUID2(mValue.mUUID, &(buffer[0]), sizeof(buffer));
-	assert(0 != result);
+  ZS_MAYBE_USED(result);
+  ZS_ASSERT(0 != result);
   String output(buffer);
   output.trimLeft("{");
   output.trimRight("}");
@@ -226,43 +231,43 @@ namespace zsLib
   }
 
   template<>
-  inline Stringize<Time>::operator String() const
+  inline Stringize<Time>::operator String() const noexcept
   {
     return internal::timeToString(mValue);
   }
 
   template<>
-  inline Stringize<Hours>::operator String() const
+  inline Stringize<Hours>::operator String() const noexcept
   {
     return internal::durationToString<Hours>(mValue);
   }
 
   template<>
-  inline Stringize<Minutes>::operator String() const
+  inline Stringize<Minutes>::operator String() const noexcept
   {
     return internal::durationToString<Minutes>(mValue);
   }
 
   template<>
-  inline Stringize<Seconds>::operator String() const
+  inline Stringize<Seconds>::operator String() const noexcept
   {
     return internal::durationToString<Seconds>(mValue);
   }
 
   template<>
-  inline Stringize<Milliseconds>::operator String() const
+  inline Stringize<Milliseconds>::operator String() const noexcept
   {
     return internal::durationToString<Milliseconds>(mValue);
   }
 
   template<>
-  inline Stringize<Microseconds>::operator String() const
+  inline Stringize<Microseconds>::operator String() const noexcept
   {
     return internal::durationToString<Microseconds>(mValue);
   }
 
   template<>
-  inline Stringize<Nanoseconds>::operator String() const
+  inline Stringize<Nanoseconds>::operator String() const noexcept
   {
     return internal::durationToString<Nanoseconds>(mValue);
   }

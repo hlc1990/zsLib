@@ -75,7 +75,7 @@ namespace zsLib
 #ifdef _WIN32
     using zsLib::internal::uuid_wrapper;
 
-    int uuid_parse(const char *input, uuid_wrapper::raw_uuid_type &output) {
+    int uuid_parse(const char *input, uuid_wrapper::raw_uuid_type &output) noexcept {
 
       String str(input);
       if (str.isEmpty()) return -1;
@@ -96,7 +96,7 @@ namespace zsLib
   using namespace compatibility;
 
   template<typename t_type>
-  void Numeric<t_type>::get(t_type &outValue) const throw (ValueOutOfRange)
+  void Numeric<t_type>::get(t_type &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     if (std::numeric_limits<t_type>::is_signed) {
       LONGLONG result = 0;
@@ -114,7 +114,7 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<bool>::get(bool &outValue) const throw (ValueOutOfRange)
+  void Numeric<bool>::get(bool &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     bool result = 0;
     bool converted = internal::convert(mData, result, mIngoreWhitespace);
@@ -124,7 +124,7 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<float>::get(float &outValue) const throw (ValueOutOfRange)
+  void Numeric<float>::get(float &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     float result = 0;
     bool converted = internal::convert(mData, result, mIngoreWhitespace);
@@ -134,7 +134,7 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<double>::get(double &outValue) const throw (ValueOutOfRange)
+  void Numeric<double>::get(double &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     double result = 0;
     bool converted = internal::convert(mData, result, mIngoreWhitespace);
@@ -144,7 +144,7 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<UUID>::get(UUID &outValue) const throw (ValueOutOfRange)
+  void Numeric<UUID>::get(UUID &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     UUID result;
     bool converted = internal::convert(mData, result, mIngoreWhitespace);
@@ -154,7 +154,7 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<Time>::get(Time &outValue) const throw (ValueOutOfRange)
+  void Numeric<Time>::get(Time &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     Time result;
     bool converted = internal::convert(mData, result, mIngoreWhitespace);
@@ -169,7 +169,7 @@ namespace zsLib
                              const String &data,
                              bool ignoreWhiteSpace,
                              CSTR failureMessage
-                             ) throw (typename Converter::ValueOutOfRange)
+                             ) noexcept(false) // throws typename Converter::ValueOutOfRange
   {
     typedef typename Converter::ValueOutOfRange CustomValueOutOfRange;
     typename Converter::NumericType::rep value = 0;
@@ -183,19 +183,19 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<Hours>::get(Hours &outValue) const throw (ValueOutOfRange)
+  void Numeric<Hours>::get(Hours &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     simpleDurationConvert< Numeric<Hours> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Hours): ");
   }
 
   template<>
-  void Numeric<Minutes>::get(Minutes &outValue) const throw (ValueOutOfRange)
+  void Numeric<Minutes>::get(Minutes &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     simpleDurationConvert< Numeric<Minutes> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Minutes): ");
   }
 
   template<>
-  void Numeric<Seconds>::get(Seconds &outValue) const throw (ValueOutOfRange)
+  void Numeric<Seconds>::get(Seconds &outValue) const noexcept(false) //throws ValueOutOfRange
   {
     simpleDurationConvert< Numeric<Seconds> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Seconds): ");
   }
@@ -206,7 +206,7 @@ namespace zsLib
                                  const String &data,
                                  bool ignoreWhiteSpace,
                                  CSTR failureMessage
-                                 ) throw (typename Converter::ValueOutOfRange)
+                                 ) noexcept(false) // throws typename Converter::ValueOutOfRange
   {
     typedef typename Converter::ValueOutOfRange CustomValueOutOfRange;
 
@@ -245,35 +245,35 @@ namespace zsLib
   }
 
   template<>
-  void Numeric<Milliseconds>::get(Milliseconds &outValue) const throw (ValueOutOfRange)
+  void Numeric<Milliseconds>::get(Milliseconds &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     fractionalDurationConvert< Numeric<Milliseconds> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Milliseconds): ");
   }
 
   template<>
-  void Numeric<Microseconds>::get(Microseconds &outValue) const throw (ValueOutOfRange)
+  void Numeric<Microseconds>::get(Microseconds &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     fractionalDurationConvert< Numeric<Microseconds> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Microseconds): ");
   }
 
   template<>
-  void Numeric<Nanoseconds>::get(Nanoseconds &outValue) const throw (ValueOutOfRange)
+  void Numeric<Nanoseconds>::get(Nanoseconds &outValue) const noexcept(false) // throws ValueOutOfRange
   {
     fractionalDurationConvert< Numeric<Nanoseconds> >(outValue, mData, mIngoreWhitespace, "Cannot convert value (Nanoseconds): ");
   }
 
   // force templates to be generated for these types
-  template void Numeric<CHAR>::get(CHAR &) const throw (ValueOutOfRange);
-  template void Numeric<WCHAR>::get(WCHAR &) const throw (ValueOutOfRange);
-  template void Numeric<UCHAR>::get(UCHAR &) const throw (ValueOutOfRange);
-  template void Numeric<SHORT>::get(SHORT &) const throw (ValueOutOfRange);
-  template void Numeric<USHORT>::get(USHORT &) const throw (ValueOutOfRange);
-  template void Numeric<INT>::get(INT &) const throw (ValueOutOfRange);
-  template void Numeric<UINT>::get(UINT &) const throw (ValueOutOfRange);
-  template void Numeric<LONG>::get(LONG &) const throw (ValueOutOfRange);
-  template void Numeric<ULONG>::get(ULONG &) const throw (ValueOutOfRange);
-  template void Numeric<LONGLONG>::get(LONGLONG &) const throw (ValueOutOfRange);
-  template void Numeric<ULONGLONG>::get(ULONGLONG &) const throw (ValueOutOfRange);
+  template void Numeric<CHAR>::get(CHAR &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<WCHAR>::get(WCHAR &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<UCHAR>::get(UCHAR &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<SHORT>::get(SHORT &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<USHORT>::get(USHORT &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<INT>::get(INT &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<UINT>::get(UINT &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<LONG>::get(LONG &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<ULONG>::get(ULONG &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<LONGLONG>::get(LONGLONG &) const noexcept(false); // throws ValueOutOfRange
+  template void Numeric<ULONGLONG>::get(ULONGLONG &) const noexcept(false); // throws ValueOutOfRange
 #ifndef _WIN32
 //  template void Numeric<bool>::get(bool &) const throw (ValueOutOfRange);
 //  template void Numeric<float>::get(float &) const throw (ValueOutOfRange);
@@ -348,14 +348,14 @@ namespace zsLib
       0xFFFFFFFFFFFFFFFFULL   // 8 bytes
     };
 
-    void skipSpace(CSTR &ioStr)
+    void skipSpace(CSTR &ioStr) noexcept
     {
       while (isspace(*ioStr)) {
         ++ioStr;
       }
     }
 
-    bool isPositive(CSTR &ioStr, bool &hadSign)
+    bool isPositive(CSTR &ioStr, bool &hadSign) noexcept
     {
       hadSign = false;
       if ('-' == *ioStr) {
@@ -371,8 +371,9 @@ namespace zsLib
       return true;
     }
 
-    size_t shouldForceBase(CSTR &ioStr, size_t base, bool hadSign)
+    size_t shouldForceBase(CSTR &ioStr, size_t base, ZS_MAYBE_USED() bool hadSign) noexcept
     {
+      ZS_MAYBE_USED(hadSign);
       if ('x' == ioStr[1]) {
         ioStr += 2;
         return 16;
@@ -380,7 +381,7 @@ namespace zsLib
       return base;
     }
 
-    bool convert(const String &input, LONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base)
+    bool convert(const String &input, LONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base) noexcept(false)
     {
       ZS_THROW_INVALID_USAGE_IF((0 == size) || (size > sizeof(QWORD)))
 
@@ -434,7 +435,7 @@ namespace zsLib
       return true;
     }
 
-    bool convert(const String &input, ULONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base)
+    bool convert(const String &input, ULONGLONG &outResult, size_t size, bool ignoreWhiteSpace, size_t base) noexcept(false)
     {
       ZS_THROW_INVALID_USAGE_IF((0 == size) || (size > sizeof(QWORD)))
 
@@ -476,7 +477,7 @@ namespace zsLib
       return true;
     }
 
-    bool convert(const String &input, bool &outResult, bool ignoreWhiteSpace)
+    bool convert(const String &input, bool &outResult, bool ignoreWhiteSpace) noexcept(false)
     {
       String temp = input;
       if (ignoreWhiteSpace)
@@ -502,7 +503,7 @@ namespace zsLib
       return true;
     }
 
-    bool convert(const String &input, float &outResult, bool ignoreWhiteSpace)
+    bool convert(const String &input, float &outResult, bool ignoreWhiteSpace) noexcept
     {
       String temp = input;
       if (ignoreWhiteSpace)
@@ -517,7 +518,7 @@ namespace zsLib
       return true;
     }
 
-    bool convert(const String &input, double &outResult, bool ignoreWhiteSpace)
+    bool convert(const String &input, double &outResult, bool ignoreWhiteSpace) noexcept
     {
       String temp = input;
       if (ignoreWhiteSpace)
@@ -532,7 +533,7 @@ namespace zsLib
       return true;
     }
 
-    bool convert(const String &input, UUID &outResult, bool ignoreWhiteSpace)
+    bool convert(const String &input, UUID &outResult, bool ignoreWhiteSpace) noexcept
     {
       String temp = input;
       if (ignoreWhiteSpace)
@@ -547,7 +548,7 @@ namespace zsLib
       return false;
     }
 
-    bool convert(const String &input, Time &outResult, bool ignoreWhiteSpace)
+    bool convert(const String &input, Time &outResult, bool ignoreWhiteSpace) noexcept
     {
       outResult = Time();
 

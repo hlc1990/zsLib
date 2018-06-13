@@ -61,9 +61,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketSet
-    #pragma mark
+    //
+    // SocketSet
+    //
 
     class SocketSet
     {
@@ -80,8 +80,8 @@ namespace zsLib
 
       ZS_DECLARE_STRUCT_PTR(EventHandleHolder);
       struct EventHandleHolder {
-        EventHandleHolder(EventHandle event);
-        ~EventHandleHolder();
+        EventHandleHolder(EventHandle event) noexcept;
+        ~EventHandleHolder() noexcept;
 
         EventHandle mEventHandle;
       };
@@ -95,58 +95,58 @@ namespace zsLib
       typedef std::pair<SocketPtr, event_type> FiredEventPair;
 
     public:
-      SocketSet();
-      ~SocketSet();
+      SocketSet() noexcept;
+      ~SocketSet() noexcept;
 
-      poll_fd *preparePollingFDs(poll_size &outSize, EventHandle * &outEvents);
+      poll_fd *preparePollingFDs(poll_size &outSize, EventHandle * &outEvents) noexcept;
 
       void firedEvent(
                       SocketPtr socket,
                       event_type event
-                      );
+                      ) noexcept;
 
-      FiredEventPair *getFiredEvents(poll_size &outSize);
+      FiredEventPair *getFiredEvents(poll_size &outSize) noexcept;
 
-      void delegateGone(SocketPtr socket);
-      SocketPtr *getSocketsWithDelegateGone(poll_size &outSize);
+      void delegateGone(SocketPtr socket) noexcept;
+      SocketPtr *getSocketsWithDelegateGone(poll_size &outSize) noexcept;
 
-      void clear();
+      void clear() noexcept;
 
-      bool isDirty() const {return mDirty;}
+      bool isDirty() const noexcept {return mDirty;}
 
 #ifdef _WIN32
-      void setWakeUpEvent(HANDLE handle);
+      void setWakeUpEvent(HANDLE handle) noexcept;
 #endif //_WIN32
 
-      void reset(SOCKET socket);
+      void reset(SOCKET socket) noexcept;
       void reset(
                  SOCKET socket,
                  event_type events
-                 );
+                 ) noexcept;
 
       void addEvents(
                      SOCKET socket,
                      event_type events
-                     );
+                     ) noexcept;
       void removeEvents(
                         SOCKET socket,
                         event_type events
-                        );
+                        ) noexcept;
 
     protected:
-      void minOfficialAllocation(poll_size minSize);
-      void minPollingAllocation(poll_size minSize);
+      void minOfficialAllocation(poll_size minSize) noexcept;
+      void minPollingAllocation(poll_size minSize) noexcept;
 
       void append(
                   SOCKET socket,
                   event_type events
-                  );
+                  ) noexcept;
 
 #ifdef _WIN32
-      static long toNetworkEvents(event_type events);
+      static long toNetworkEvents(event_type events) noexcept;
 #endif //_WIN32
 
-      zsLib::Log::Params log(const char *message) const;
+      zsLib::Log::Params log(const char *message) const noexcept;
 
     private:
       AutoPUID mID;
@@ -181,9 +181,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketMonitor
-    #pragma mark
+    //
+    // SocketMonitor
+    //
 
     class SocketMonitor
     {
@@ -200,44 +200,44 @@ namespace zsLib
       typedef SocketSet::EventHandle EventHandle;
 
     protected:
-      SocketMonitor();
-      SocketMonitor(const SocketMonitor &) = delete;
+      SocketMonitor() noexcept;
+      SocketMonitor(const SocketMonitor &) noexcept = delete;
 
-      static SocketMonitorPtr create();
+      static SocketMonitorPtr create() noexcept;
 
     public:
-      ~SocketMonitor();
-      static SocketMonitorPtr link();
-      void unlink();
+      ~SocketMonitor() noexcept;
+      static SocketMonitorPtr link() noexcept;
+      void unlink() noexcept;
 
       void monitorBegin(
                         SocketPtr socket,
                         bool monitorRead,
                         bool monitorWrite,
                         bool monitorException
-                        );
-      void monitorEnd(zsLib::Socket &socket);
+                        ) noexcept;
+      void monitorEnd(zsLib::Socket &socket) noexcept;
 
-      void monitorRead(const zsLib::Socket &socket);
-      void monitorWrite(const zsLib::Socket &socket);
-      void monitorException(const zsLib::Socket &socket);
+      void monitorRead(const zsLib::Socket &socket) noexcept;
+      void monitorWrite(const zsLib::Socket &socket) noexcept;
+      void monitorException(const zsLib::Socket &socket) noexcept;
 
-      void operator()();
+      void operator()() noexcept;
 
     protected:
-      void shutdown();
-      PUID getID() const { return mID; }
+      void shutdown() noexcept;
+      PUID getID() const noexcept { return mID; }
 
     private:
-      void cancel();
+      void cancel() noexcept;
 
-      void processWaiting();
-      void wakeUp();
-      void createWakeUpSocket();
-      void cleanWakeUpSocket();
+      void processWaiting() noexcept;
+      void wakeUp() noexcept;
+      void createWakeUpSocket() noexcept;
+      void cleanWakeUpSocket() noexcept;
 
-      zsLib::Log::Params log(const char *message) const;
-      static zsLib::Log::Params slog(const char *message);
+      zsLib::Log::Params log(const char *message) const noexcept;
+      static zsLib::Log::Params slog(const char *message) noexcept;
 
     private:
       AutoPUID mID;

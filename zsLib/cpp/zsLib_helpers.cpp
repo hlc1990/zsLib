@@ -61,46 +61,46 @@ namespace std {
 }
 
 namespace zsLib {
-	namespace compatibility {
+  namespace compatibility {
 
 #ifdef HAVE_RAISEEXCEPTION
-		const DWORD MS_VC_EXCEPTION = 0x406D1388;
+    const DWORD MS_VC_EXCEPTION = 0x406D1388;
 
 #pragma pack(push,8)
-		typedef struct tagTHREADNAME_INFO
-		{
-			DWORD dwType; // Must be 0x1000.
-			LPCSTR szName; // Pointer to name (in user addr space).
-			DWORD dwThreadID; // Thread ID (-1=caller thread).
-			DWORD dwFlags; // Reserved for future use, must be zero.
-		} THREADNAME_INFO;
+    typedef struct tagTHREADNAME_INFO
+    {
+      DWORD dwType; // Must be 0x1000.
+      LPCSTR szName; // Pointer to name (in user addr space).
+      DWORD dwThreadID; // Thread ID (-1=caller thread).
+      DWORD dwFlags; // Reserved for future use, must be zero.
+    } THREADNAME_INFO;
 #pragma pack(pop)
 
     //-------------------------------------------------------------------------
     void SetThreadName(DWORD dwThreadID, const char* threadName)
-		{
-			THREADNAME_INFO info;
-			info.dwType = 0x1000;
-			info.szName = threadName;
-			info.dwThreadID = dwThreadID;
-			info.dwFlags = 0;
+    {
+      THREADNAME_INFO info;
+      info.dwType = 0x1000;
+      info.szName = threadName;
+      info.dwThreadID = dwThreadID;
+      info.dwFlags = 0;
 
-			__try
-			{
-				RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info);
-			}
-			__except (EXCEPTION_EXECUTE_HANDLER)
-			{
-			}
-		}
+      __try
+      {
+        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info);
+      }
+      __except (EXCEPTION_EXECUTE_HANDLER)
+      {
+      }
+    }
 #endif //HAVE_RAISEEXCEPTION
 
     //-------------------------------------------------------------------------
     void uuid_generate_random(zsLib::internal::uuid_wrapper::raw_uuid_type &uuid) {
-			auto result = CoCreateGuid(&uuid);
-			assert(S_OK == result);
-		}
-	}
+      auto result = CoCreateGuid(&uuid);
+      ZS_ASSERT(S_OK == result);
+    }
+  }
 
   using namespace zsLib::compatibility;
 }
@@ -119,59 +119,59 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Setup
-    #pragma mark
+    //
+    // Setup
+    //
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (helpers)
-    #pragma mark
+    //
+    // (helpers)
+    //
 
     // forward declarations
-    void initSubsystems();
+    void initSubsystems() noexcept;
 #ifdef _WIN32
-    void initWindowsEventProviderLogger();
+    void initWindowsEventProviderLogger() noexcept;
 #endif //__WIN32
-    void installTimerMonitorSettingsDefaults();
-    void installSocketMonitorSettingsDefaults();
-    void installMessageQueueManagerSettingsDefaults();
+    void installTimerMonitorSettingsDefaults() noexcept;
+    void installSocketMonitorSettingsDefaults() noexcept;
+    void installMessageQueueManagerSettingsDefaults() noexcept;
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Setup
-    #pragma mark
+    //
+    // Setup
+    //
 
     class Setup
     {
     protected:
       //-----------------------------------------------------------------------
-      Setup()
+      Setup() noexcept
       {
       }
 
     public:
       //-----------------------------------------------------------------------
-      ~Setup()
+      ~Setup() noexcept
       {
         ZS_EVENTING_UNREGISTER(zsLib);
       }
 
       //-----------------------------------------------------------------------
-      static Setup &singleton()
+      static Setup &singleton() noexcept
       {
         static Setup setup;
         return setup;
       }
 
       //-----------------------------------------------------------------------
-      void setup()
+      void setup() noexcept
       {
         {
           AutoRecursiveLock lock(*IHelper::getGlobalLock());
@@ -188,7 +188,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      PUID createPUID()
+      PUID createPUID() noexcept
       {
         return ++mID;
       }
@@ -198,7 +198,7 @@ namespace zsLib
     };
 
     //---------------------------------------------------------------------------
-    void setup()
+    void setup() noexcept
     {
       internal::Setup::singleton().setup();
     }
@@ -214,13 +214,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  PUID createPUID()
+  PUID createPUID() noexcept
   {
     return internal::Setup::singleton().createPUID();
   }
 
   //---------------------------------------------------------------------------
-  UUID createUUID()
+  UUID createUUID() noexcept
   {
     UUID gen;
     uuid_generate_random(gen.mUUID);
@@ -228,7 +228,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void debugSetCurrentThreadName(const char *name)
+  void debugSetCurrentThreadName(const char *name) noexcept
   {
     if (!name) name = "";
 
@@ -250,7 +250,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Time now()
+  Time now() noexcept
   {
     return std::chrono::system_clock::now();
   }

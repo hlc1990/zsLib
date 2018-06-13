@@ -36,7 +36,7 @@
 
 #ifdef _WIN32
 namespace std {
-	inline int tolower(int c) { return _tolower(c); }
+	inline int tolower(int c) noexcept { return _tolower(c); }
 }
 #endif //_WIN32
 
@@ -54,17 +54,17 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::ParserPos
-      #pragma mark
+      //
+      // XML::internal::ParserPos
+      //
 
       //-----------------------------------------------------------------------
-      ParserPos::ParserPos()
+      ParserPos::ParserPos() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      ParserPos::ParserPos(const ParserPos &inPos) :
+      ParserPos::ParserPos(const ParserPos &inPos) noexcept :
         mParser(inPos.mParser),
         mDocument(inPos.mDocument)
       {
@@ -76,7 +76,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static size_t calculateColumnFromSOL(const char *const inPos, const char *const inStart, ULONG inTabSize)
+      static size_t calculateColumnFromSOL(const char *const inPos, const char *const inStart, ULONG inTabSize) noexcept
       {
         // find the start of the line
         const char *startLine = inPos;
@@ -121,12 +121,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::ParserPos
-    #pragma mark
+    //
+    // XML::ParserPos
+    //
 
     //-------------------------------------------------------------------------
-    ParserPos::ParserPos() :
+    ParserPos::ParserPos() noexcept :
       mRow(0),
       mColumn(0),
       mPos(NULL)
@@ -134,7 +134,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos::ParserPos(const ParserPos &inPos) :
+    ParserPos::ParserPos(const ParserPos &inPos) noexcept :
       internal::ParserPos(inPos),
       mRow(inPos.mRow),
       mColumn(inPos.mColumn),
@@ -146,7 +146,7 @@ namespace zsLib
     ParserPos::ParserPos(
                          Parser &inParser,
                          Document &inDocument
-                         ) :
+                         ) noexcept :
       mRow(0),
       mColumn(0),
       mPos(NULL)
@@ -160,7 +160,7 @@ namespace zsLib
     ParserPos::ParserPos(
                          ParserPtr inParser,
                          DocumentPtr inDocument
-                         ) :
+                         ) noexcept :
       mRow(0),
       mColumn(0),
       mPos(NULL)
@@ -171,19 +171,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool ParserPos::isSOF() const
+    bool ParserPos::isSOF() const noexcept
     {
       if (NULL == mPos)
         return false;
 
       ParserPtr parser = getParser();
-      ZS_THROW_BAD_STATE_IF(!parser)
+      ZS_ASSERT(parser);
 
       return (mPos == parser->mSOF);
     }
 
     //-------------------------------------------------------------------------
-    bool ParserPos::isEOF() const
+    bool ParserPos::isEOF() const noexcept
     {
       if (NULL == mPos)
         return true;
@@ -192,19 +192,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void ParserPos::setSOF()
+    void ParserPos::setSOF() noexcept
     {
       ParserPtr parser = getParser();
-      ZS_THROW_BAD_STATE_IF(!parser)
+      ZS_ASSERT(parser);
 
       mPos = parser->mSOF;
       mRow = 1;
       mColumn = 1;
-      ZS_THROW_BAD_STATE_IF(NULL == mPos)
+      ZS_ASSERT(NULL != mPos);
     }
 
     //-------------------------------------------------------------------------
-    void ParserPos::setEOF()
+    void ParserPos::setEOF() noexcept
     {
       while (!isEOF()) {
         ++(*this);
@@ -212,31 +212,31 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void ParserPos::setParser(ParserPtr inParser)
+    void ParserPos::setParser(ParserPtr inParser) noexcept
     {
       mParser = inParser;
     }
 
     //-------------------------------------------------------------------------
-    ParserPtr ParserPos::getParser() const
+    ParserPtr ParserPos::getParser() const noexcept
     {
       return mParser.lock();
     }
 
     //-------------------------------------------------------------------------
-    void ParserPos::setDocument(DocumentPtr inDocument)
+    void ParserPos::setDocument(DocumentPtr inDocument) noexcept
     {
       mDocument = inDocument;
     }
 
     //-------------------------------------------------------------------------
-    DocumentPtr ParserPos::getDocument() const
+    DocumentPtr ParserPos::getDocument() const noexcept
     {
       return mDocument.lock();
     }
 
     //-------------------------------------------------------------------------
-    ParserPos ParserPos::operator++() const
+    ParserPos ParserPos::operator++() const noexcept
     {
       ParserPos temp(*this);
       ++temp;
@@ -244,14 +244,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos &ParserPos::operator++()
+    ParserPos &ParserPos::operator++() noexcept
     {
       (*this) += 1;
       return (*this);
     }
 
     //-------------------------------------------------------------------------
-    ParserPos ParserPos::operator--() const
+    ParserPos ParserPos::operator--() const noexcept
     {
       ParserPos temp(*this);
       --temp;
@@ -259,14 +259,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos &ParserPos::operator--()
+    ParserPos &ParserPos::operator--() noexcept
     {
       (*this) -= 1;
       return (*this);
     }
 
     //-------------------------------------------------------------------------
-    size_t ParserPos::operator-(const ParserPos &inPos) const
+    size_t ParserPos::operator-(const ParserPos &inPos) const noexcept
     {
       ParserPos startPos = inPos;
       ParserPos endPos(*this);
@@ -298,7 +298,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos &ParserPos::operator+=(size_t inDistance)
+    ParserPos &ParserPos::operator+=(size_t inDistance) noexcept
     {
       ParserPtr parser(getParser());
 
@@ -334,8 +334,8 @@ namespace zsLib
           }
           case '\t':
           {
-            ZS_THROW_BAD_STATE_IF(!parser)
-            ZS_THROW_BAD_STATE_IF(0 == mColumn)
+            ZS_ASSERT(parser);
+            ZS_ASSERT(0 != mColumn);
 
             ULONG tabSize = parser->getTabSize();
             // if tab size were set to 3
@@ -359,7 +359,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos &ParserPos::operator-=(size_t inDistance)
+    ParserPos &ParserPos::operator-=(size_t inDistance) noexcept
     {
       ParserPtr parser(getParser());
 
@@ -390,7 +390,7 @@ namespace zsLib
           {
             if ('\n' == *mPos)
             {
-              ZS_THROW_BAD_STATE_IF(mRow < 2)   // how did the count become inaccurate
+              ZS_ASSERT(mRow > 1);   // how did the count become inaccurate
               --mRow;
             }
             if ('\r' == *mPos)
@@ -398,13 +398,13 @@ namespace zsLib
               if ('\n' != (*(mPos+1)))
               {
                 // this is a MAC EOL
-                ZS_THROW_BAD_STATE_IF(mRow < 2)   // how did the count become inaccurate
+                ZS_ASSERT(mRow > 1);   // how did the count become inaccurate
                 --mRow;
               }
             }
 
-            ZS_THROW_BAD_STATE_IF(!parser)
-            ZS_THROW_BAD_STATE_IF(NULL == parser->mSOF)
+            ZS_ASSERT(parser);
+            ZS_ASSERT(NULL != parser->mSOF);
 
             // these characters cause the column to get messed up, simplest method is to
             // recalculate the column position from the start of the line
@@ -413,7 +413,7 @@ namespace zsLib
           }
           default:
           {
-            ZS_THROW_BAD_STATE_IF(mColumn < 2)   // how did the count become inaccurate
+            ZS_ASSERT(mColumn > 1);   // how did the count become inaccurate
 
             --mColumn;
             break;
@@ -425,19 +425,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool ParserPos::operator==(const ParserPos &inPos)
+    bool ParserPos::operator==(const ParserPos &inPos) noexcept
     {
       return (mPos == inPos.mPos);
     }
 
     //-------------------------------------------------------------------------
-    bool ParserPos::operator!=(const ParserPos &inPos)
+    bool ParserPos::operator!=(const ParserPos &inPos) noexcept
     {
       return (mPos != inPos.mPos);
     }
 
     //-------------------------------------------------------------------------
-    char ParserPos::operator*() const
+    char ParserPos::operator*() const noexcept
     {
       if (isEOF())
         return 0;
@@ -446,7 +446,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos::operator CSTR() const
+    ParserPos::operator CSTR() const noexcept
     {
       if (mPos) return mPos;
 
@@ -454,7 +454,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool ParserPos::isString(CSTR inString, bool inCaseSensative) const
+    bool ParserPos::isString(CSTR inString, bool inCaseSensative) const noexcept
     {
       if (NULL == inString)
         return isEOF();
@@ -482,7 +482,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos operator+(const ParserPos &inPos, size_t inDistance)
+    ParserPos operator+(const ParserPos &inPos, size_t inDistance) noexcept
     {
       ParserPos temp(inPos);
       temp += inDistance;
@@ -490,7 +490,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos operator-(const ParserPos &inPos, size_t inDistance)
+    ParserPos operator-(const ParserPos &inPos, size_t inDistance) noexcept
     {
       ParserPos temp(inPos);
       temp -= inDistance;
@@ -498,13 +498,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ParserPos operator+(const ParserPos &inPos, int inDistance)
+    ParserPos operator+(const ParserPos &inPos, int inDistance) noexcept
     {
       return inPos + ((size_t)inDistance);
     }
 
     //-------------------------------------------------------------------------
-    ParserPos operator-(const ParserPos &inPos, int inDistance)
+    ParserPos operator-(const ParserPos &inPos, int inDistance) noexcept
     {
       return inPos - ((size_t)inDistance);
     }

@@ -51,26 +51,26 @@ namespace zsLib
     MessageQueue::MessageQueue(
                                const make_private &,
                                IMessageQueueNotifyPtr notify
-                               ) :
+                               ) noexcept :
       mNotify(notify)
     {
       ZS_EVENTING_1(x, i, Trace, MessageQueueCreate, zs, MessageQueue, Start, this, this, this);
     }
 
     //-------------------------------------------------------------------------
-    MessageQueue::~MessageQueue()
+    MessageQueue::~MessageQueue() noexcept
     {
       ZS_EVENTING_1(x, i, Trace, MessageQueueDestroy, zs, MessageQueue, Stop, this, this, this);
     }
 
     //-------------------------------------------------------------------------
-    MessageQueuePtr MessageQueue::create(IMessageQueueNotifyPtr notify)
+    MessageQueuePtr MessageQueue::create(IMessageQueueNotifyPtr notify) noexcept
     {
       return make_shared<MessageQueue>(make_private{}, notify);
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueue::post(IMessageQueueMessageUniPtr message)
+    void MessageQueue::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       ZS_EVENTING_1(x, i, Insane, MessageQueuePost, zs, MessageQueue, Send, this, this, this);
 
@@ -82,7 +82,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueue::process()
+    void MessageQueue::process() noexcept
     {
       do
       {
@@ -104,7 +104,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueue::processOnlyOneMessage()
+    void MessageQueue::processOnlyOneMessage() noexcept
     {
       IMessageQueueMessagePtr message;
 
@@ -123,7 +123,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueue::getTotalUnprocessedMessages() const
+    IMessageQueue::size_type MessageQueue::getTotalUnprocessedMessages() const noexcept
     {
       AutoLock lock(mLock);
       ZS_EVENTING_2(x, i, Insane, MessageQueueTotalUnprocessedMessages, zs, MessageQueue, Info, this, this, this, size_t, messages, mMessages.size());
@@ -132,7 +132,7 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
-  IMessageQueuePtr IMessageQueue::create(IMessageQueueNotifyPtr notify)
+  IMessageQueuePtr IMessageQueue::create(IMessageQueueNotifyPtr notify) noexcept
   {
     return internal::MessageQueue::create(notify);
   }

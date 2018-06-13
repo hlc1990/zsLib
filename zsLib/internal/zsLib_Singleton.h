@@ -47,9 +47,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SingletonManager::Register
-    #pragma mark
+    //
+    // SingletonManager::Register
+    //
 
     class SingletonManager
     {
@@ -63,51 +63,51 @@ namespace zsLib
       typedef std::map<String, ISingletonManagerDelegatePtr> DelegateMap;
 
     protected:
-      static SingletonManagerPtr create();
+      static SingletonManagerPtr create() noexcept;
 
     public:
-      SingletonManager();
-      ~SingletonManager();
+      SingletonManager() noexcept;
+      ~SingletonManager() noexcept;
 
     protected:
-      static SingletonManagerPtr singleton();
+      static SingletonManagerPtr singleton() noexcept;
 
       void registerSingleton(
                              const char *uniqueNamespacedID,
                              ISingletonManagerDelegatePtr singleton
-                             );
+                             ) noexcept;
 
-      ISingletonManagerDelegatePtr find(const char *uniqueNamespacedID);
+      ISingletonManagerDelegatePtr find(const char *uniqueNamespacedID) noexcept;
 
-      void reference();
-      void unreference();
+      void reference() noexcept;
+      void unreference() noexcept;
 
     public:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark SingletonManager::Initializer
-      #pragma mark
+      //
+      // SingletonManager::Initializer
+      //
 
       class Initializer
       {
       public:
-        Initializer();
-        ~Initializer();
+        Initializer() noexcept;
+        ~Initializer() noexcept;
 
       protected:
         SingletonManagerPtr mManager;
       };
 
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark SingletonManager::Register
-      #pragma mark
+      //
+      // SingletonManager::Register
+      //
 
       class Register
       {
       public:
-        Register();
-        ~Register();
+        Register() noexcept;
+        ~Register() noexcept;
 
       protected:
         SingletonManagerPtr mManager;
@@ -117,9 +117,9 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark SingletonManager => (data)
-      #pragma mark
+      //
+      // SingletonManager => (data)
+      //
 
       SingletonManagerWeakPtr mThisWeak;
 

@@ -47,17 +47,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Promise
-    #pragma mark
+    //
+    // Promise
+    //
 
-    const char *Promise::toString(PromiseStates state)
+    const char *Promise::toString(PromiseStates state) noexcept
     {
       switch (state) {
         case PromiseState_Pending:  return "pending";
         case PromiseState_Resolved: return "resolve";
         case PromiseState_Rejected: return "rejected";
       }
+      ZS_ASSERT_FAIL("unknown promise state");
       return "unknown";
     }
 
@@ -65,9 +66,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark PromiseMultiDelegate
-    #pragma mark
+    //
+    // PromiseMultiDelegate
+    //
 
     class PromiseMultiDelegate : public zsLib::Promise
     {
@@ -77,7 +78,7 @@ namespace zsLib
                            const make_private &,
                            const std::list<PromisePtr> &promises,
                            IMessageQueuePtr queue
-                           ) :
+                           ) noexcept :
         Promise(make_private{}, promises, queue)
       {}
 
@@ -88,7 +89,7 @@ namespace zsLib
                                             const std::list<PromisePtr> &promises,
                                             bool allMode,
                                             bool ignoreRejections
-                                            )
+                                            ) noexcept
       {
         PromiseMultiDelegatePtr pThis(make_shared<PromiseMultiDelegate>(make_private{}, promises, queue));
         pThis->mAllMode = allMode;
@@ -122,9 +123,9 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark PromiseMultiDelegate => IPromiseDelegate
-      #pragma mark
+      //
+      // PromiseMultiDelegate => IPromiseDelegate
+      //
 
       void onPromiseSettled(PromisePtr) override;
 
@@ -134,9 +135,9 @@ namespace zsLib
 
     private:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark PromiseMultiDelegate => (internal)
-      #pragma mark
+      //
+      // PromiseMultiDelegate => (internal)
+      //
 
       typedef PUID PromiseID;
       typedef std::map<PromiseID, PromisePtr> PromiseMap;
@@ -216,9 +217,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark PromiseBroadcastDelegate
-    #pragma mark
+    //
+    // PromiseBroadcastDelegate
+    //
 
     class PromiseBroadcastDelegate : public zsLib::Promise
     {
@@ -228,7 +229,7 @@ namespace zsLib
                                const make_private &,
                                const std::list<PromisePtr> &promises,
                                IMessageQueuePtr queue
-                               ) :
+                               ) noexcept :
         Promise(make_private{}, promises, queue)
       {}
 
@@ -237,7 +238,7 @@ namespace zsLib
       static PromiseBroadcastDelegatePtr create(
                                                IMessageQueuePtr queue,
                                                const std::list<PromisePtr> &promises
-                                               )
+                                               ) noexcept
       {
         PromiseBroadcastDelegatePtr pThis(make_shared<PromiseBroadcastDelegate>(make_private{}, promises, queue));
         pThis->mThisWeak = pThis;
@@ -247,9 +248,9 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark PromiseBroadcastDelegate => IPromiseDelegate
-      #pragma mark
+      //
+      // PromiseBroadcastDelegate => IPromiseDelegate
+      //
 
       void onPromiseSettled(PromisePtr) override;
 
@@ -259,9 +260,9 @@ namespace zsLib
 
     private:
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark PromiseBroacastDelegate => (internal)
-      #pragma mark
+      //
+      // PromiseBroacastDelegate => (internal)
+      //
 
     };
 
@@ -309,12 +310,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Promise
-    #pragma mark
+    //
+    // Promise
+    //
 
     //-------------------------------------------------------------------------
-    Promise::Promise(IMessageQueuePtr queue) :
+    Promise::Promise(IMessageQueuePtr queue) noexcept :
       MessageQueueAssociator(queue)
     {
     }
@@ -323,14 +324,14 @@ namespace zsLib
     Promise::Promise(
                      const std::list<PromisePtr> &promises,
                      IMessageQueuePtr queue
-                     ) : 
+                     ) noexcept :
       MessageQueueAssociator(queue),
       mPromises(promises)
     {
     }
 
     //-------------------------------------------------------------------------
-    Promise::~Promise()
+    Promise::~Promise() noexcept
     {
     }
 
@@ -340,15 +341,15 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Promise
-  #pragma mark
+  //
+  // Promise
+  //
 
   //---------------------------------------------------------------------------
   Promise::Promise(
                    const make_private &,
                    IMessageQueuePtr queue
-                   ) :
+                   ) noexcept :
     internal::Promise(queue)
   {
   }
@@ -358,19 +359,19 @@ namespace zsLib
                    const make_private &,
                    const std::list<PromisePtr> &promises,
                    IMessageQueuePtr queue
-                   ) :
+                   ) noexcept :
     internal::Promise(promises, queue)
   {
   }
 
   //---------------------------------------------------------------------------
-  Promise::~Promise()
+  Promise::~Promise() noexcept
   {
     mThisWeak.reset();
   }
 
   //---------------------------------------------------------------------------
-  PromisePtr Promise::create(IMessageQueuePtr queue)
+  PromisePtr Promise::create(IMessageQueuePtr queue) noexcept
   {
     PromisePtr pThis(make_shared<Promise>(make_private{}, queue));
     pThis->mThisWeak = pThis;
@@ -381,7 +382,7 @@ namespace zsLib
   PromisePtr Promise::all(
                           const PromiseList &promises,
                           IMessageQueuePtr queue
-                          )
+                          ) noexcept
   {
     return internal::PromiseMultiDelegate::create(queue, promises, true, false);
   }
@@ -390,7 +391,7 @@ namespace zsLib
   PromisePtr Promise::allSettled(
                                  const PromiseList &promises,
                                  IMessageQueuePtr queue
-                                 )
+                                 ) noexcept
   {
     return internal::PromiseMultiDelegate::create(queue, promises, true, true);
   }
@@ -399,7 +400,7 @@ namespace zsLib
   PromisePtr Promise::race(
                            const PromiseList &promises,
                            IMessageQueuePtr queue
-                           )
+                           ) noexcept
   {
     return internal::PromiseMultiDelegate::create(queue, promises, false, false);
   }
@@ -408,7 +409,7 @@ namespace zsLib
   PromisePtr Promise::broadcast(
                                 const PromiseList &promises,
                                 IMessageQueuePtr queue
-                                )
+                                ) noexcept
   {
     return internal::PromiseBroadcastDelegate::create(queue, promises);
   }
@@ -417,7 +418,7 @@ namespace zsLib
   PromisePtr Promise::broadcast(
                                 const PromiseWeakList &promises,
                                 IMessageQueuePtr queue
-                                )
+                                ) noexcept
   {
     PromiseList tempPromises;
     for (auto iter = promises.begin(); iter != promises.end(); ++iter) {
@@ -431,7 +432,7 @@ namespace zsLib
   PromisePtr Promise::createResolved(
                                      AnyPtr value,
                                      IMessageQueuePtr queue
-                                     )
+                                     ) noexcept
   {
     PromisePtr promise = Promise::create(queue);
     promise->resolve(value);
@@ -442,7 +443,7 @@ namespace zsLib
   PromisePtr Promise::createRejected(
                                      AnyPtr reason,
                                      IMessageQueuePtr queue
-                                     )
+                                     ) noexcept
   {
     PromisePtr promise = Promise::create(queue);
     promise->reject(reason);
@@ -450,13 +451,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Promise::resolve(AnyPtr value)
+  void Promise::resolve(AnyPtr value) noexcept
   {
     IPromiseDelegatePtr delegate;
 
     {
       AutoRecursiveLock lock(mLock);
-      ZS_THROW_INVALID_USAGE_IF(isSettled())
+      ZS_ASSERT(!isSettled());
 
       mState = PromiseState_Resolved;
       mValue = value;
@@ -485,13 +486,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Promise::reject(AnyPtr reason)
+  void Promise::reject(AnyPtr reason) noexcept
   {
     IPromiseDelegatePtr delegate;
 
     {
       AutoRecursiveLock lock(mLock);
-      ZS_THROW_INVALID_USAGE_IF(isSettled())
+      ZS_ASSERT(!isSettled());
 
       mState = PromiseState_Rejected;
       mReason = reason;
@@ -524,7 +525,7 @@ namespace zsLib
   void Promise::resolveAll(
                            const PromiseList &promises,
                            AnyPtr value
-                           )
+                           ) noexcept
   {
     for (auto iter = promises.begin(); iter != promises.end(); ++iter) {
       auto promise = (*iter);
@@ -537,7 +538,7 @@ namespace zsLib
   void Promise::resolveAll(
                            const PromiseWeakList &promises,
                            AnyPtr value
-                           )
+                           ) noexcept
   {
     for (auto iter = promises.begin(); iter != promises.end(); ++iter) {
       auto promise = (*iter).lock();
@@ -550,7 +551,7 @@ namespace zsLib
   void Promise::rejectAll(
                           const PromiseList &promises,
                           AnyPtr reason
-                          )
+                          ) noexcept
   {
     for (auto iter = promises.begin(); iter != promises.end(); ++iter) {
       auto promise = (*iter);
@@ -563,7 +564,7 @@ namespace zsLib
   void Promise::rejectAll(
                           const PromiseWeakList &promises,
                           AnyPtr reason
-                          )
+                          ) noexcept
   {
     for (auto iter = promises.begin(); iter != promises.end(); ++iter) {
       auto promise = (*iter).lock();
@@ -573,7 +574,7 @@ namespace zsLib
   }
   
   //---------------------------------------------------------------------------
-  void Promise::then(IPromiseDelegatePtr inDelegate)
+  void Promise::then(IPromiseDelegatePtr inDelegate) noexcept
   {
     IPromiseDelegatePtr delegate;
 
@@ -617,7 +618,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Promise::thenWeak(IPromiseDelegatePtr inDelegate)
+  void Promise::thenWeak(IPromiseDelegatePtr inDelegate) noexcept
   {
     {
       AutoRecursiveLock lock(mLock);
@@ -632,34 +633,34 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool Promise::isSettled() const
+  bool Promise::isSettled() const noexcept
   {
     AutoRecursiveLock lock(mLock);
     return PromiseState_Pending != mState;
   }
 
   //---------------------------------------------------------------------------
-  bool Promise::isResolved() const
+  bool Promise::isResolved() const noexcept
   {
     AutoRecursiveLock lock(mLock);
     return PromiseState_Resolved == mState;
   }
 
   //---------------------------------------------------------------------------
-  bool Promise::isRejected() const
+  bool Promise::isRejected() const noexcept
   {
     AutoRecursiveLock lock(mLock);
     return PromiseState_Rejected == mState;
   }
 
   //---------------------------------------------------------------------------
-  void Promise::background()
+  void Promise::background() noexcept
   {
     AutoRecursiveLock lock(mLock);
 
     if (isSettled()) return;
 
-    ZS_THROW_INVALID_USAGE_IF(!mThen)
+    ZS_ASSERT(mThen);
 
     mThisBackground = mThisWeak.lock();
   }
@@ -703,9 +704,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IPromiseSettledDelegate
-  #pragma mark
+  //
+  // IPromiseSettledDelegate
+  //
 
   //---------------------------------------------------------------------------
   void IPromiseSettledDelegate::onPromiseResolved(PromisePtr promise)
@@ -722,9 +723,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IPromiseResolutionDelegate
-  #pragma mark
+  //
+  // IPromiseResolutionDelegate
+  //
   
   //---------------------------------------------------------------------------
   void IPromiseResolutionDelegate::onPromiseSettled(PromisePtr promise)
@@ -735,9 +736,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IPromiseCatchDelegate
-  #pragma mark
+  //
+  // IPromiseCatchDelegate
+  //
   
   //---------------------------------------------------------------------------
   void IPromiseCatchDelegate::onPromiseSettled(PromisePtr promise)

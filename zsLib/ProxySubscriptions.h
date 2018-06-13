@@ -42,9 +42,9 @@ namespace zsLib
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ProxySubscriptions
-  #pragma mark
+  //
+  // ProxySubscriptions
+  //
 
   template <typename XINTERFACE, typename SUBSCRIPTIONBASECLASS>
   class ProxySubscriptions
@@ -96,25 +96,25 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Subscription
-    #pragma mark
+    //
+    // Subscription
+    //
 
     class Subscription : public BaseSubscription
     {
       //-----------------------------------------------------------------------
       // PURPOSE: cancel the active subscription to delegate events
-      virtual PUID getID() const = 0;
+      virtual PUID getID() const noexcept = 0;
 
       //-----------------------------------------------------------------------
       // PURPOSE: cancel the active subscription to delegate events
-      virtual void cancel() = 0;
+      virtual void cancel() noexcept = 0;
 
       //-----------------------------------------------------------------------
       // PURPOSE: cause events to continue to fire for the subscribed delegate
       //          even if a reference to the subscription object is not
       //          mantained.
-      virtual void background() = 0;
+      virtual void background() noexcept = 0;
     };
   };
 }

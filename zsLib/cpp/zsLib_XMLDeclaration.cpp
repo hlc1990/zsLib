@@ -50,27 +50,27 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Declaration
-      #pragma mark
+      //
+      // XML::internal::Declaration
+      //
 
       //-----------------------------------------------------------------------
-      Declaration::Declaration()
+      Declaration::Declaration() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      Declaration::~Declaration()
+      Declaration::~Declaration() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      void Declaration::parse(XML::ParserPos &ioPos)
+      void Declaration::parse(XML::ParserPos &ioPos) noexcept
       {
         Parser::AutoStack stack(ioPos);
 
         // this must be a <?xml
-        ZS_THROW_BAD_STATE_IF(!ioPos.isString("<?xml", false))
+        ZS_ASSERT(ioPos.isString("<?xml", false));
 
         ioPos += strlen("<?xml");
 
@@ -131,7 +131,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Declaration::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Declaration::getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept
       {
         size_t result = 0;
         result += strlen("<?xml");
@@ -153,7 +153,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Declaration::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Declaration::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         Generator::writeBuffer(ioPos, "<?xml");
 
@@ -172,19 +172,22 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Declaration::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Declaration::getOutputSizeJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
         size_t result = 0;
         return result;
       }
 
       //-----------------------------------------------------------------------
-      void Declaration::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Declaration::writeBufferJSON(ZS_MAYBE_USED() const GeneratorPtr &inGenerator, ZS_MAYBE_USED() char * &ioPos) const noexcept
       {
+        ZS_MAYBE_USED(inGenerator);
+        ZS_MAYBE_USED(ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Declaration::cloneAssignParent(NodePtr inParent) const
+      NodePtr Declaration::cloneAssignParent(NodePtr inParent) const noexcept
       {
         XML::DeclarationPtr newObject(XML::Declaration::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -206,18 +209,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Declaration
-    #pragma mark
+    //
+    // XML::Declaration
+    //
 
     //-------------------------------------------------------------------------
-    Declaration::Declaration(const make_private &) :
+    Declaration::Declaration(const make_private &) noexcept :
       internal::Declaration()
     {
     }
 
     //-------------------------------------------------------------------------
-    DeclarationPtr Declaration::create()
+    DeclarationPtr Declaration::create() noexcept
     {
       DeclarationPtr newObject(make_shared<Declaration>(make_private {}));
       newObject->mThis = newObject;
@@ -225,7 +228,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::findAttribute(String inName) const
+    AttributePtr Declaration::findAttribute(String inName) const noexcept
     {
       DocumentPtr document(getDocument());
 
@@ -253,7 +256,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Declaration::getAttributeValue(String inName) const
+    String Declaration::getAttributeValue(String inName) const noexcept
     {
       AttributePtr attribute = findAttribute(inName);
       if (attribute)
@@ -263,7 +266,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::findAttributeChecked(String inName) const throw(Exceptions::CheckFailed)
+    AttributePtr Declaration::findAttributeChecked(String inName) const noexcept(false)
     {
       AttributePtr result = findAttribute(inName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -271,7 +274,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Declaration::getAttributeValueChecked(String inName) const throw(Exceptions::CheckFailed)
+    String Declaration::getAttributeValueChecked(String inName) const noexcept(false)
     {
       AttributePtr result = findAttribute(inName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -279,7 +282,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Declaration::setAttribute(String inName, String inValue)
+    bool Declaration::setAttribute(String inName, String inValue) noexcept
     {
       AttributePtr attribute = Attribute::create();
       attribute->setName(inName);
@@ -288,9 +291,9 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Declaration::setAttribute(AttributePtr inAttribute)
+    bool Declaration::setAttribute(AttributePtr inAttribute) noexcept
     {
-      ZS_THROW_INVALID_USAGE_IF(!inAttribute)
+      ZS_ASSERT(inAttribute);
 
       bool replaced = deleteAttribute(inAttribute->getName());
       mThis.lock()->adoptAsLastChild(inAttribute);
@@ -298,7 +301,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Declaration::deleteAttribute(String inName)
+    bool Declaration::deleteAttribute(String inName) noexcept
     {
       AttributePtr attribute = findAttribute(inName);
       if (!attribute)
@@ -309,19 +312,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::getFirstAttribute() const
+    AttributePtr Declaration::getFirstAttribute() const noexcept
     {
       return mFirstAttribute;
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::getLastAttribute() const
+    AttributePtr Declaration::getLastAttribute() const noexcept
     {
       return mLastAttribute;
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::getFirstAttributeChecked() const throw(Exceptions::CheckFailed)
+    AttributePtr Declaration::getFirstAttributeChecked() const noexcept(false)
     {
       AttributePtr result = getFirstAttribute();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -329,7 +332,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Declaration::getLastAttributeChecked() const throw(Exceptions::CheckFailed)
+    AttributePtr Declaration::getLastAttributeChecked() const noexcept(false)
     {
       AttributePtr result = getLastAttribute();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -337,14 +340,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Declaration::adoptAsFirstChild(NodePtr inNode)
+    void Declaration::adoptAsFirstChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       if (!inNode->isAttribute())
       {
-        ZS_THROW_INVALID_USAGE("declarations can only have attributes as children")
+        ZS_ASSERT_FAIL("declarations can only have attributes as children");
         return;
       }
 
@@ -375,14 +378,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Declaration::adoptAsLastChild(NodePtr inNode)
+    void Declaration::adoptAsLastChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       if (!inNode->isAttribute())
       {
-        ZS_THROW_INVALID_USAGE("declarations can only have attributes as children")
+        ZS_ASSERT_FAIL("declarations can only have attributes as children");
         return;
       }
 
@@ -413,13 +416,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Declaration::clone() const
+    NodePtr Declaration::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Declaration::clear()
+    void Declaration::clear() noexcept
     {
       NodePtr child = mFirstAttribute;
       while (child)
@@ -433,25 +436,25 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Declaration::getNodeType()
+    Node::NodeType::Type Declaration::getNodeType() const noexcept
     {
       return NodeType::Declaration;
     }
 
     //-------------------------------------------------------------------------
-    bool Declaration::isDeclaration() const
+    bool Declaration::isDeclaration() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Declaration::toNode() const
+    NodePtr Declaration::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    DeclarationPtr Declaration::toDeclaration() const
+    DeclarationPtr Declaration::toDeclaration() const noexcept
     {
       return mThis.lock();
     }

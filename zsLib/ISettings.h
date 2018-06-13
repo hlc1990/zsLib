@@ -44,72 +44,76 @@ namespace zsLib
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ISettings
-  #pragma mark
+  //
+  // ISettings
+  //
 
   interaction ISettings
   {
     typedef zsLib::Exceptions::InvalidUsage InvalidUsage;
 
-    static void setup(ISettingsDelegatePtr delegate);
+    ISettings() noexcept = default;
+    ISettings(const ISettings &) noexcept = delete;
+    ISettings &operator=(const ISettings &) = delete;
 
-    static String getString(const char *key);
-    static LONG getInt(const char *key);
-    static ULONG getUInt(const char *key);
-    static bool getBool(const char *key);
-    static float getFloat(const char *key);
-    static double getDouble(const char *key);
+    static void setup(ISettingsDelegatePtr delegate) noexcept;
+
+    static String getString(const char *key) noexcept;
+    static LONG getInt(const char *key) noexcept;
+    static ULONG getUInt(const char *key) noexcept;
+    static bool getBool(const char *key) noexcept;
+    static float getFloat(const char *key) noexcept;
+    static double getDouble(const char *key) noexcept;
 
     static void setString(
                           const char *key,
                           const char *value
-                          );
+                          ) noexcept;
     static void setInt(
                         const char *key,
                         LONG value
-                        );
+                        ) noexcept;
     static void setUInt(
                         const char *key,
                         ULONG value
-                        );
+                        ) noexcept;
     static void setBool(
                         const char *key,
                         bool value
-                        );
+                        ) noexcept;
     static void setFloat(
                           const char *key,
                           float value
-                          );
+                          ) noexcept;
     static void setDouble(
                           const char *key,
                           double value
-                          );
+                          ) noexcept;
 
-    static void clear(const char *key);
+    static void clear(const char *key) noexcept;
 
-    static bool apply(const char *jsonSettings);
+    static bool apply(const char *jsonSettings) noexcept;
 
-    static void applyDefaults();
-    static void installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate);
-    static void removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate);
+    static void applyDefaults() noexcept;
+    static void installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate) noexcept;
+    static void removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate) noexcept;
 
-    static void clearAll();
+    static void clearAll() noexcept;
 
-    static void verifySettingExists(const char *key) throw (InvalidUsage);
+    static void verifySettingExists(const char *key) noexcept(false); // throws InvalidUsage
 
-    static void verifyRequiredSettings() throw (InvalidUsage);
+    static void verifyRequiredSettings() noexcept(false); // throws InvalidUsage
 
-    virtual ~ISettings() {} // to make settings polymorphic
+    virtual ~ISettings() noexcept {} // to make settings polymorphic
   };
 
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ISettingsDelegate
-  #pragma mark
+  //
+  // ISettingsDelegate
+  //
 
   interaction ISettingsDelegate
   {
@@ -117,54 +121,55 @@ namespace zsLib
     //          and must NOT block on any kind of lock that might be
     //          blocked calling inside to the SDK (directly or indirectly).
 
-    virtual String getString(const char *key) const = 0;
-    virtual LONG getInt(const char *key) const = 0;
-    virtual ULONG getUInt(const char *key) const = 0;
-    virtual bool getBool(const char *key) const = 0;
-    virtual float getFloat(const char *key) const = 0;
-    virtual double getDouble(const char *key) const = 0;
+    virtual String getString(const char *key) const noexcept = 0;
+    virtual LONG getInt(const char *key) const noexcept = 0;
+    virtual ULONG getUInt(const char *key) const noexcept = 0;
+    virtual bool getBool(const char *key) const noexcept = 0;
+    virtual float getFloat(const char *key) const noexcept = 0;
+    virtual double getDouble(const char *key) const noexcept = 0;
 
     virtual void setString(
                             const char *key,
                             const char *value
-                            ) = 0;
+                            ) noexcept = 0;
     virtual void setInt(
                         const char *key,
                         LONG value
-                        ) = 0;
+                        ) noexcept = 0;
     virtual void setUInt(
                           const char *key,
                           ULONG value
-                          ) = 0;
+                          ) noexcept = 0;
     virtual void setBool(
                           const char *key,
                           bool value
-                          ) = 0;
+                          ) noexcept = 0;
     virtual void setFloat(
                           const char *key,
                           float value
-                          ) = 0;
+                          ) noexcept = 0;
     virtual void setDouble(
                             const char *key,
                             double value
-                            ) = 0;
+                            ) noexcept = 0;
 
-    virtual void clear(const char *key) = 0;
+    virtual void clear(const char *key) noexcept = 0;
 
-    virtual void clearAll() = 0;
+    virtual void clearAll() noexcept = 0;
   };
 
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ISettingsApplyDefaultsDelegate
-  #pragma mark
+  //
+  // ISettingsApplyDefaultsDelegate
+  //
 
   interaction ISettingsApplyDefaultsDelegate
   {
-    virtual void notifySettingsApplyDefaults() = 0;
+    virtual void notifySettingsApplyDefaults() noexcept = 0;
+    virtual void notifyVerifyRequiredSettings() noexcept(false) {} // throws InvalidUsage
   };
 
 } // namespace zsLib

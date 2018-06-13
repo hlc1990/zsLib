@@ -33,6 +33,12 @@
 
 #include <zsLib/internal/types.h>
 
+#define ZS_MACRO_SELECT(...)                                                        ZS_INTERNAL_MACRO_SELECT(__VA_ARGS__)
+#define ZS_MAYBE_USED(...)                                                          ZS_INTERNAL_MAYBE_USED(__VA_ARGS__)
+#define ZS_ASSERT(xCondition)                                                       ZS_INTERNAL_ASSERT(xCondition)
+#define ZS_ASSERT_MESSAGE(xCondition, xMsg)                                         ZS_INTERNAL_ASSERT_MESSAGE(xCondition, xMsg)
+#define ZS_ASSERT_FAIL(xMsg)                                                        ZS_INTERNAL_ASSERT_FAIL(xMsg)
+
 #define ZS_DECLARE_PTR(xExistingType)                                               ZS_INTERNAL_DECLARE_PTR(xExistingType)
 #define ZS_DECLARE_USING_PTR(xNamespace, xExistingType)                             ZS_INTERNAL_DECLARE_USING_PTR(xNamespace, xExistingType)
 #define ZS_DECLARE_CLASS_PTR(xClassName)                                            ZS_INTERNAL_DECLARE_CLASS_PTR(xClassName)
