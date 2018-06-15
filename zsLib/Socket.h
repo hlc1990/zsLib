@@ -284,7 +284,7 @@ namespace zsLib
 
 ZS_DECLARE_PROXY_BEGIN(zsLib::ISocketDelegate)
 ZS_DECLARE_PROXY_TYPEDEF(zsLib::SocketPtr, SocketPtr)
-ZS_DECLARE_PROXY_METHOD_1(onReadReady, SocketPtr)
-ZS_DECLARE_PROXY_METHOD_1(onWriteReady, SocketPtr)
-ZS_DECLARE_PROXY_METHOD_1(onException, SocketPtr)
+ZS_DECLARE_PROXY_METHOD(onReadReady, SocketPtr)
+ZS_DECLARE_PROXY_METHOD(onWriteReady, SocketPtr)
+ZS_DECLARE_PROXY_METHOD(onException, SocketPtr)
 ZS_DECLARE_PROXY_END()

@@ -95,5 +95,5 @@ namespace zsLib
 
 ZS_DECLARE_PROXY_BEGIN(zsLib::ITimerDelegate)
 ZS_DECLARE_TYPEDEF_PTR(zsLib::ITimerPtr, ITimerPtr)
-ZS_DECLARE_PROXY_METHOD_1(onTimer, ITimerPtr)
+ZS_DECLARE_PROXY_METHOD(onTimer, ITimerPtr)
 ZS_DECLARE_PROXY_END()

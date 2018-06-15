@@ -33,7 +33,18 @@
 
 #include <zsLib/internal/types.h>
 
-#define ZS_MACRO_SELECT(...)                                                        ZS_INTERNAL_MACRO_SELECT(__VA_ARGS__)
+#define ZS_MACRO_GET_ARG_COUNT(...)                                                     ZS_INTERNAL_MACRO_GET_ARG_ACOUNT(__VA_ARGS__)
+#define ZS_MACRO_SELECT(NAME, ...)                                                      ZS_INTERNAL_MACRO_SELECT(NAME, __VA_ARGS__)
+
+// These macros are defined internally but are not shown here due to an issue with the different behaviours between compilers regarding __VA_ARGS__
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_1(NAME, PROP1, ...)
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_2(NAME, PROP1, PROP2, ...)
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_3(NAME, PROP1, PROP2, PROP3, ...)
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_4(NAME, PROP1, PROP2, PROP3, PROP4, ...)
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_5(NAME, PROP1, PROP2, PROP3, PROP4, PROP5, ...)
+//#define ZS_MACRO_SELECT_WITH_PROPERTY_6(NAME, PROP1, PROP2, PROP3, PROP4, PROP5, PROP6, ...)
+
+
 #define ZS_MAYBE_USED(...)                                                          ZS_INTERNAL_MAYBE_USED(__VA_ARGS__)
 #define ZS_ASSERT(xCondition)                                                       ZS_INTERNAL_ASSERT(xCondition)
 #define ZS_ASSERT_MESSAGE(xCondition, xMsg)                                         ZS_INTERNAL_ASSERT_MESSAGE(xCondition, xMsg)
@@ -151,7 +162,7 @@ namespace zsLib
 
   struct Any
   {
-    virtual ~Any() {}
+    virtual ~Any() noexcept {}
   };
 
   template <typename type>
@@ -163,10 +174,10 @@ namespace zsLib
 
   struct Noop
   {
-    Noop(bool noop = false) : mNoop(noop) {}
-    Noop(const Noop &noop) : mNoop(noop.mNoop) {}
+    Noop(bool noop = false) noexcept : mNoop(noop) {}
+    Noop(const Noop &noop) noexcept : mNoop(noop.mNoop) {}
 
-    bool isNoop() const {return mNoop;}
+    bool isNoop() const noexcept {return mNoop;}
 
     bool mNoop;
   };
@@ -174,11 +185,11 @@ namespace zsLib
   class AutoInitializedPUID
   {
   public:
-    AutoInitializedPUID();
+    AutoInitializedPUID() noexcept;
 
-    operator PUID() const {return mValue;}
+    operator PUID() const noexcept {return mValue;}
 
-    void reset(PUID value) {mValue = value;}
+    void reset(PUID value) noexcept {mValue = value;}
 
   private:
     PUID mValue;
@@ -192,36 +203,36 @@ namespace zsLib
   public:
     typedef type UseType;
   public:
-    Optional() {}
+    Optional() noexcept {}
 
-    Optional(const UseType &value) :
+    Optional(const UseType &value) noexcept :
       mHasValue(true),
       mType(value)
     {}
 
-    Optional(const Optional &op2) :
+    Optional(const Optional &op2) noexcept :
       mHasValue(op2.mHasValue),
       mType(op2.mType)
     {}
 
-    Optional &operator=(const Optional &op2)
+    Optional &operator=(const Optional &op2) noexcept
     {
       mHasValue = op2.mHasValue;
       mType = op2.mType;
       return *this;
     }
 
-    Optional &operator=(const UseType &op2)
+    Optional &operator=(const UseType &op2) noexcept
     {
       mHasValue = true;
       mType = op2;
       return *this;
     }
 
-    bool hasValue() const {return mHasValue;}
-    UseType &value() {return mType;}
-    const UseType &value() const {return mType;}
-    operator UseType() const {return mType;}
+    bool hasValue() const noexcept {return mHasValue;}
+    UseType &value() noexcept {return mType;}
+    const UseType &value() const noexcept {return mType;}
+    operator UseType() const noexcept {return mType;}
 
   public:
     bool mHasValue {false};

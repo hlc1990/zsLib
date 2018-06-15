@@ -50,14 +50,14 @@ namespace zsLib
 {
   namespace internal
   {
-    void initSubsystems()
+    void initSubsystems() noexcept
     {
       ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zslib));
       ZS_GET_SUBSYSTEM_LOG_LEVEL(ZS_GET_OTHER_SUBSYSTEM(zsLib, zslib_socket));
     }
   } // namespace internal
 
-  AutoInitializedPUID::AutoInitializedPUID()
+  AutoInitializedPUID::AutoInitializedPUID() noexcept
   {
     mValue = createPUID();
   }

@@ -459,7 +459,7 @@ namespace zsLib
 }
 
 ZS_DECLARE_PROXY_WITH_DELEGATE_MESSAGE_QUEUE_OPTIONAL_BEGIN(zsLib::IPromiseDelegate)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseSettled, zsLib::PromisePtr)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseResolved, zsLib::PromisePtr)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseRejected, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseSettled, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseResolved, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseRejected, zsLib::PromisePtr)
 ZS_DECLARE_PROXY_END()

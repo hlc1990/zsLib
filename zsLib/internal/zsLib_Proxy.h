@@ -39,10 +39,22 @@
 #include <zsLib/Log.h>
 #include <zsLib/internal/zsLib_ProxyPack.h>
 
-#define ZS_LIB_NO_CONST
-#define ZS_LIB_CONST const
-
 #define ZS_INTERNAL_DECLARE_STUB_PTR(xStub) typedef std::unique_ptr< xStub > xStub##UniPtr;
+
+#define ZS_INTERNAL_PROXY_NO_DEFINITION       
+
+#define ZS_INTERNAL_PROXY_IGNORE_CHECK      if (ignoreMethodCall()) return;
+#define ZS_INTERNAL_PROXY_NO_IGNORE_CHECK   ;
+
+#define ZS_INTERNAL_PROXY_NO_CONST      ZS_INTERNAL_PROXY_NO_DEFINITION
+#define ZS_INTERNAL_PROXY_CONST         const
+
+#define ZS_INTERNAL_PROYY_NO_RETURN_KEYWORD   ZS_INTERNAL_PROXY_NO_DEFINITION
+#define ZS_INTERNAL_PROXY_RETURN_KEYWORD      return
+
+#define ZS_INTERNAL_PROXY_THROW               noexcept(false)
+#define ZS_INTERNAL_PROXY_NO_THROW            noexcept
+#define ZS_INTERNAL_PROXY_NO_THROW_DECLARE    ZS_INTERNAL_PROXY_NO_DEFINITION
 
 namespace zsLib
 {
@@ -208,162 +220,84 @@ namespace zsLib                                                                 
   };                                                                                                          \
 }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xConst, xMethod)                                              \
-    void xMethod() xConst override;                                                                           \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod)                                                \
+    xReturnType xMethod() xConst xThrow override;                                                                                                                   \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_1(xConst, xMethod,t1)                                           \
-    void xMethod(t1 v1) xConst override;                                                                      \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_1(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1)                                             \
+    xReturnType xMethod(t1 v1) xConst xThrow override;                                                                                                              \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_2(xConst, xMethod,t1,t2)                                        \
-    void xMethod(t1 v1, t2 v2) xConst override;                                                               \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_2(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2)                                          \
+    xReturnType xMethod(t1 v1, t2 v2) xConst xThrow override;                                                                                                       \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_3(xConst, xMethod,t1,t2,t3)                                     \
-    void xMethod(t1 v1,t2 v2,t3 v3) xConst override;                                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_3(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3)                                       \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3) xConst xThrow override;                                                                                                  \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_4(xConst, xMethod,t1,t2,t3,t4)                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override;                                                    \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_4(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4)                                    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst xThrow override;                                                                                            \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_5(xConst, xMethod,t1,t2,t3,t4,t5)                               \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override;                                              \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_5(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5)                                 \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst xThrow override;                                                                                      \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_6(xConst, xMethod,t1,t2,t3,t4,t5,t6)                            \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override;                                        \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_6(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6)                              \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst xThrow override;                                                                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_7(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7)                         \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override;                                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_7(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7)                           \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst xThrow override;                                                                          \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_8(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override;                            \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_8(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                        \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst xThrow override;                                                                    \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_9(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                   \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override;                      \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_9(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                     \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst xThrow override;                                                              \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_10(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override;              \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_10(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)                \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst xThrow override;                                                      \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_11(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override;          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_11(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)            \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst xThrow override;                                              \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_12(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                    \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override;            \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_12(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)        \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst xThrow override;                                      \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_13(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override;                                                                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_13(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                              \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst xThrow override;                                                                                                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_14(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override;                                                                                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_14(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                          \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst xThrow override;                                                                                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_15(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override;                                                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_15(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                      \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst xThrow override;                                                                                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_16(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                          \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override;                                                                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_16(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                  \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst xThrow override;                                                                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_17(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override;                                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_17(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                              \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst xThrow override;                                                                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_18(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override;                                                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_18(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                          \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst xThrow override;                                                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_19(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override;                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_19(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                      \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst xThrow override;                                                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_20(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                          \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override;                                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_20(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                  \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst xThrow override;                                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_21(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override;                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_21(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                              \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst xThrow override;                                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_22(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override;                  \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_22(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                          \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst xThrow override;                                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_23(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override;          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_23(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                      \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst xThrow override;                        \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_24(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override;          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_24(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                  \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst xThrow override;                \
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_25(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override;          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_25(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                              \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst xThrow override;        \
 
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_0(xConst, xMethod,r1)                                  \
-    r1 xMethod() xConst override;                                                                           \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_1(xConst, xMethod,r1,t1)                               \
-    r1 xMethod(t1 v1) xConst override;                                                                      \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_2(xConst, xMethod,r1,t1,t2)                            \
-    r1 xMethod(t1 v1, t2 v2) xConst override;                                                               \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_3(xConst, xMethod,r1,t1,t2,t3)                         \
-    r1 xMethod(t1 v1,t2 v2,t3 v3) xConst override;                                                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_4(xConst, xMethod,r1,t1,t2,t3,t4)                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override;                                                    \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_5(xConst, xMethod,r1,t1,t2,t3,t4,t5)                   \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override;                                              \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_6(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6)                \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override;                                        \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_7(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7)             \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override;                                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_8(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8)          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override;                            \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_9(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9)       \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override;                      \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_10(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override;              \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_11(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override;              \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_12(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override;          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_13(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override;                                                                                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_14(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override;                                                                                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_15(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override;                                                                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_16(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                              \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override;                                                                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_17(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override;                                                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_18(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override;                                                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_19(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override;                                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_20(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                              \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override;                                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_21(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override;                          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_22(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override;                  \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_23(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override;          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_24(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override;          \
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_25(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override;          \
 
 #define ZS_INTERNAL_DECLARE_PROXY_METHOD_0(xMethod)                                                                                                 \
     class Stub_0_##xMethod : public IMessageQueueMessage                                                                                            \
@@ -1072,291 +1006,160 @@ namespace zsLib                                                                 
   };                                                                                                          \
 }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xConst, xMethod)                                              \
-    void xMethod() xConst override {                                                                          \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod();                                                                               \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_0(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod)          \
+    xReturnType xMethod() xConst xThrow override {                                                                            \
+      xIgnoreReturn;                                                                                                          \
+      xReturnKeyword getDelegate()->xMethod();                                                                                \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_1(xConst, xMethod,t1)                                           \
-    void xMethod(t1 v1) xConst override {                                                                     \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1);                                                                             \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_1(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1)       \
+    xReturnType xMethod(t1 v1) xConst xThrow override {                                                                       \
+      xIgnoreReturn;                                                                                                          \
+      xReturnKeyword getDelegate()->xMethod(v1);                                                                              \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_2(xConst, xMethod,t1,t2)                                        \
-    void xMethod(t1 v1, t2 v2) xConst override {                                                              \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2);                                                                          \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_2(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2)    \
+    xReturnType xMethod(t1 v1, t2 v2) xConst xThrow override {                                                                \
+      xIgnoreReturn;                                                                                                          \
+      xReturnKeyword getDelegate()->xMethod(v1,v2);                                                                           \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_3(xConst, xMethod,t1,t2,t3)                                     \
-    void xMethod(t1 v1,t2 v2,t3 v3) xConst override {                                                         \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3);                                                                       \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_3(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3) \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3) xConst xThrow override {                                                           \
+      xIgnoreReturn;                                                                                                          \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3);                                                                        \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_4(xConst, xMethod,t1,t2,t3,t4)                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override {                                                   \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4);                                                                    \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_4(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4)          \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst xThrow override {                                                                 \
+      xIgnoreReturn;                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4);                                                                                 \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_5(xConst, xMethod,t1,t2,t3,t4,t5)                               \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override {                                             \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5);                                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_5(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5)       \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst xThrow override {                                                           \
+      xIgnoreReturn;                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5);                                                                              \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_6(xConst, xMethod,t1,t2,t3,t4,t5,t6)                            \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override {                                       \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6);                                                              \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_6(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6)    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst xThrow override {                                                     \
+      xIgnoreReturn;                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6);                                                                           \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_7(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7)                         \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override {                                 \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7);                                                           \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_7(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7) \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst xThrow override {                                               \
+      xIgnoreReturn;                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7);                                                                        \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_8(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8)                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override {                           \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8);                                                        \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_8(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8)      \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst xThrow override {                                                 \
+      xIgnoreReturn;                                                                                                                              \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8);                                                                             \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_9(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)                   \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override {                     \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9);                                                     \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_9(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9)   \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst xThrow override {                                           \
+      xIgnoreReturn;                                                                                                                              \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9);                                                                          \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_10(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override {             \
-      if (ignoreMethodCall()) return;                                                                         \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10);                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_10(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)      \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst xThrow override {                                           \
+      xIgnoreReturn;                                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10);                                                                              \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_11(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override {         \
-      if (ignoreMethodCall()) return;                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11);                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_11(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)  \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst xThrow override {                                   \
+      xIgnoreReturn;                                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11);                                                                          \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_12(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)                    \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override {           \
-      if (ignoreMethodCall()) return;                                                                                       \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12);                                                       \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_12(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst xThrow override {                                 \
+      xIgnoreReturn;                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12);                                                                            \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_13(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override {                                                                                         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13);                                                                                                                                         \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_13(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst xThrow override {                                                                                         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13);                                                                                                                                        \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_14(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override {                                                                                 \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14);                                                                                                                                     \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_14(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                            \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst xThrow override {                                                                                 \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14);                                                                                                                                    \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_15(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override {                                                                         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);                                                                                                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_15(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                        \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst xThrow override {                                                                         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);                                                                                                                                \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_16(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                                          \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override {                                                                 \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16);                                                                                                                             \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_16(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst xThrow override {                                                                 \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16);                                                                                                                            \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_17(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override {                                                         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17);                                                                                                                         \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_17(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst xThrow override {                                                         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17);                                                                                                                        \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_18(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override {                                                 \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18);                                                                                                                     \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_18(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                            \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst xThrow override {                                                 \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18);                                                                                                                    \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_19(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override {                                         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19);                                                                                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_19(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                        \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst xThrow override {                                         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19);                                                                                                                \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_20(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                                          \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override {                                 \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20);                                                                                                             \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_20(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst xThrow override {                                 \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20);                                                                                                            \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_21(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override {                         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21);                                                                                                         \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_21(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst xThrow override {                         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21);                                                                                                        \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_22(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override {                 \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22);                                                                                                     \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_22(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                            \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst xThrow override {                 \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22);                                                                                                    \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_23(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                              \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override {         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23);                                                                                                 \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_23(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                        \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst xThrow override {         \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23);                                                                                                \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_24(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                                  \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override {         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                                     \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24);                                                                                                     \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_24(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                    \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst xThrow override { \
+      xIgnoreReturn;                                                                                                                                                                                                            \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24);                                                                                            \
     }
 
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_25(xConst, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                                      \
-    void xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override {         \
-      if (ignoreMethodCall()) return;                                                                                                                                                                                             \
-      getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25);                                                                                                         \
-    }
-
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_0(xConst, xMethod,r1)                                  \
-    r1 xMethod() xConst override {                                                                          \
-      return getDelegate()->xMethod();                                                                      \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_1(xConst, xMethod,r1,t1)                               \
-    r1 xMethod(t1 v1) xConst override {                                                                     \
-      return getDelegate()->xMethod(v1);                                                                    \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_2(xConst, xMethod,r1,t1,t2)                            \
-    r1 xMethod(t1 v1, t2 v2) xConst override {                                                              \
-      return getDelegate()->xMethod(v1,v2);                                                                 \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_3(xConst, xMethod,r1,t1,t2,t3)                         \
-    r1 xMethod(t1 v1,t2 v2,t3 v3) xConst override {                                                         \
-      return getDelegate()->xMethod(v1,v2,v3);                                                              \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_4(xConst, xMethod,r1,t1,t2,t3,t4)                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4) xConst override {                                                   \
-      return getDelegate()->xMethod(v1,v2,v3,v4);                                                           \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_5(xConst, xMethod,r1,t1,t2,t3,t4,t5)                   \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5) xConst override {                                             \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5);                                                        \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_6(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6)                \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6) xConst override {                                       \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6);                                                     \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_7(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7)             \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7) xConst override {                                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7);                                                  \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_8(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8)          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8) xConst override {                           \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8);                                               \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_9(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9)       \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9) xConst override {                     \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9);                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_10(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10) xConst override {             \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10);                                        \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_11(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11)      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11) xConst override {             \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11);                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_12(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12)      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12) xConst override {         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12);                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_13(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)                                                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13) xConst override {                                                                                         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13);                                                                                                                                \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_14(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14)                                                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14) xConst override {                                                                                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14);                                                                                                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_15(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15)                                                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15) xConst override {                                                                         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15);                                                                                                                        \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_16(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16)                                                                              \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16) xConst override {                                                                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16);                                                                                                                    \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_17(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17)                                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17) xConst override {                                                         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17);                                                                                                                \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_18(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18)                                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18) xConst override {                                                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18);                                                                                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_19(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19)                                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19) xConst override {                                         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19);                                                                                                        \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_20(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20)                                                              \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20) xConst override {                                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20);                                                                                                    \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_21(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21)                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21) xConst override {                         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21);                                                                                                \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_22(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22)                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22) xConst override {                 \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22);                                                                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_23(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23)                                                  \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23) xConst override {         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23);                                                                                        \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_24(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24)                                                      \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24) xConst override {         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24);                                                                                            \
-    }
-
-#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_RETURN_25(xConst, xMethod,r1,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                                                          \
-    r1 xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst override {         \
-      return getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25);                                                                                                \
+#define ZS_INTERNAL_DECLARE_PROXY_METHOD_SYNC_25(xReturnKeyword, xReturnType, xIgnoreReturn, xConst, xThrow, xMethod,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25)                          \
+    xReturnType xMethod(t1 v1,t2 v2,t3 v3,t4 v4,t5 v5,t6 v6,t7 v7,t8 v8,t9 v9,t10 v10,t11 v11,t12 v12,t13 v13,t14 v14,t15 v15,t16 v16,t17 v17,t18 v18,t19 v19,t20 v20,t21 v21,t22 v22,t23 v23,t24 v24,t25 v25) xConst xThrow override {   \
+      xIgnoreReturn;                                                                                                                                                                                                                      \
+      xReturnKeyword getDelegate()->xMethod(v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25);                                                                                                  \
     }
 
 #define ZS_INTERNAL_DECLARE_PROXY_METHOD_0(xMethod)                                                                                                 \

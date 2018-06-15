@@ -85,18 +85,18 @@ namespace testingUsingGUIThread
     virtual void func1() = 0;
     virtual void func2() = 0;
     virtual void func3(zsLib::String) = 0;
-    virtual void func4(int value) = 0;
-    virtual zsLib::String func5(ULONG value1, ULONG value2) = 0;
+    virtual void func4(int value) noexcept = 0;
+    virtual zsLib::String func5(ULONG value1, ULONG value2) noexcept = 0;
   };
 }
 
 
 ZS_DECLARE_PROXY_BEGIN(testingUsingGUIThread::ITestProxyDelegate)
-ZS_DECLARE_PROXY_METHOD_0(func1)
-ZS_DECLARE_PROXY_METHOD_0(func2)
-ZS_DECLARE_PROXY_METHOD_1(func3, zsLib::String)
-ZS_DECLARE_PROXY_METHOD_SYNC_1(func4, int)
-ZS_DECLARE_PROXY_METHOD_SYNC_RETURN_2(func5, zsLib::String, ULONG, ULONG)
+ZS_DECLARE_PROXY_METHOD(func1)
+ZS_DECLARE_PROXY_METHOD(func2)
+ZS_DECLARE_PROXY_METHOD(func3, zsLib::String)
+ZS_DECLARE_PROXY_METHOD_SYNC(func4, int)
+ZS_DECLARE_PROXY_METHOD_SYNC_RETURN(func5, zsLib::String, ULONG, ULONG)
 ZS_DECLARE_PROXY_END()
 
 namespace testingUsingGUIThread
