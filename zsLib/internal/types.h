@@ -239,6 +239,20 @@ static_assert(ZS_INTERNAL_MACRO_SELECT_WITH_PROPERTY_5(ZS_INTERNAL_VERIFY_CHOICE
 #define ZS_INTERNAL_MAYBE_USED_0() 
 #endif //__cplusplus >= 201703L
 
+// https://stackoverflow.com/questions/5966594/how-can-i-use-pragma-message-so-that-the-message-points-to-the-filelineno
+
+#define ZS_INTERNAL_QUOTED_LINE_STRINGIZER( L )     #L 
+#define ZS_INTERNAL_MAKE_QUOTED_LINE_STRING( M, L ) M(L)
+#define ZS_INTERNAL_QUOTED_LINE() ZS_INTERNAL_MAKE_QUOTED_LINE_STRING( ZS_INTERNAL_QUOTED_LINE_STRINGIZER, __LINE__ )
+#define ZS_INTERNAL_FILE_LINE() __FILE__ "(" ZS_INTERNAL_QUOTED_LINE() ") : "
+
+
+#define ZS_INTERNAL_BUILD_NOTE(xFieldName, xMsg)                                                               message(ZS_INTERNAL_FILE_LINE() "\n" \
+  "------------------------------------------------------------------------------\n"                                                                \
+  "| " xFieldName " -> " xMsg "\n"                                                                                                            \
+  "------------------------------------------------------------------------------" )
+
+
 #define ZS_INTERNAL_MAYBE_USED_1(xVariable) ((void)xVariable);
 
 #define ZS_INTERNAL_MAYBE_USED(...) ZS_INTERNAL_MACRO_SELECT(ZS_INTERNAL_MAYBE_USED, __VA_ARGS__)

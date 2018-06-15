@@ -75,7 +75,7 @@ namespace testing
   interaction ITestTearAway
   {
     virtual void func1() = 0;
-    virtual void func2() const = 0;
+    virtual void func2() const noexcept = 0;
     virtual void func3(zsLib::String) = 0;
     virtual void func4(int value) = 0;
     virtual zsLib::String func5(ULONG value1, ULONG value2) = 0;
@@ -88,12 +88,12 @@ namespace testing
 
 
 ZS_DECLARE_TEAR_AWAY_BEGIN(testing::ITestTearAway, testing::MyData)
-ZS_DECLARE_TEAR_AWAY_METHOD_0(func1)
-ZS_DECLARE_TEAR_AWAY_METHOD_CONST_0(func2)
-ZS_DECLARE_TEAR_AWAY_METHOD_1(func3, zsLib::String)
-ZS_DECLARE_TEAR_AWAY_METHOD_1(func4, int)
-ZS_DECLARE_TEAR_AWAY_METHOD_RETURN_2(func5, zsLib::String, ULONG, ULONG)
-ZS_DECLARE_TEAR_AWAY_METHOD_CONST_RETURN_2(func6, zsLib::String, ULONG, ULONG)
+ZS_DECLARE_TEAR_AWAY_METHOD(func1)
+ZS_DECLARE_TEAR_AWAY_METHOD_CONST(func2)
+ZS_DECLARE_TEAR_AWAY_METHOD(func3, zsLib::String)
+ZS_DECLARE_TEAR_AWAY_METHOD(func4, int)
+ZS_DECLARE_TEAR_AWAY_METHOD_RETURN(func5, zsLib::String, ULONG, ULONG)
+ZS_DECLARE_TEAR_AWAY_METHOD_RETURN_CONST(func6, zsLib::String, ULONG, ULONG)
 ZS_DECLARE_TEAR_AWAY_END()
 
 namespace testing
@@ -119,7 +119,7 @@ namespace testing
     {
       mCheck.mCalledFunc1 = true;
     }
-    virtual void func2() const
+    virtual void func2() const noexcept
     {
       ++(mCheck.mCalledFunc2);
     }

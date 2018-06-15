@@ -128,11 +128,11 @@ namespace testingUsingGUIThread
     {
       getCheck().mCalledFunc3 = value;
     }
-    virtual void func4(int value)
+    virtual void func4(int value) noexcept
     {
       getCheck().mCalledFunc4 = value;
     }
-    virtual zsLib::String func5(ULONG value1, ULONG value2)
+    virtual zsLib::String func5(ULONG value1, ULONG value2) noexcept
     {
       return zsLib::Stringize<ULONG>(value1,16).string() + " " + zsLib::Stringize<ULONG>(value2,16).string();
     }
