@@ -235,8 +235,10 @@ static_assert(ZS_INTERNAL_MACRO_SELECT_WITH_PROPERTY_5(ZS_INTERNAL_VERIFY_CHOICE
 // https://blogs.msdn.microsoft.com/vcblog/2018/04/09/msvc-now-correctly-reports-__cplusplus/
 // NOTE: specify /Zc:__cplusplus for c++17 on MSVC
 #define ZS_INTERNAL_MAYBE_USED_0() [[maybe_unused]]
+#define ZS_INTERNAL_NO_DISCARD() [[nodiscard]]
 #else
 #define ZS_INTERNAL_MAYBE_USED_0() 
+#define ZS_INTERNAL_NO_DISCARD()
 #endif //__cplusplus >= 201703L
 
 // https://stackoverflow.com/questions/5966594/how-can-i-use-pragma-message-so-that-the-message-points-to-the-filelineno

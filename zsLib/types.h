@@ -47,6 +47,8 @@
 //#define ZS_MACRO_SELECT_WITH_PROPERTY_6(NAME, PROP1, PROP2, PROP3, PROP4, PROP5, PROP6, ...)
 
 #define ZS_MAYBE_USED(...)                                                          ZS_INTERNAL_MAYBE_USED(__VA_ARGS__)
+#define ZS_NO_DISCARD()                                                             ZS_INTERNAL_NO_DISCARD()
+
 #define ZS_ASSERT(xCondition)                                                       ZS_INTERNAL_ASSERT(xCondition)
 #define ZS_ASSERT_MESSAGE(xCondition, xMsg)                                         ZS_INTERNAL_ASSERT_MESSAGE(xCondition, xMsg)
 #define ZS_ASSERT_FAIL(xMsg)                                                        ZS_INTERNAL_ASSERT_FAIL(xMsg)
