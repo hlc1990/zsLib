@@ -40,9 +40,9 @@ namespace zsLib
   class String : public std::string {
 
   public:
-    String() noexcept = default;
-    String(const String &) = default;
-    String(String &&) noexcept = default;
+    String() noexcept;
+    String(const String &) noexcept;
+    String(String &&) noexcept;
 
     String(CSTR) noexcept;
     String(CWSTR) noexcept;

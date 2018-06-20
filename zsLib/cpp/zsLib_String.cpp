@@ -88,6 +88,18 @@ namespace zsLib
     typedef std::basic_string<char, ci_char_traits> ci_string;
   } // namespace internal
 
+  String::String() noexcept : std::string()
+  {
+  }
+
+  String::String(const String &source) noexcept  : std::string(source)
+  {  
+  }
+
+  String::String(String &&source) noexcept : std::string(std::move(source))
+  {
+  }
+
   String::String(CSTR value) noexcept : std::string(value ? value : std::string())
   {
   }
