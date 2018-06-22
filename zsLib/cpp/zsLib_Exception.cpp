@@ -148,7 +148,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  const char *Exception::what() const
+  const char *Exception::what() const noexcept
   {
     return mMessage.c_str();
   }

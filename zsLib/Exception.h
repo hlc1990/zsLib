@@ -66,7 +66,7 @@ namespace zsLib
 
     ~Exception() noexcept {}
 
-    virtual const char *what() const;
+    virtual const char *what() const noexcept;
 
     const Subsystem &subsystem() const noexcept {return mSubsystem;}
     const String &message() const noexcept {return mMessage;}
