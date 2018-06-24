@@ -68,6 +68,7 @@
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadBasic.h" />
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadPool.h" />
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingBlackberryChannels.h" />
+    <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h" />
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h" />
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h" />
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadBasic.cpp" />
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadPool.cpp" />
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingBlackberryChannels.cpp" />
+    <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.cpp" />
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp" />
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp" />
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp" />

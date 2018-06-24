@@ -31,6 +31,7 @@
 
 #include <zsLib/internal/zsLib_MessageQueueThread.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
+#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h>
@@ -158,7 +159,21 @@ namespace zsLib
     MessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
     {
 #ifdef _WIN32
+#ifdef WINUWP
+#ifdef __cplusplus_winrt
+      if (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::hasDispatcher()) {
+        return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::singleton();
+      }
+#endif //__cplusplus_winrt
+#ifdef CPPWINRT_VERSION
+      if (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher()) {
+        return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton();
+      }
+#endif //CPPWINRT_VERSION
+      return internal::MessageQueueThreadBasic::create("zsLib.backgroundThreadDispatcher");
+#else //WINUWP
       return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton();
+#endif //WINUWP
 #elif defined(__APPLE__)
       return internal::MessageQueueThreadUsingMainThreadMessageQueueForApple::singleton();
 #elif defined(__QNX__)

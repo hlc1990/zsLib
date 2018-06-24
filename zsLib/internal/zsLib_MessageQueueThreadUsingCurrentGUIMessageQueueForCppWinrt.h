@@ -31,10 +31,15 @@
 
 #pragma once
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
+#ifdef WINUWP
 
-#ifdef __cplusplus_winrt
+#ifdef __has_include
+#if __has_include(<winrt/windows.ui.core.h>)
+#include <winrt/windows.ui.core.h>
+#endif //__has_include(<winrt/windows.ui.core.h>)
+#endif //__has_include
+
+#ifdef CPPWINRT_VERSION
 
 #include <Windows.h>
 
@@ -46,13 +51,13 @@ namespace zsLib
 {
   namespace internal
   {
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP)
+    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt);
 
-    class MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP : public MessageQueueThread,
+    class MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt : public MessageQueueThread,
                                                                     public IMessageQueueNotify
     {
     public:
-      typedef Windows::UI::Core::CoreDispatcher CoreDispatcher;
+      typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
 
       struct Exceptions
       {
@@ -60,15 +65,15 @@ namespace zsLib
       };
 
     protected:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept;
-      static MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr create(CoreDispatcher ^dispatcher) noexcept;
-      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr queue) noexcept;
+      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept;
+      static MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr create(CoreDispatcher dispatcher) noexcept;
+      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr queue) noexcept;
 
     public:
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept;
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept;
 
       static MessageQueueThreadPtr singleton() noexcept;
-      static CoreDispatcher ^setupDispatcher(CoreDispatcher ^dispatcher = nullptr) noexcept;
+      static CoreDispatcher setupDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
       static bool hasDispatcher(bool ready = false) noexcept;
 
       // IMessageQueue
@@ -90,16 +95,16 @@ namespace zsLib
 
     protected:
       mutable Lock mLock;
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPWeakPtr mThisWeak;
+      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtWeakPtr mThisWeak;
 
       MessageQueuePtr mQueue;
-      CoreDispatcher ^mDispatcher;
+      CoreDispatcher mDispatcher {nullptr};
 
       std::atomic_bool mIsShutdown {};
     };
   }
 }
 
-#endif //__cplusplus_winrt
+#endif //CPPWINRT_VERSION
 
-#endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
+#endif //WINUWP
