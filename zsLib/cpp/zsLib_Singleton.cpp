@@ -42,9 +42,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark SingletonManager
-  #pragma mark
+  //
+  // SingletonManager
+  //
 
   namespace internal
   {
@@ -52,17 +52,17 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SingletonManager
-    #pragma mark
+    //
+    // SingletonManager
+    //
 
     //-------------------------------------------------------------------------
-    SingletonManager::SingletonManager()
+    SingletonManager::SingletonManager() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    SingletonManager::~SingletonManager()
+    SingletonManager::~SingletonManager() noexcept
     {
       if (0 == mDelegates.size()) return;
 
@@ -76,7 +76,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SingletonManagerPtr SingletonManager::create()
+    SingletonManagerPtr SingletonManager::create() noexcept
     {
       SingletonManagerPtr pThis(new zsLib::SingletonManager);
       pThis->mThisWeak = pThis;
@@ -84,7 +84,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SingletonManagerPtr SingletonManager::singleton()
+    SingletonManagerPtr SingletonManager::singleton() noexcept
     {
       static SingletonLazySharedPtr<zsLib::SingletonManager> singleton(SingletonManager::create());
       SingletonManagerPtr pThis = singleton.singleton();
@@ -98,7 +98,7 @@ namespace zsLib
     void SingletonManager::registerSingleton(
                                              const char *uniqueNamespacedID,
                                              ISingletonManagerDelegatePtr singleton
-                                             )
+                                             ) noexcept
     {
       SingletonManagerPtr pThis = SingletonManager::singleton();
       if (!pThis) return;
@@ -123,7 +123,7 @@ namespace zsLib
       }
     }
     //-------------------------------------------------------------------------
-    ISingletonManagerDelegatePtr SingletonManager::find(const char *uniqueNamespacedID)
+    ISingletonManagerDelegatePtr SingletonManager::find(const char *uniqueNamespacedID) noexcept
     {
       SingletonManagerPtr pThis = SingletonManager::singleton();
       if (!pThis) return ISingletonManagerDelegatePtr();
@@ -137,7 +137,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SingletonManager::reference()
+    void SingletonManager::reference() noexcept
     {
       AutoRecursiveLock lock(mLock);
       if (mCleaned) return;
@@ -146,7 +146,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SingletonManager::unreference()
+    void SingletonManager::unreference() noexcept
     {
       DelegateMap cleanDelegates;
 
@@ -154,7 +154,7 @@ namespace zsLib
         AutoRecursiveLock lock(mLock);
         if (mCleaned) return;
 
-        ZS_THROW_BAD_STATE_IF(0 == mReferences)
+        ZS_ASSERT(mReferences> 0);
         --mReferences;
         if (0 != mReferences) return;
 
@@ -180,12 +180,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SingletonManager::Initializer
-    #pragma mark
+    //
+    // SingletonManager::Initializer
+    //
 
     //-------------------------------------------------------------------------
-    SingletonManager::Initializer::Initializer()
+    SingletonManager::Initializer::Initializer() noexcept
     {
       mManager = SingletonManager::singleton();
       if (!mManager) return;
@@ -194,7 +194,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SingletonManager::Initializer::~Initializer()
+    SingletonManager::Initializer::~Initializer() noexcept
     {
       if (!mManager) return;
       mManager->unreference();
@@ -205,30 +205,30 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SingletonManager::Initializer
-    #pragma mark
+    //
+    // SingletonManager::Initializer
+    //
 
     //-------------------------------------------------------------------------
-    SingletonManager::Register::Register()
+    SingletonManager::Register::Register() noexcept
     {
       mManager = SingletonManager::singleton();
     }
 
     //-------------------------------------------------------------------------
-    SingletonManager::Register::~Register()
+    SingletonManager::Register::~Register() noexcept
     {
       mManager.reset();
     }
   }
 
   //---------------------------------------------------------------------------
-  SingletonManager::Initializer::Initializer() : internal::SingletonManager::Initializer()
+  SingletonManager::Initializer::Initializer() noexcept : internal::SingletonManager::Initializer()
   {
   }
 
   //---------------------------------------------------------------------------
-  SingletonManager::Initializer::~Initializer()
+  SingletonManager::Initializer::~Initializer() noexcept 
   {
   }
 
@@ -236,19 +236,19 @@ namespace zsLib
   SingletonManager::Register::Register(
                                        const char *uniqueNamespacedID,
                                        ISingletonManagerDelegatePtr singleton
-                                       ) : internal::SingletonManager::Register()
+                                       ) noexcept : internal::SingletonManager::Register()
   {
     if (!mManager) return;
     mManager->registerSingleton(uniqueNamespacedID, singleton);
   }
 
   //---------------------------------------------------------------------------
-  SingletonManager::Register::~Register()
+  SingletonManager::Register::~Register() noexcept
   {
   }
 
   //---------------------------------------------------------------------------
-  ISingletonManagerDelegatePtr SingletonManager::Register::find(const char *uniqueNamespacedID)
+  ISingletonManagerDelegatePtr SingletonManager::Register::find(const char *uniqueNamespacedID) noexcept
   {
     auto manager = SingletonManager::singleton();
 

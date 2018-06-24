@@ -59,11 +59,11 @@ namespace zsLib
                  Microseconds timeout,
                  bool repeat,
                  size_t maxFiringsAtOnce
-                 )
+                 ) noexcept
     {
       mDelegate = ITimerDelegateProxy::createWeak(delegate);
-      ZS_THROW_INVALID_USAGE_IF(!mDelegate);
-      ZS_THROW_INVALID_USAGE_IF(!ITimerDelegateProxy::isProxy(mDelegate)); // NOTE: the delegate passed in is not associated with a message queue
+      ZS_ASSERT(mDelegate);
+      ZS_ASSERT(ITimerDelegateProxy::isProxy(mDelegate)); // NOTE: the delegate passed in is not associated with a message queue
 
       mOnceOnly = !repeat;
       mMaxFiringsAtOnce = maxFiringsAtOnce;
@@ -76,7 +76,7 @@ namespace zsLib
     }
 
     //---------------------------------------------------------------------------
-    Timer::~Timer()
+    Timer::~Timer() noexcept
     {
       mThisWeak.reset();
       cancel();
@@ -89,7 +89,7 @@ namespace zsLib
                            Microseconds timeout,
                            bool repeat,
                            size_t maxFiringTimerAtOnce
-                           )
+                           ) noexcept
     {
       TimerPtr timer(make_shared<Timer>(make_private{}, delegate, timeout, repeat, maxFiringTimerAtOnce));
       timer->mThisWeak = timer;
@@ -106,7 +106,7 @@ namespace zsLib
     TimerPtr Timer::create(
                            ITimerDelegatePtr delegate,
                            Time timeout
-                           )
+                           ) noexcept
     {
       Time now = zsLib::now();
       if (now > timeout) {
@@ -117,13 +117,13 @@ namespace zsLib
     }
 
     //---------------------------------------------------------------------------
-    PUID Timer::getID() const
+    PUID Timer::getID() const noexcept
     {
       return mID; 
     }
 
     //---------------------------------------------------------------------------
-    void Timer::cancel()
+    void Timer::cancel() noexcept
     {
       {
         AutoRecursiveLock lock(mLock);
@@ -145,7 +145,7 @@ namespace zsLib
     }
 
     //---------------------------------------------------------------------------
-    void Timer::background(bool background)
+    void Timer::background(bool background) noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -156,7 +156,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Timer::tick(const Time &time, Microseconds &sleepTime)
+    bool Timer::tick(const Time &time, Microseconds &sleepTime) noexcept
     {
       AutoRecursiveLock lock(mLock);
       bool fired = false;
@@ -216,7 +216,7 @@ namespace zsLib
                             Microseconds timeout,
                             bool repeat,
                             size_t maxFiringTimerAtOnce
-                            )
+                            ) noexcept
   {
     return internal::Timer::create(delegate, timeout, repeat, maxFiringTimerAtOnce);
   }
@@ -225,7 +225,7 @@ namespace zsLib
   ITimerPtr ITimer::create(
                            ITimerDelegatePtr delegate,
                            Time timeout
-                           )
+                           ) noexcept
   {
     return internal::Timer::create(delegate, timeout);
   }

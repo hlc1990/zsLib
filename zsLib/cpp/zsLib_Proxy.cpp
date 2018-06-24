@@ -153,8 +153,10 @@ namespace zsLib
       return total;
     }
 
-    void proxyCountIncrement(int line, const char *fileName)
+    void proxyCountIncrement(ZS_MAYBE_USED() int line, ZS_MAYBE_USED() const char *fileName)
     {
+      ZS_MAYBE_USED(line);
+      ZS_MAYBE_USED(fileName);
       ++getProxyCountGlobal();
 #ifdef _DEBUG
       (ProxyTracking::singleton()).follow(line, fileName);
@@ -163,6 +165,8 @@ namespace zsLib
 
     void proxyCountDecrement(int line, const char *fileName)
     {
+      ZS_MAYBE_USED(line);
+      ZS_MAYBE_USED(fileName);
       --getProxyCountGlobal();
 #ifdef _DEBUG
       (ProxyTracking::singleton()).unfollow(line, fileName);

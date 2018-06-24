@@ -252,15 +252,15 @@
     <ClInclude Include="..\..\..\zsLib\internal\zsLib_RangeSelection.h">
       <Filter>zsLib\internal</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\zsLib\internal\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h">
+      <Filter>zsLib\internal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingBlackberryChannels.cpp">
       <Filter>zsLib\cpp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.cpp">
-      <Filter>zsLib\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp">
       <Filter>zsLib\cpp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.cpp">
@@ -420,6 +420,12 @@
       <Filter>zsLib\cpp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueAssociator.cpp">
+      <Filter>zsLib\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.cpp">
+      <Filter>zsLib\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\zsLib\cpp\zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.cpp">
       <Filter>zsLib\cpp</Filter>
     </ClCompile>
   </ItemGroup>

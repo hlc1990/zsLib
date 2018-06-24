@@ -46,8 +46,8 @@ namespace zsLib
     class Event
     {
     public:
-      Event(bool manualReset = true);
-      ~Event();
+      Event(bool manualReset = true) noexcept;
+      ~Event() noexcept;
 
       Event(const Event &) = delete;
 

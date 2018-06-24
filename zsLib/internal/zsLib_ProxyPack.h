@@ -42,7 +42,7 @@ namespace zsLib
   namespace internal
   {
     template <typename TYPE>
-    inline void ProxyPack(TYPE &member, TYPE &value)
+    inline void ProxyPack(TYPE &member, TYPE &value) noexcept
     {
 #ifdef _WIN32
       sizeof(TYPE);
@@ -51,12 +51,13 @@ namespace zsLib
     }
 
     template <typename TYPE>
-    inline void ProxyClean(TYPE &member)
+    inline void ProxyClean(ZS_MAYBE_USED() TYPE &member) noexcept
     {
+      ZS_MAYBE_USED(member);
     }
 
     template <>
-    inline void ProxyPack<CSTR>(CSTR &member, CSTR &value)
+    inline void ProxyPack<CSTR>(CSTR &member, CSTR &value) noexcept
     {
       if (value) {
         size_t length = strlen(value);
@@ -68,14 +69,14 @@ namespace zsLib
     }
 
     template <>
-    inline void ProxyClean<CSTR>(CSTR &member)
+    inline void ProxyClean<CSTR>(CSTR &member) noexcept
     {
       delete [] ((char *)member);
       member = NULL;
     }
 
     template <>
-    inline void ProxyPack<CWSTR>(CWSTR &member, CWSTR &value)
+    inline void ProxyPack<CWSTR>(CWSTR &member, CWSTR &value) noexcept
     {
       if (value) {
         size_t length = wcslen(value);
@@ -87,44 +88,44 @@ namespace zsLib
     }
 
     template <>
-    inline void ProxyClean<CWSTR>(CWSTR &member)
+    inline void ProxyClean<CWSTR>(CWSTR &member) noexcept
     {
       delete [] ((WCHAR *)member);
       member = NULL;
     }
 
     template <>
-    inline void ProxyPack<std::string>(std::string &member, std::string &value)
+    inline void ProxyPack<std::string>(std::string &member, std::string &value) noexcept
     {
       member = value.c_str();
     }
 
     template <>
-    inline void ProxyClean<std::string>(std::string &member)
+    inline void ProxyClean<std::string>(std::string &member) noexcept
     {
       member.clear();
     }
 
     template <>
-    inline void ProxyPack<std::wstring>(std::wstring &member, std::wstring &value)
+    inline void ProxyPack<std::wstring>(std::wstring &member, std::wstring &value) noexcept
     {
       member = value.c_str();
     }
 
     template <>
-    inline void ProxyClean<std::wstring>(std::wstring &member)
+    inline void ProxyClean<std::wstring>(std::wstring &member) noexcept
     {
       member.clear();
     }
 
     template <>
-    inline void ProxyPack<String>(String &member, String &value)
+    inline void ProxyPack<String>(String &member, String &value) noexcept
     {
       member = value.c_str();
     }
 
     template <>
-    inline void ProxyClean<String>(String &member)
+    inline void ProxyClean<String>(String &member) noexcept
     {
       member.clear();
     }

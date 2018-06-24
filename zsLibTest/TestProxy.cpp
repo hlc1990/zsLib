@@ -79,8 +79,8 @@ namespace testing
     virtual void func1() = 0;
     virtual void func2() = 0;
     virtual void func3(zsLib::String) = 0;
-    virtual void func4(int value) = 0;
-    virtual zsLib::String func5(ULONG value1, ULONG value2) = 0;
+    virtual void func4(int value) noexcept = 0;
+    virtual zsLib::String func5(ULONG value1, ULONG value2) noexcept = 0;
   };
 
   interaction ITestSubscriptionProxyDelegate
@@ -103,21 +103,21 @@ namespace testing
 
 
 ZS_DECLARE_PROXY_BEGIN(testing::ITestProxyDelegate)
-ZS_DECLARE_PROXY_METHOD_0(func1)
-ZS_DECLARE_PROXY_METHOD_0(func2)
-ZS_DECLARE_PROXY_METHOD_1(func3, zsLib::String)
-ZS_DECLARE_PROXY_METHOD_SYNC_1(func4, int)
-ZS_DECLARE_PROXY_METHOD_SYNC_RETURN_2(func5, zsLib::String, ULONG, ULONG)
+ZS_DECLARE_PROXY_METHOD(func1)
+ZS_DECLARE_PROXY_METHOD(func2)
+ZS_DECLARE_PROXY_METHOD(func3, zsLib::String)
+ZS_DECLARE_PROXY_METHOD_SYNC(func4, int)
+ZS_DECLARE_PROXY_METHOD_SYNC_RETURN(func5, zsLib::String, ULONG, ULONG)
 ZS_DECLARE_PROXY_END()
 
 ZS_DECLARE_PROXY_BEGIN(testing::ITestSubscriptionProxyDelegate)
-ZS_DECLARE_PROXY_METHOD_0(sub1)
-ZS_DECLARE_PROXY_METHOD_1(sub2, zsLib::String)
+ZS_DECLARE_PROXY_METHOD(sub1)
+ZS_DECLARE_PROXY_METHOD(sub2, zsLib::String)
 ZS_DECLARE_PROXY_END()
 
 ZS_DECLARE_PROXY_SUBSCRIPTIONS_BEGIN(testing::ITestSubscriptionProxyDelegate, testing::Subscription)
-ZS_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_0(sub1)
-ZS_DECLARE_PROXY_SUBSCRIPTIONS_METHOD_1(sub2, zsLib::String)
+ZS_DECLARE_PROXY_SUBSCRIPTIONS_METHOD(sub1)
+ZS_DECLARE_PROXY_SUBSCRIPTIONS_METHOD(sub2, zsLib::String)
 ZS_DECLARE_PROXY_SUBSCRIPTIONS_END()
 
 namespace testing
@@ -150,11 +150,11 @@ namespace testing
     {
       getCheck().mCalledFunc3 = value;
     }
-    virtual void func4(int value)
+    virtual void func4(int value) noexcept
     {
       getCheck().mCalledFunc4 = value;
     }
-    virtual zsLib::String func5(ULONG value1, ULONG value2)
+    virtual zsLib::String func5(ULONG value1, ULONG value2) noexcept
     {
       return zsLib::Stringize<ULONG>(value1,16).string() + " " + zsLib::Stringize<ULONG>(value2,16).string();
     }

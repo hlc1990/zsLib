@@ -79,25 +79,25 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (Forwards)
-    #pragma mark
+    //
+    // (Forwards)
+    //
 
-    static int inet_pton6(const char *src, u_char *dst);
-    static int inet_pton4(const char *src, u_char *dst);
-    static const char *inet_ntop6(const u_char *src, char *dst, size_t size);
+    static int inet_pton6(const char *src, u_char *dst) noexcept;
+    static int inet_pton4(const char *src, u_char *dst) noexcept;
+    static const char *inet_ntop6(const u_char *src, char *dst, size_t size) noexcept;
   } // namespace internal
 
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IPAddress
-  #pragma mark
+  //
+  // IPAddress
+  //
 
   //---------------------------------------------------------------------------
-  IPAddress::IPAddress()
+  IPAddress::IPAddress() noexcept
   {
     clear();
   }
@@ -106,7 +106,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const IPAddress &inIPAddress,
                        WORD inPort
-                       )
+                       ) noexcept
   {
     if (this == &inIPAddress)
       return;
@@ -139,7 +139,7 @@ namespace zsLib
                        BYTE y,
                        BYTE z,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     mIPAddress.dw[2] = htonl(0xFFFF);
@@ -154,7 +154,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        DWORD inIPv4Address, // host byte order
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     mIPAddress.dw[2] = htonl(0xFFFF);
@@ -166,7 +166,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const IPv6PortPair &inPortPair,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     mIPAddress = inPortPair.mIPAddress;
     mPort = inPortPair.mPort;
@@ -178,7 +178,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const IPv6Address &inIPAddress,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     mIPAddress = inIPAddress;
     mPort = htons(inPort);
@@ -188,7 +188,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const in_addr &inIPAddress,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     IPAddress ipv4((DWORD)ntohl(inIPAddress.s_addr), inPort);
@@ -199,7 +199,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const sockaddr_in &inIPAddress,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     IPAddress ipv4((DWORD)ntohl(inIPAddress.sin_addr.s_addr), 0 == inPort ? (ntohs(inIPAddress.sin_port)) : inPort);
@@ -210,7 +210,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const in6_addr &inIPAddress,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     mIPAddress = reinterpret_cast<const IPv6Address &>(inIPAddress);
@@ -221,7 +221,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const sockaddr_in6 &inIPAddress,
                        WORD inPort          // host byte order
-                       )
+                       ) noexcept
   {
     clear();
     mIPAddress = reinterpret_cast<const IPv6Address &>(inIPAddress.sin6_addr);
@@ -237,7 +237,7 @@ namespace zsLib
   IPAddress::IPAddress(
                        const String &inString,
                        WORD inPort
-                       ) throw (IPAddress::Exceptions::ParseError)
+                       ) noexcept(false)
   {
     clear();
 
@@ -354,7 +354,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isConvertable(const String &inString)
+  bool IPAddress::isConvertable(const String &inString) noexcept
   {
     WORD bogusPort = 0;
 
@@ -434,28 +434,28 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::anyV4()
+  IPAddress IPAddress::anyV4() noexcept
   {
     static IPAddress any((DWORD)0, 0);
     return any;
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::anyV6()
+  IPAddress IPAddress::anyV6() noexcept
   {
     static IPAddress any;
     return any;
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::loopbackV4()
+  IPAddress IPAddress::loopbackV4() noexcept
   {
     static IPAddress loopback(127, 0, 0, 1);
     return loopback;
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::loopbackV6()
+  IPAddress IPAddress::loopbackV6() noexcept
   {
     static IPAddress loopback;
     loopback.mIPAddress.dw[3] = htonl(1);
@@ -463,7 +463,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IPAddress &IPAddress::operator=(const IPAddress &inIPAddress)
+  IPAddress &IPAddress::operator=(const IPAddress &inIPAddress) noexcept
   {
     mIPAddress = inIPAddress.mIPAddress;
     mPort = inIPAddress.mPort;
@@ -473,7 +473,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IPAddress &IPAddress::operator=(const IPv6PortPair &inPortPair)
+  IPAddress &IPAddress::operator=(const IPv6PortPair &inPortPair) noexcept
   {
     mIPAddress = inPortPair.mIPAddress;
     mPort = inPortPair.mPort;
@@ -482,7 +482,7 @@ namespace zsLib
     return *this;
   }
 
-  bool IPAddress::operator==(const IPAddress &inIPAddress) const
+  bool IPAddress::operator==(const IPAddress &inIPAddress) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     if (0 != memcmp(&(inIPAddress.mIPAddress), &mIPAddress, size)) return false;
@@ -491,7 +491,7 @@ namespace zsLib
     return inIPAddress.mPort == mPort;
   }
 
-  bool IPAddress::operator==(const IPv6PortPair &inPortPair) const
+  bool IPAddress::operator==(const IPv6PortPair &inPortPair) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     if (0 != memcmp(&(inPortPair.mIPAddress), &mIPAddress, size)) return false;
@@ -499,19 +499,19 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator!=(const IPAddress &inIPAddress) const
+  bool IPAddress::operator!=(const IPAddress &inIPAddress) const noexcept
   {
     return !(*this == inIPAddress);
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator!=(const IPv6PortPair &inPortPair) const
+  bool IPAddress::operator!=(const IPv6PortPair &inPortPair) const noexcept
   {
     return !(*this == inPortPair);
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator<(const IPAddress &inIPAddress) const
+  bool IPAddress::operator<(const IPAddress &inIPAddress) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     int compare = memcmp(&mIPAddress, &(inIPAddress.mIPAddress), size);
@@ -525,7 +525,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator<(const IPv6PortPair &inPortPair) const
+  bool IPAddress::operator<(const IPv6PortPair &inPortPair) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     int compare = memcmp(&mIPAddress, &(inPortPair.mIPAddress), size);
@@ -534,7 +534,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator>(const IPAddress &inIPAddress) const
+  bool IPAddress::operator>(const IPAddress &inIPAddress) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     int compare = memcmp(&mIPAddress, &(inIPAddress.mIPAddress), size);
@@ -544,7 +544,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::operator>(const IPv6PortPair &inPortPair) const
+  bool IPAddress::operator>(const IPv6PortPair &inPortPair) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     int compare = memcmp(&mIPAddress, &(inPortPair.mIPAddress), size);
@@ -553,7 +553,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isEqualIgnoringIPv4Format(const IPAddress &inIPAddress) const
+  bool IPAddress::isEqualIgnoringIPv4Format(const IPAddress &inIPAddress) const noexcept
   {
     if (!isAddressEqualIgnoringIPv4Format(inIPAddress))
       return false;
@@ -563,28 +563,28 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isEqualIgnoringIPv4Format(const IPv6PortPair &inPortPair) const
+  bool IPAddress::isEqualIgnoringIPv4Format(const IPv6PortPair &inPortPair) const noexcept
   {
     if (!isAddressEqualIgnoringIPv4Format(inPortPair)) return false;
     return mPort == inPortPair.mPort;
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isAddressEqual(const IPAddress &inIPAddress) const
+  bool IPAddress::isAddressEqual(const IPAddress &inIPAddress) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     return (0 == memcmp(&(inIPAddress.mIPAddress), &mIPAddress, size));
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isAddressEqual(const IPv6PortPair &inPortPair) const
+  bool IPAddress::isAddressEqual(const IPv6PortPair &inPortPair) const noexcept
   {
     size_t size = sizeof(mIPAddress.by);
     return (0 == memcmp(&(inPortPair.mIPAddress), &mIPAddress, size));
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isAddressEqualIgnoringIPv4Format(const IPAddress &inIPAddress) const
+  bool IPAddress::isAddressEqualIgnoringIPv4Format(const IPAddress &inIPAddress) const noexcept
   {
     if (isIPv4())
     {
@@ -596,7 +596,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isAddressEqualIgnoringIPv4Format(const IPv6PortPair &inPortPair) const
+  bool IPAddress::isAddressEqualIgnoringIPv4Format(const IPv6PortPair &inPortPair) const noexcept
   {
     if (isIPv4())
     {
@@ -609,7 +609,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::clear()
+  void IPAddress::clear() noexcept
   {
     memset(&mIPAddress, 0, sizeof(mIPAddress));
     mPort = 0;
@@ -618,25 +618,25 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isEmpty() const
+  bool IPAddress::isEmpty() const noexcept
   {
     return isAddressEmpty() && isPortEmpty() && (isZoneEmpty());
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isAddressEmpty() const
+  bool IPAddress::isAddressEmpty() const noexcept
   {
     return ((0 == mIPAddress.ull[0]) && (0 == mIPAddress.ull[1]));
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isPortEmpty() const
+  bool IPAddress::isPortEmpty() const noexcept
   {
     return (0 == mPort);
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isZoneEmpty() const
+  bool IPAddress::isZoneEmpty() const noexcept
   {
     return ((0 == mScope) &&
             (mZonePostfix.isEmpty()));
@@ -644,13 +644,13 @@ namespace zsLib
 
   //---------------------------------------------------------------------------
   // conversion routines between all the IPv4 structures
-  void IPAddress::convertIPv4Mapped() throw(IPAddress::Exceptions::NotIPv4)
+  void IPAddress::convertIPv4Mapped() noexcept(false)
   {
     (*this) = static_cast<const IPAddress &>(*this).convertIPv4Mapped();
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::convertIPv4Mapped() const throw(IPAddress::Exceptions::NotIPv4)
+  IPAddress IPAddress::convertIPv4Mapped() const noexcept(false)
   {
     // convert to mapped
     IPAddress temp(getIPv4AddressAsDWORD(), ntohs(mPort));
@@ -660,13 +660,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::convertIPv4Compatible() throw(IPAddress::Exceptions::NotIPv4)
+  void IPAddress::convertIPv4Compatible() noexcept(false)
   {
     (*this) = static_cast<const IPAddress &>(*this).convertIPv4Compatible();
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::convertIPv4Compatible() const throw(IPAddress::Exceptions::NotIPv4)
+  IPAddress IPAddress::convertIPv4Compatible() const noexcept(false)
   {
     IPAddress temp;
     temp.mIPAddress.dw[3] = htonl(getIPv4AddressAsDWORD());
@@ -677,13 +677,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::convertIPv46to4() throw(IPAddress::Exceptions::NotIPv4)
+  void IPAddress::convertIPv46to4() noexcept(false)
   {
     (*this) = static_cast<const IPAddress &>(*this).convertIPv46to4();
   }
 
   //---------------------------------------------------------------------------
-  IPAddress IPAddress::convertIPv46to4() const throw(IPAddress::Exceptions::NotIPv4)
+  IPAddress IPAddress::convertIPv46to4() const noexcept(false)
   {
     if (htons(0x2002) == mIPAddress.w[0]) return *this;  // no need to convert, already an 6to4 address (this preserve all since its a 2002::/16 address)
 
@@ -705,21 +705,21 @@ namespace zsLib
   //---------------------------------------------------------------------------
   // IP V6 clear is '::' (all 128 bits zeroed)
   // IP V4 clear is 0000 0000 0000 0000 00000 FFFF 0000 0000 ( '::FFFF:0:0' )
-  bool IPAddress::isAddrAny() const
+  bool IPAddress::isAddrAny() const noexcept
   {
     if (isIPv6()) return isAddressEqual(anyV6());
     return isAddressEqualIgnoringIPv4Format(anyV4());
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isLoopback() const
+  bool IPAddress::isLoopback() const noexcept
   {
     if (isAddressEqual(loopbackV6())) return true;
     return isAddressEqualIgnoringIPv4Format(loopbackV4());
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isIPv4() const
+  bool IPAddress::isIPv4() const noexcept
   {
     if (0 == mIPAddress.ull[0]) {
       if (htonl(0xFFFF) == mIPAddress.dw[2]) return true;
@@ -743,7 +743,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isIPv6() const
+  bool IPAddress::isIPv6() const noexcept
   {
     if (isIPv4Compatible())
       return true;   // an IPv4 compatible address is also an IPv6 address - both return true
@@ -769,7 +769,7 @@ namespace zsLib
   // Link-local addresses always begin with FE80. With the 64-bit interface
   // identifier, the prefix for link-local addresses is always FE80::/64. An
   // IPv6 router never forwards link-local traffic beyond the link.
-  bool IPAddress::isLinkLocal() const
+  bool IPAddress::isLinkLocal() const noexcept
   {
     if (isIPv4())
     {
@@ -788,7 +788,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isPrivate() const
+  bool IPAddress::isPrivate() const noexcept
   {
     // see http://en.wikipedia.org/wiki/Private_network
     if (isLinkLocal())
@@ -809,55 +809,55 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isIPv4Mapped() const
+  bool IPAddress::isIPv4Mapped() const noexcept
   {
     if (htonl(0xFFFF) != mIPAddress.dw[2]) return false;
     return (0 == mIPAddress.ull[0]);
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isIPv4Compatible() const
+  bool IPAddress::isIPv4Compatible() const noexcept
   {
     return ((0 == mIPAddress.ull[0]) && (0 == mIPAddress.dw[2]));
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isIPv46to4() const
+  bool IPAddress::isIPv46to4() const noexcept
   {
     return (htons(0x2002) == mIPAddress.w[0]);
   }
 
   //---------------------------------------------------------------------------
-  bool IPAddress::isTeredoTunnel() const
+  bool IPAddress::isTeredoTunnel() const noexcept
   {
     return (htons(0x2001) == mIPAddress.w[0]);
   }
 
   //---------------------------------------------------------------------------
-  DWORD IPAddress::getIPv4AddressAsDWORD() const throw(IPAddress::Exceptions::NotIPv4)
+  DWORD IPAddress::getIPv4AddressAsDWORD() const noexcept(false)
   {
     if ((isIPv4Mapped()) || (isIPv4Compatible())) return ntohl(mIPAddress.dw[3]);
 
-    if (isIPv46to4()) return (((DWORD)ntohs(mIPAddress.w[1])) << (sizeof(u_short)*8)) | ((DWORD)ntohs(mIPAddress.w[2]));
-
-    ZS_THROW_CUSTOM(Exceptions::NotIPv4, ("Attempting to convert IP address to IPv4 when address is an IPv6 address: " + (*this).string()).c_str())
-    return 0;
+    if (!isIPv46to4()) {
+      ZS_THROW_CUSTOM(Exceptions::NotIPv4, ("Attempting to convert IP address to IPv4 when address is an IPv6 address: " + (*this).string()).c_str())
+    }
+    return (((DWORD)ntohs(mIPAddress.w[1])) << (sizeof(u_short) * 8)) | ((DWORD)ntohs(mIPAddress.w[2]));
   }
 
   //---------------------------------------------------------------------------
-  WORD IPAddress::getPort() const
+  WORD IPAddress::getPort() const noexcept
   {
     return ntohs(mPort);
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::setPort(WORD inPort)
+  void IPAddress::setPort(WORD inPort) noexcept
   {
     mPort = htons(inPort);
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::getIPv4(sockaddr_in &outAddress) const throw(IPAddress::Exceptions::NotIPv4)
+  void IPAddress::getIPv4(sockaddr_in &outAddress) const noexcept(false)
   {
     memset(&(outAddress), 0, sizeof(outAddress));
 #ifdef HAVE_SOCKADDR_IN_LEN
@@ -880,7 +880,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::getIPv6(sockaddr_in6 &outAddress) const
+  void IPAddress::getIPv6(sockaddr_in6 &outAddress) const noexcept
   {
     memset(&(outAddress), 0, sizeof(outAddress));
 #ifdef HAVE_SOCKADDR_IN_LEN
@@ -895,7 +895,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String IPAddress::string(bool inIncludePort) const
+  String IPAddress::string(bool inIncludePort) const noexcept
   {
     WORD port = getPort();
     if (!inIncludePort) port = 0;
@@ -944,7 +944,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String IPAddress::stringAsIPv6(bool inIncludePort) const
+  String IPAddress::stringAsIPv6(bool inIncludePort) const noexcept
   {
     WORD port = getPort();
     if (!inIncludePort) port = 0;
@@ -967,7 +967,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String IPAddress::getZone() const
+  String IPAddress::getZone() const noexcept
   {
     if (mZonePostfix.hasData()) return mZonePostfix;
     if (0 == mScope) return String();
@@ -975,7 +975,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IPAddress::setZone(const String &zone)
+  void IPAddress::setZone(const String &zone) noexcept
   {
     if (zone.isEmpty()) {
       mScope = 0;
@@ -1004,9 +1004,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (internal)
-    #pragma mark
+    //
+    // (internal)
+    //
 
     //-------------------------------------------------------------------------
     // taken from: http://www.sfr-fresh.com/unix/misc/dante-1.2.0.tar.gz:a/dante-1.2.0/libscompat/inet_pton.c
@@ -1023,7 +1023,7 @@ namespace zsLib
     //author:
     //  Paul Vixie, 1996.
     //
-    static int inet_pton6(const char *src, u_char *dst)
+    static int inet_pton6(const char *src, u_char *dst) noexcept
     {
       static const char xdigits_l[] = "0123456789abcdef",
       xdigits_u[] = "0123456789ABCDEF";
@@ -1119,7 +1119,7 @@ namespace zsLib
     //author:
     //  Paul Vixie, 1996.
     //
-    static int inet_pton4(const char *src, u_char *dst)
+    static int inet_pton4(const char *src, u_char *dst) noexcept
     {
       static const char digits[] = "0123456789";
       int saw_digit, octets, ch;
@@ -1144,7 +1144,7 @@ namespace zsLib
               return (0);
             saw_digit = 1;
           }
-          *tp = newTemp;
+          *tp = static_cast<u_char>(newTemp);
         } else if (ch == '.' && saw_digit) {
           if (octets == 4)
             return (0);
@@ -1180,7 +1180,7 @@ namespace zsLib
     //
 
     //-------------------------------------------------------------------------
-    static const char *inet_ntop4 (const u_char *src, char *dst, size_t size)
+    static const char *inet_ntop4 (const u_char *src, char *dst, size_t size) noexcept
     {
       char tmp[sizeof("255.255.255.255")+1];
 
@@ -1201,7 +1201,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    static const char *inet_ntop6(const u_char *src, char *dst, size_t size)
+    static const char *inet_ntop6(const u_char *src, char *dst, size_t size) noexcept
     {
       /*
        * Note that int32_t and int16_t need only be "at least" large enough

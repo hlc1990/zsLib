@@ -29,6 +29,7 @@
  
  */
 
+[special]
 namespace zs
 {
   typedef uint64 puid;

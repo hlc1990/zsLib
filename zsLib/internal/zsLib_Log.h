@@ -88,10 +88,10 @@ namespace zsLib
 
       struct EventingWriter
       {
-        EventingWriter();
+        EventingWriter() noexcept;
         EventingWriter(const EventingWriter &op2) = delete;
 
-        ~EventingWriter();
+        ~EventingWriter() noexcept;
 
         volatile InternalKeywordBitmaskType mKeywordsBitmask {0};
         volatile uint32_t mInitValue {ZSLIB_INTERNAL_LOG_EVENT_WRITER_INIT_VALUE};
@@ -107,15 +107,15 @@ namespace zsLib
       };
 
     public:
-      Log(const make_private &);
-      ~Log();
+      Log(const make_private &) noexcept;
+      ~Log() noexcept;
 
-      static void initSingleton();
+      static void initSingleton() noexcept;
 
-      static String paramize(const char *name);
+      static String paramize(const char *name) noexcept;
 
-      static bool returnFalse() { return false; }
-      static bool returnTrue() { return false; }
+      constexpr static bool returnFalse() noexcept { return false; }
+      constexpr static bool returnTrue() noexcept { return true; }
 
     protected:
       RecursiveLock mLock;
@@ -143,8 +143,8 @@ namespace zsLib
   ::zsLib::Subsystem &get##xSubsystem##Subsystem();       \
 
 #define ZS_INTERNAL_DECLARE_SUBSYSTEM(xSubsystem)         \
-  ::zsLib::Subsystem &get##xSubsystem##Subsystem();       \
-  static ::zsLib::Subsystem &getCurrentSubsystem() {      \
+  ZS_MAYBE_USED() ::zsLib::Subsystem &get##xSubsystem##Subsystem();       \
+  ZS_MAYBE_USED() static ::zsLib::Subsystem &getCurrentSubsystem() {      \
     return get##xSubsystem##Subsystem();                  \
   }
 

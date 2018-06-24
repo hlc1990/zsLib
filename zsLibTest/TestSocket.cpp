@@ -145,7 +145,7 @@ public:
 
       zsLib::IPAddress remoteIP;
       zsLib::SocketPtr socket3 = socket1->accept(remoteIP);
-      TESTING_CHECK(socket3)
+      TESTING_CHECK(nullptr != socket3)
       TESTING_CHECK(address2.isAddressEqual(remoteIP))
 
       socket3->send((BYTE *)"HELLO", sizeof("HELLO"));

@@ -57,7 +57,7 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
-    static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace zsLib
     class MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal
     {
     public:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal() :
+      MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal() noexcept :
         mRegisteredWindowClass(0),
         mHiddenWindowClassName(_T("zsLibHiddenWindowe059928c0dab4631bdaeab09d5b25847")),
         mCustomMessageName(_T("zsLibCustomMessage3bbf9fd89d067b42860cc9074d64539f")),
@@ -93,7 +93,7 @@ namespace zsLib
         ZS_THROW_BAD_STATE_IF(0 == mCustomMessage)
       }
 
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal()
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal() noexcept
       {
         if (0 != mRegisteredWindowClass)
         {
@@ -111,21 +111,21 @@ namespace zsLib
     };
 
     //-------------------------------------------------------------------------
-    static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal &getGlobal()
+    static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal &getGlobal() noexcept
     {
       static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal global;
       return global;
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton()
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton() noexcept
     {
       static SingletonLazySharedPtr<MessageQueueThreadUsingCurrentGUIMessageQueueForWindows> singleton(MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::create());
       return singleton.singleton();
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::create()
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::create() noexcept
     {
       MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr thread(new MessageQueueThreadUsingCurrentGUIMessageQueueForWindows);
       thread->mQueue = MessageQueue::create(thread);
@@ -134,7 +134,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setup()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setup() noexcept
     {
       // make sure the window message queue was created by peeking a message
       MSG msg;
@@ -158,13 +158,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() :
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept :
       mHWND(NULL)
     {
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows()
+    MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept
     {
       if (NULL != mHWND)
       {
@@ -174,45 +174,45 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::process()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::process() noexcept
     {
       mQueue->processOnlyOneMessage(); // process only one message at a time since this must be syncrhonized through the GUI message queue
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::processMessagesFromThread()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::processMessagesFromThread() noexcept
     {
       mQueue->process();
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::post(IMessageQueueMessageUniPtr message)
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       if (mIsShutdown) {
-        ZS_THROW_CUSTOM(Exceptions::MessageQueueAlreadyDeleted, "message posted to message queue after message queue was deleted.")
+        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
       }
       mQueue->post(std::move(message));
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::getTotalUnprocessedMessages() const
+    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::getTotalUnprocessedMessages() const noexcept
     {
       return mQueue->getTotalUnprocessedMessages();
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::notifyMessagePosted()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::notifyMessagePosted() noexcept
     {
       AutoLock lock(mLock);
       if (NULL == mHWND) {
-        ZS_THROW_CUSTOM(Exceptions::MessageQueueAlreadyDeleted, "message posted to message queue after message queue was deleted.")
+        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
       }
 
       ZS_THROW_BAD_STATE_IF(0 == ::PostMessage(mHWND, getGlobal().mCustomMessage, (WPARAM)0, (LPARAM)0))
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::waitForShutdown()
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::waitForShutdown() noexcept
     {
       AutoLock lock(mLock);
 
@@ -226,13 +226,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ThreadPriorities threadPriority)
+    void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::setThreadPriority(ZS_MAYBE_USED() ThreadPriorities threadPriority) noexcept
     {
+      ZS_MAYBE_USED(threadPriority);
       // no-op
     }
 
     //-------------------------------------------------------------------------
-    static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
     {
       if (getGlobal().mCustomMessage != uMsg)
         return ::DefWindowProc(hWnd, uMsg, wParam, lParam);

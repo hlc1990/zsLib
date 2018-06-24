@@ -59,25 +59,25 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Node
-      #pragma mark
+      //
+      // XML::internal::Node
+      //
 
       //-----------------------------------------------------------------------
-      Node::Node() :
+      Node::Node() noexcept :
         mUserData(NULL)
       {
       }
 
       //-----------------------------------------------------------------------
-      Node::~Node()
+      Node::~Node() noexcept
       {
       }
       
       //-----------------------------------------------------------------------
-      void Node::cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const
+      void Node::cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const noexcept
       {
-        ZS_THROW_INVALID_USAGE_IF(inSelf.get() != this)
+        ZS_ASSERT(inSelf.get() == this);
 
         NodePtr child = inSelf->getFirstChild();
         while (child)
@@ -89,39 +89,39 @@ namespace zsLib
 
     } // namespace internal
 
-    bool WalkSink::onDocumentEnter(DocumentPtr)        {return false;}
-    bool WalkSink::onDocumentExit(DocumentPtr)         {return false;}
-    bool WalkSink::onElementEnter(ElementPtr)          {return false;}
-    bool WalkSink::onElementExit(ElementPtr)           {return false;}
-    bool WalkSink::onAttribute(AttributePtr)           {return false;}
-    bool WalkSink::onText(TextPtr)                     {return false;}
-    bool WalkSink::onComment(CommentPtr)               {return false;}
-    bool WalkSink::onDeclarationEnter(DeclarationPtr)  {return false;}
-    bool WalkSink::onDeclarationExit(DeclarationPtr)   {return false;}
-    bool WalkSink::onUnknown(UnknownPtr)               {return false;}
+    bool WalkSink::onDocumentEnter(DocumentPtr) noexcept        {return false;}
+    bool WalkSink::onDocumentExit(DocumentPtr) noexcept         {return false;}
+    bool WalkSink::onElementEnter(ElementPtr) noexcept          {return false;}
+    bool WalkSink::onElementExit(ElementPtr) noexcept           {return false;}
+    bool WalkSink::onAttribute(AttributePtr) noexcept           {return false;}
+    bool WalkSink::onText(TextPtr) noexcept                     {return false;}
+    bool WalkSink::onComment(CommentPtr) noexcept               {return false;}
+    bool WalkSink::onDeclarationEnter(DeclarationPtr) noexcept  {return false;}
+    bool WalkSink::onDeclarationExit(DeclarationPtr) noexcept   {return false;}
+    bool WalkSink::onUnknown(UnknownPtr) noexcept               {return false;}
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Node
-    #pragma mark
+    //
+    // XML::Node
+    //
 
     //-------------------------------------------------------------------------
-    Node::Node() :
+    Node::Node() noexcept :
       internal::Node()
     {
     }
 
     //-------------------------------------------------------------------------
-    Node::~Node()
+    Node::~Node() noexcept
     {
       clear();
     }
 
     //-------------------------------------------------------------------------
-    DocumentPtr Node::getDocument() const
+    DocumentPtr Node::getDocument() const noexcept
     {
       NodePtr root = getRoot();
       if (root->isDocument())
@@ -131,7 +131,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    static ULONG getMaskBit(Node::NodeType::Type inNodeType)
+    static ULONG getMaskBit(Node::NodeType::Type inNodeType) noexcept
     {
       switch (inNodeType)
       {
@@ -142,13 +142,13 @@ namespace zsLib
         case Node::NodeType::Comment:       return ZS_INTERNAL_XML_FILTER_BIT_COMMENT;
         case Node::NodeType::Declaration:   return ZS_INTERNAL_XML_FILTER_BIT_DECLARATION;
         case Node::NodeType::Unknown:       return ZS_INTERNAL_XML_FILTER_BIT_UNKNOWN;
-        default:                            ZS_THROW_INVALID_USAGE("unknown XML type") break;
+        default:                            ZS_ASSERT_FAIL("unknown XML type"); break;
       }
       return 0;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::walk(WalkSink &inWalker, const FilterList *inFilterList) const
+    bool Node::walk(WalkSink &inWalker, const FilterList *inFilterList) const noexcept
     {
       // walks the tree in a non-recursive way to protect the stack from overflowing
 
@@ -287,7 +287,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Node::walk(WalkSink &inWalker, NodeType::Type inType) const
+    bool Node::walk(WalkSink &inWalker, NodeType::Type inType) const noexcept
     {
       FilterList filter;
       filter.push_back(inType);
@@ -295,13 +295,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getParent() const
+    NodePtr Node::getParent() const noexcept
     {
       return mParent.lock();
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getRoot() const
+    NodePtr Node::getRoot() const noexcept
     {
       NodePtr found = toNode();
       NodePtr parent = found->getParent();
@@ -314,19 +314,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getFirstChild() const
+    NodePtr Node::getFirstChild() const noexcept
     {
       return mFirstChild;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getLastChild() const
+    NodePtr Node::getLastChild() const noexcept
     {
       return mLastChild;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getFirstSibling() const
+    NodePtr Node::getFirstSibling() const noexcept
     {
       NodePtr parent = getParent();
       if (parent)
@@ -336,7 +336,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getLastSibling() const
+    NodePtr Node::getLastSibling() const noexcept
     {
       NodePtr parent = getParent();
       if (parent)
@@ -346,19 +346,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getPreviousSibling() const
+    NodePtr Node::getPreviousSibling() const noexcept
     {
       return mPreviousSibling;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getNextSibling() const
+    NodePtr Node::getNextSibling() const noexcept
     {
       return mNextSibling;
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getParentElement() const
+    ElementPtr Node::getParentElement() const noexcept
     {
       NodePtr found = getParent();
       while (found)
@@ -372,7 +372,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getRootElement() const
+    ElementPtr Node::getRootElement() const noexcept
     {
       ElementPtr found;
       if (isElement()) {
@@ -394,7 +394,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getFirstChildElement() const
+    ElementPtr Node::getFirstChildElement() const noexcept
     {
       NodePtr found = getFirstChild();
       while (found)
@@ -408,7 +408,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getLastChildElement() const
+    ElementPtr Node::getLastChildElement() const noexcept
     {
       NodePtr found = getLastChild();
       while (found)
@@ -422,7 +422,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getFirstSiblingElement() const
+    ElementPtr Node::getFirstSiblingElement() const noexcept
     {
       NodePtr found = getParent();
       if (found)
@@ -432,7 +432,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getLastSiblingElement() const
+    ElementPtr Node::getLastSiblingElement() const noexcept
     {
       NodePtr found = getParent();
       if (found)
@@ -442,7 +442,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getPreviousSiblingElement() const
+    ElementPtr Node::getPreviousSiblingElement() const noexcept
     {
       NodePtr found = getPreviousSibling();
       while (found)
@@ -456,7 +456,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getNextSiblingElement() const
+    ElementPtr Node::getNextSiblingElement() const noexcept
     {
       NodePtr found = getNextSibling();
       while (found)
@@ -470,7 +470,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findPreviousSiblingElement(String elementName) const
+    ElementPtr Node::findPreviousSiblingElement(String elementName) const noexcept
     {
       bool caseSensative = true;
       DocumentPtr document = getDocument();
@@ -496,7 +496,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findNextSiblingElement(String elementName) const
+    ElementPtr Node::findNextSiblingElement(String elementName) const noexcept
     {
       bool caseSensative = true;
       DocumentPtr document = getDocument();
@@ -522,7 +522,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findFirstChildElement(String elementName) const
+    ElementPtr Node::findFirstChildElement(String elementName) const noexcept
     {
       bool caseSensative = true;
       DocumentPtr document = getDocument();
@@ -548,7 +548,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findLastChildElement(String elementName) const
+    ElementPtr Node::findLastChildElement(String elementName) const noexcept
     {
       bool caseSensative = true;
       DocumentPtr document = getDocument();
@@ -574,7 +574,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getParentChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getParentChecked() const noexcept(false)
     {
       NodePtr result = getParent();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -582,7 +582,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getRootChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getRootChecked() const noexcept(false)
     {
       NodePtr result = getRoot();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -590,7 +590,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getFirstChildChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getFirstChildChecked() const noexcept(false)
     {
       NodePtr result = getFirstChild();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -598,7 +598,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getLastChildChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getLastChildChecked() const noexcept(false)
     {
       NodePtr result = getLastChild();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -606,7 +606,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getFirstSiblingChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getFirstSiblingChecked() const noexcept(false)
     {
       NodePtr result = getFirstSibling();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -614,7 +614,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getLastSiblingChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getLastSiblingChecked() const noexcept(false)
     {
       NodePtr result = getLastSibling();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -622,7 +622,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getPreviousSiblingChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getPreviousSiblingChecked() const noexcept(false)
     {
       NodePtr result = getPreviousSibling();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -630,7 +630,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::getNextSiblingChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::getNextSiblingChecked() const noexcept(false)
     {
       NodePtr result = getNextSibling();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -638,7 +638,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getParentElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getParentElementChecked() const noexcept(false)
     {
       ElementPtr result = getParentElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -646,7 +646,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getRootElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getRootElementChecked() const noexcept(false)
     {
       ElementPtr result = getRootElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -654,7 +654,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getFirstChildElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getFirstChildElementChecked() const noexcept(false)
     {
       ElementPtr result = getFirstChildElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -662,7 +662,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getLastChildElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getLastChildElementChecked() const noexcept(false)
     {
       ElementPtr result = getLastChildElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -670,7 +670,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getFirstSiblingElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getFirstSiblingElementChecked() const noexcept(false)
     {
       ElementPtr result = getFirstSiblingElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -678,7 +678,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getLastSiblingElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getLastSiblingElementChecked() const noexcept(false)
     {
       ElementPtr result = getLastSiblingElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -686,7 +686,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getPreviousSiblingElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getPreviousSiblingElementChecked() const noexcept(false)
     {
       ElementPtr result = getPreviousSiblingElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -694,7 +694,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::getNextSiblingElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::getNextSiblingElementChecked() const noexcept(false)
     {
       ElementPtr result = getNextSiblingElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -702,7 +702,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findPreviousSiblingElementChecked(String elementName) const throw(Exceptions::CheckFailed)
+    ElementPtr Node::findPreviousSiblingElementChecked(String elementName) const noexcept(false)
     {
       ElementPtr result = findPreviousSiblingElement(elementName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -710,7 +710,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findNextSiblingElementChecked(String elementName) const throw(Exceptions::CheckFailed)
+    ElementPtr Node::findNextSiblingElementChecked(String elementName) const noexcept(false)
     {
       ElementPtr result = findNextSiblingElement(elementName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -718,7 +718,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findFirstChildElementChecked(String elementName) const throw(Exceptions::CheckFailed)
+    ElementPtr Node::findFirstChildElementChecked(String elementName) const noexcept(false)
     {
       ElementPtr result = findFirstChildElement(elementName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -726,7 +726,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::findLastChildElementChecked(String elementName) const throw(Exceptions::CheckFailed)
+    ElementPtr Node::findLastChildElementChecked(String elementName) const noexcept(false)
     {
       ElementPtr result = findLastChildElement(elementName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -734,7 +734,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::orphan()
+    void Node::orphan() noexcept
     {
       NodePtr parent = getParent();
 
@@ -760,7 +760,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::adoptAsFirstChild(NodePtr inNode)
+    void Node::adoptAsFirstChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
@@ -787,7 +787,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::adoptAsLastChild(NodePtr inNode)
+    void Node::adoptAsLastChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
@@ -814,14 +814,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::adoptAsPreviousSibling(NodePtr inNode)
+    void Node::adoptAsPreviousSibling(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       NodePtr parent = mParent.lock();
 
-      ZS_THROW_INVALID_USAGE_IF(!parent)  // you cannot add as a sibling if there is no parent
+      ZS_ASSERT(parent);  // you cannot add as a sibling if there is no parent
 
       // orphan the node first
       inNode->orphan();
@@ -841,14 +841,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::adoptAsNextSibling(NodePtr inNode)
+    void Node::adoptAsNextSibling(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       NodePtr parent = mParent.lock();
 
-      ZS_THROW_INVALID_USAGE_IF(!parent)  // you cannot add as a sibling if there is no parent
+      ZS_ASSERT(parent);  // you cannot add as a sibling if there is no parent
 
       // orphan the node first
       inNode->orphan();
@@ -868,13 +868,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Node::hasChildren()
+    bool Node::hasChildren() noexcept
     {
       return (bool)getFirstChild();
     }
 
     //-------------------------------------------------------------------------
-    void Node::removeChildren()
+    void Node::removeChildren() noexcept
     {
       ULONG depth = 1;
 
@@ -921,115 +921,116 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Node::clear()
+    void Node::clear() noexcept
     {
       removeChildren();
       mUserData = NULL;
     }
 
     //-------------------------------------------------------------------------
-    void *Node::getUserData() const
+    void *Node::getUserData() const noexcept
     {
       return mUserData;
     }
 
     //-------------------------------------------------------------------------
-    void Node::setUserData(void *inData)
+    void Node::setUserData(void *inData) noexcept
     {
       mUserData = inData;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isDocument() const
+    bool Node::isDocument() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isElement() const
+    bool Node::isElement() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isAttribute() const
+    bool Node::isAttribute() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isText() const
+    bool Node::isText() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isComment() const
+    bool Node::isComment() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isDeclaration() const
+    bool Node::isDeclaration() const noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    bool Node::isUnknown() const{
+    bool Node::isUnknown() const noexcept
+    {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::toNode() const
+    NodePtr Node::toNode() const noexcept
     {
       return NodePtr();
     }
 
     //-------------------------------------------------------------------------
-    DocumentPtr Node::toDocument() const
+    DocumentPtr Node::toDocument() const noexcept
     {
       return DocumentPtr();
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::toElement() const
+    ElementPtr Node::toElement() const noexcept
     {
       return ElementPtr();
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Node::toAttribute() const
+    AttributePtr Node::toAttribute() const noexcept
     {
       return AttributePtr();
     }
 
     //-------------------------------------------------------------------------
-    TextPtr Node::toText() const
+    TextPtr Node::toText() const noexcept
     {
       return TextPtr();
     }
 
     //-------------------------------------------------------------------------
-    CommentPtr Node::toComment() const
+    CommentPtr Node::toComment() const noexcept
     {
       return CommentPtr();
     }
 
     //-------------------------------------------------------------------------
-    DeclarationPtr Node::toDeclaration() const
+    DeclarationPtr Node::toDeclaration() const noexcept
     {
       return DeclarationPtr();
     }
 
     //-------------------------------------------------------------------------
-    UnknownPtr Node::toUnknown() const
+    UnknownPtr Node::toUnknown() const noexcept
     {
       return UnknownPtr();
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Node::toNodeChecked() const throw(Exceptions::CheckFailed)
+    NodePtr Node::toNodeChecked() const noexcept(false)
     {
       NodePtr result = toNode();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1037,7 +1038,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    DocumentPtr Node::toDocumentChecked() const throw(Exceptions::CheckFailed)
+    DocumentPtr Node::toDocumentChecked() const noexcept(false)
     {
       DocumentPtr result = toDocument();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1045,7 +1046,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Node::toElementChecked() const throw(Exceptions::CheckFailed)
+    ElementPtr Node::toElementChecked() const noexcept(false)
     {
       ElementPtr result = toElement();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1053,7 +1054,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Node::toAttributeChecked() const throw(Exceptions::CheckFailed)
+    AttributePtr Node::toAttributeChecked() const noexcept(false)
     {
       AttributePtr result = toAttribute();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1061,7 +1062,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    TextPtr Node::toTextChecked() const throw(Exceptions::CheckFailed)
+    TextPtr Node::toTextChecked() const noexcept(false)
     {
       TextPtr result = toText();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1069,7 +1070,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    CommentPtr Node::toCommentChecked() const throw(Exceptions::CheckFailed)
+    CommentPtr Node::toCommentChecked() const noexcept(false)
     {
       CommentPtr result = toComment();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1077,7 +1078,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    DeclarationPtr Node::toDeclarationChecked() const throw(Exceptions::CheckFailed)
+    DeclarationPtr Node::toDeclarationChecked() const noexcept(false)
     {
       DeclarationPtr result = toDeclaration();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1085,7 +1086,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    UnknownPtr Node::toUnknownChecked() const throw(Exceptions::CheckFailed)
+    UnknownPtr Node::toUnknownChecked() const noexcept(false)
     {
       UnknownPtr result = toUnknown();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)

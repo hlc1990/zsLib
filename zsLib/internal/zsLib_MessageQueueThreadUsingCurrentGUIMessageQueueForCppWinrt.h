@@ -31,38 +31,50 @@
 
 #pragma once
 
-#ifdef __QNX__
+#ifdef WINUWP
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGBLACKBERRYCHANNELS_H_b359128a0bad4631bdaeab09d5b25847
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGBLACKBERRYCHANNELS_H_b359128a0bad4631bdaeab09d5b25847
+#ifdef __has_include
+#if __has_include(<winrt/windows.ui.core.h>)
+#include <winrt/windows.ui.core.h>
+#endif //__has_include(<winrt/windows.ui.core.h>)
+#endif //__has_include
 
-#include <zsLib/internal/zsLib_MessageQueue.h>
+#ifdef CPPWINRT_VERSION
+
+#include <Windows.h>
+
 #include <zsLib/internal/zsLib_MessageQueueThread.h>
+
 #include <zsLib/Exception.h>
 
 namespace zsLib
 {
   namespace internal
   {
-    class MessageQueueThreadUsingBlackberryChannelsWrapper;
+    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt);
 
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingBlackberryChannels)
-
-    class MessageQueueThreadUsingBlackberryChannels : public MessageQueueThread,
-                                                      public IMessageQueueNotify,
-                                                      public IQtCrossThreadNotifierDelegate
+    class MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt : public MessageQueueThread,
+                                                                    public IMessageQueueNotify
     {
-      friend class MessageQueueThreadUsingBlackberryChannelsWrapper;
+    public:
+      typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+
+      struct Exceptions
+      {
+        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
+      };
 
     protected:
-      MessageQueueThreadUsingBlackberryChannels() noexcept;
-      static MessageQueueThreadUsingBlackberryChannelsPtr create() noexcept;
-      void setup() noexcept;
+      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept;
+      static MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr create(CoreDispatcher dispatcher) noexcept;
+      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr queue) noexcept;
 
     public:
-      ~MessageQueueThreadUsingBlackberryChannels() noexcept;
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept;
 
-      static MessageQueueThreadUsingBlackberryChannelsPtr singleton() noexcept;
+      static MessageQueueThreadPtr singleton() noexcept;
+      static CoreDispatcher setupDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
+      static bool hasDispatcher(bool ready = false) noexcept;
 
       // IMessageQueue
       virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
@@ -77,21 +89,22 @@ namespace zsLib
 
       virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
 
-      // IQtCrossThreadNotifierDelegate
-      virtual void processMessageFromThread() noexcept;
-
     public:
       virtual void process() noexcept;
+      virtual void processMessagesFromThread() noexcept;
 
     protected:
       mutable Lock mLock;
+      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtWeakPtr mThisWeak;
 
-      IQtCrossThreadNotifierPtr mCrossThreadNotifier;
       MessageQueuePtr mQueue;
+      CoreDispatcher mDispatcher {nullptr};
+
+      std::atomic_bool mIsShutdown {};
     };
   }
 }
 
-#endif // ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGBLACKBERRYCHANNELS_H_b359128a0bad4631bdaeab09d5b25847
+#endif //CPPWINRT_VERSION
 
-#endif // __QNX__
+#endif //WINUWP

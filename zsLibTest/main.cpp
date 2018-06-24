@@ -3,7 +3,9 @@
 
 #include <zsLib/helpers.h>
 
-int main (int argc, char * const argv[]) {
+int main (ZS_MAYBE_USED() int argc, ZS_MAYBE_USED() char * const argv[]) {
+  ZS_MAYBE_USED(argc);
+  ZS_MAYBE_USED(argv);
 
   Testing::runAllTests();
   Testing::output();

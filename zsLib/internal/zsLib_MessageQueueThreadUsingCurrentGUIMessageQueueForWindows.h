@@ -49,38 +49,32 @@ namespace zsLib
     class MessageQueueThreadUsingCurrentGUIMessageQueueForWindows : public MessageQueueThread,
                                                                     public IMessageQueueNotify
     {
-    public:
-      struct Exceptions
-      {
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
-      };
-
     protected:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWindows();
-      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr create();
-      void setup();
+      MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept;
+      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr create() noexcept;
+      void setup() noexcept;
 
     public:
       ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows();
 
-      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr singleton();
+      static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr singleton() noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message);
+      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
 
-      virtual size_type getTotalUnprocessedMessages() const;
+      virtual size_type getTotalUnprocessedMessages() const noexcept;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted();
+      virtual void notifyMessagePosted() noexcept;
 
       // IMessageQueueThread
-      virtual void waitForShutdown();
+      virtual void waitForShutdown() noexcept;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority);
+      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
 
     public:
-      virtual void process();
-      virtual void processMessagesFromThread();
+      virtual void process() noexcept;
+      virtual void processMessagesFromThread() noexcept;
 
     protected:
       mutable Lock mLock;

@@ -54,9 +54,9 @@ namespace zsLib
             Microseconds timeout,
             bool repeat,
             size_t maxFiringTimerAtOnce
-            );
+            ) noexcept;
 
-      ~Timer();
+      ~Timer() noexcept;
 
     public:
       static TimerPtr create(
@@ -64,21 +64,21 @@ namespace zsLib
                              Microseconds timeout,
                              bool repeat,
                              size_t maxFiringTimerAtOnce
-                             );
+                             ) noexcept;
 
       static TimerPtr create(
                              ITimerDelegatePtr delegate,
                              Time timeout
-                             );
+                             ) noexcept;
 
-      PUID getID() const override;
+      PUID getID() const noexcept override;
 
-      void cancel() override;      // cancel a timer (it is no longer needed)
+      void cancel() noexcept override;      // cancel a timer (it is no longer needed)
 
-      void background(bool background = true) override;  // background the timer (will run until timer is cancelled even if reference to object is forgotten)
+      void background(bool background = true) noexcept override;  // background the timer (will run until timer is cancelled even if reference to object is forgotten)
 
     protected:
-      bool tick(const Time &time, Microseconds &sleepTime);  // returns true if should expire the timer
+      bool tick(const Time &time, Microseconds &sleepTime) noexcept;  // returns true if should expire the timer
 
     protected:
       RecursiveLock mLock;

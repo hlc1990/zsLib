@@ -40,47 +40,49 @@ namespace zsLib
   class String : public std::string {
 
   public:
-    String();
-    String(const String &);
+    String() noexcept;
+    String(const String &) noexcept;
+    String(String &&) noexcept;
 
-    String(CSTR);
-    String(CWSTR);
-    String(const std::string &);
-    String(CSTR, size_t);
-    String(CWSTR, size_t);
-    explicit String(const std::wstring &);
+    String(CSTR) noexcept;
+    String(CWSTR) noexcept;
+    String(const std::string &) noexcept;
+    String(CSTR, size_t) noexcept;
+    String(CWSTR, size_t) noexcept;
+    explicit String(const std::wstring &) noexcept;
 
-    static String copyFrom(CSTR, size_t maxCharacters);
-    static String copyFromUnicodeSafe(CSTR, size_t maxCharacters);
+    static String copyFrom(CSTR, size_t maxCharacters) noexcept;
+    static String copyFromUnicodeSafe(CSTR, size_t maxCharacters) noexcept;
 
-    std::wstring wstring() const;
+    std::wstring wstring() const noexcept;
 
-    bool isEmpty() const;
-    bool hasData() const;
-    size_t getLength() const;
+    bool isEmpty() const noexcept;
+    bool hasData() const noexcept;
+    size_t getLength() const noexcept;
 
-    operator CSTR() const;
+    operator CSTR() const noexcept;
 
-    String &operator=(const std::string &);
-    String &operator=(const std::wstring &);
-    String &operator=(const String &);
-    String &operator=(CSTR);
-    String &operator=(CWSTR);
+    String &operator=(const std::string &) noexcept;
+    String &operator=(const std::wstring &) noexcept;
+    String &operator=(const String &) noexcept;
+    String &operator=(String &&) noexcept = default;
+    String &operator=(CSTR) noexcept;
+    String &operator=(CWSTR) noexcept;
 
-    int compareNoCase(CSTR) const;
-    int compareNoCase(const String &) const;
+    int compareNoCase(CSTR) const noexcept;
+    int compareNoCase(const String &) const noexcept;
 
-    void toLower();
-    void toUpper();
+    void toLower() noexcept;
+    void toUpper() noexcept;
 
-    void trim(CSTR chars = " \t\r\n\v\f");
-    void trimLeft(CSTR chars = " \t\r\n\v\f");
-    void trimRight(CSTR chars = " \t\r\n\v\f");
+    void trim(CSTR chars = " \t\r\n\v\f") noexcept;
+    void trimLeft(CSTR chars = " \t\r\n\v\f") noexcept;
+    void trimRight(CSTR chars = " \t\r\n\v\f") noexcept;
 
-    size_t lengthUnicodeSafe() const;
-    String substrUnicodeSafe(size_t pos = 0, size_t n = std::string::npos ) const;
-    WCHAR atUnicodeSafe(size_t pos) const;
+    size_t lengthUnicodeSafe() const noexcept;
+    String substrUnicodeSafe(size_t pos = 0, size_t n = std::string::npos ) const noexcept;
+    WCHAR atUnicodeSafe(size_t pos) const noexcept(false);
 
-    void replaceAll(CSTR findStr, CSTR replaceStr, size_t totalOccurances = std::string::npos);
+    void replaceAll(CSTR findStr, CSTR replaceStr, size_t totalOccurances = std::string::npos) noexcept;
   };
 }

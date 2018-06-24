@@ -91,13 +91,13 @@ namespace zsLib
         friend class Parser;
 
       protected:
-        Node();
-        Node(const Node &) = delete;
+        Node() noexcept;
+        Node(const Node &) noexcept = delete;
 
-        void cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const;
+        void cloneChildren(const NodePtr &inSelf, NodePtr inNewObject) const noexcept;
 
       public:
-        ~Node();
+        ~Node() noexcept;
 
       protected:
         NodeWeakPtr mParent;
@@ -121,24 +121,24 @@ namespace zsLib
         Document(
                  bool inElementNameIsCaseSensative,
                  bool inAttributeNameIsCaseSensative
-                 );
+                 ) noexcept;
 
-        Document(const Document &) = delete;
+        Document(const Document &) noexcept = delete;
 
-        ~Document();
+        ~Document() noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
         size_t actualWriteJSON(
                                const GeneratorPtr &inGenerator,
                                char * &ioPos
-                               ) const;
+                               ) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       protected:
         DocumentWeakPtr mThis;
@@ -159,38 +159,38 @@ namespace zsLib
       public:
         typedef std::list<AttributePtr> AttributeList;
 
-        Element();
-        Element(const Element &) = delete;
+        Element() noexcept;
+        Element(const Element &) noexcept = delete;
 
       public:
-        ~Element();
+        ~Element() noexcept;
 
-        void parse(XML::ParserPos &ioPos);
+        void parse(XML::ParserPos &ioPos) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
         size_t actualWriteJSON(
                                const GeneratorPtr &inGenerator,
                                char * &ioPos
-                               ) const;
+                               ) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       private:
-        void cloneAttributes(ElementPtr inOriginalElement);
+        void cloneAttributes(ElementPtr inOriginalElement) noexcept;
 
-        static void actualParse(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos);
-        static void parseAttributes(ElementPtr inCurrentElement, XML::ParserPos &ioPos);
-        static bool parseTagSingleElementEndSlash(XML::ParserPos &ioPos);
-        static bool parseIsDocumentSingleElement(ElementPtr inCurrentElement, XML::ParserPos &ioPos);
-        static bool parseNewElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes);
-        static void parseEndTag(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes);
-        static void parsePopElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes);
-        static void parsePopPushes(XML::ParserPos &ioPos, ULONG &ioTotalPushes);
+        static void actualParse(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos) noexcept;
+        static void parseAttributes(ElementPtr inCurrentElement, XML::ParserPos &ioPos) noexcept;
+        static bool parseTagSingleElementEndSlash(XML::ParserPos &ioPos) noexcept;
+        static bool parseIsDocumentSingleElement(ElementPtr inCurrentElement, XML::ParserPos &ioPos) noexcept;
+        static bool parseNewElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept;
+        static void parseEndTag(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept;
+        static void parsePopElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept;
+        static void parsePopPushes(XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept;
 
       protected:
         ElementWeakPtr mThis;
@@ -208,26 +208,26 @@ namespace zsLib
       class Attribute
       {
       public:
-        ~Attribute();
+        ~Attribute() noexcept;
 
-        bool parse(XML::ParserPos &ioPos);
+        bool parse(XML::ParserPos &ioPos) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
         size_t actualWriteJSON(
                                const GeneratorPtr &inGenerator,
                                char * &ioPos
-                               ) const;
+                               ) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       protected:
-        Attribute();
-        Attribute(const Attribute &) = delete;
+        Attribute() noexcept;
+        Attribute(const Attribute &) noexcept = delete;
 
       protected:
         String mName;
@@ -245,27 +245,27 @@ namespace zsLib
       class Text
       {
       public:
-        ~Text();
+        ~Text() noexcept;
 
-        void parse(XML::ParserPos &ioPos);
+        void parse(XML::ParserPos &ioPos) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
         String getValueInFormat(
                                 UINT format,
                                 bool normalize = false,
                                 bool encode0xDCharactersInText = false
-                                ) const;
+                                ) const noexcept;
 
       protected:
-        Text();
-        Text(const Text &) = delete;
+        Text() noexcept;
+        Text(const Text &) noexcept = delete;
 
         String mValue;
         UINT mFormat;
@@ -281,20 +281,20 @@ namespace zsLib
       class Comment
       {
       public:
-        Comment();
-        Comment(const Comment &) = delete;
+        Comment() noexcept;
+        Comment(const Comment &) noexcept = delete;
 
-        ~Comment();
+        ~Comment() noexcept;
 
-        void parse(XML::ParserPos &ioPos);
+        void parse(XML::ParserPos &ioPos) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       protected:
         String mValue;
@@ -312,20 +312,20 @@ namespace zsLib
         friend class XML::Attribute;
 
       public:
-        Declaration();
-        Declaration(const Declaration &) = delete;
+        Declaration() noexcept;
+        Declaration(const Declaration &) noexcept = delete;
 
-        ~Declaration();
+        ~Declaration() noexcept;
 
-        void parse(XML::ParserPos &ioPos);
+        void parse(XML::ParserPos &ioPos) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       protected:
         DeclarationWeakPtr mThis;
@@ -341,20 +341,20 @@ namespace zsLib
       class Unknown
       {
       public:
-        Unknown();
-        Unknown(const Unknown &) = delete;
+        Unknown() noexcept;
+        Unknown(const Unknown &) noexcept = delete;
 
-        ~Unknown();
+        ~Unknown() noexcept;
 
-        void parse(XML::ParserPos &ioPos, const char *start = NULL, const char *ending = NULL);
+        void parse(XML::ParserPos &ioPos, const char *start = NULL, const char *ending = NULL) noexcept;
 
-        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const;
-        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const;
-        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const;
+        size_t getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept;
+        void writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept;
 
-        NodePtr cloneAssignParent(NodePtr inParent) const;
+        NodePtr cloneAssignParent(NodePtr inParent) const noexcept;
 
       protected:
         String mValue;
@@ -369,11 +369,11 @@ namespace zsLib
       class ParserPos
       {
       protected:
-        ParserPos();
-        ParserPos(const ParserPos &);
+        ParserPos() noexcept;
+        ParserPos(const ParserPos &) noexcept;
 
       public:
-        ~ParserPos();
+        ~ParserPos() noexcept;
 
       protected:
         ParserWeakPtr mParser;
@@ -420,8 +420,8 @@ namespace zsLib
         class AutoStack
         {
         public:
-          AutoStack(const XML::ParserPos &inPos);
-          ~AutoStack();
+          AutoStack(const XML::ParserPos &inPos) noexcept;
+          ~AutoStack() noexcept;
         private:
           ParserPtr mParser;
         };
@@ -434,46 +434,46 @@ namespace zsLib
         friend class XML::ParserPos;
 
       public:
-        Parser();
-        ~Parser();
+        Parser() noexcept;
+        ~Parser() noexcept;
 
-        void clearStack();
-        void pushPos(const XML::ParserPos &inPos);
-        XML::ParserPos popPos();
+        void clearStack() noexcept;
+        void pushPos(const XML::ParserPos &inPos) noexcept;
+        XML::ParserPos popPos() noexcept;
 
-        void addWarning(ParserWarningTypes inWarning);
-        void addWarning(ParserWarningTypes inWarning, const XML::ParserPos &inPos);
-
-      protected:
-        const NoChildrenElementList &getContainsNoChildrenElements() const {return mSingleElements;}
+        void addWarning(ParserWarningTypes inWarning) noexcept;
+        void addWarning(ParserWarningTypes inWarning, const XML::ParserPos &inPos) noexcept;
 
       protected:
-        static bool isAlpha(char inLetter);
-        static bool isDigit(char inLetter);
-        static bool isAlphaNumeric(char inLetter);
-        static bool isHexDigit(char inLetter);
+        const NoChildrenElementList &getContainsNoChildrenElements() const noexcept {return mSingleElements;}
 
-        static bool isLegalName(char inLetter, bool inFirstLetter);
+      protected:
+        static bool isAlpha(char inLetter) noexcept;
+        static bool isDigit(char inLetter) noexcept;
+        static bool isAlphaNumeric(char inLetter) noexcept;
+        static bool isHexDigit(char inLetter) noexcept;
 
-        static WCHAR findEntity(const String &inLookup);
+        static bool isLegalName(char inLetter, bool inFirstLetter) noexcept;
 
-        static bool isWhiteSpace(char inLetter);
-        static bool isWhiteSpace(const XML::ParserPos &inPos);
-        static bool skipWhiteSpace(XML::ParserPos &inPos);
+        static WCHAR findEntity(const String &inLookup) noexcept;
 
-        static bool parseAnyExceptElement(XML::ParserPos &ioPos, NodePtr parent);
+        static bool isWhiteSpace(char inLetter) noexcept;
+        static bool isWhiteSpace(const XML::ParserPos &inPos) noexcept;
+        static bool skipWhiteSpace(XML::ParserPos &inPos) noexcept;
 
-        static String parseLegalName(XML::ParserPos &inPos);
-        static bool skipMismatchedEndTag(XML::ParserPos &ioPos);
+        static bool parseAnyExceptElement(XML::ParserPos &ioPos, NodePtr parent) noexcept;
 
-        static String compressWhiteSpace(const String &inString);
+        static String parseLegalName(XML::ParserPos &inPos) noexcept;
+        static bool skipMismatchedEndTag(XML::ParserPos &ioPos) noexcept;
 
-        static NodePtr cloneAssignParent(NodePtr inNewParent, NodePtr inExistingChild);
-        static void safeAdoptAsLastChild(NodePtr inParent, NodePtr inNewChild);
+        static String compressWhiteSpace(const String &inString) noexcept;
 
-        static String parseJSONString(XML::ParserPos &ioPos);
-        static String parseJSONNumber(XML::ParserPos &ioPos);
-        bool parseSimpleJSONValue(XML::ParserPos &ioPos, String &outResult, bool &outIsQuoted);
+        static NodePtr cloneAssignParent(NodePtr inNewParent, NodePtr inExistingChild) noexcept;
+        static void safeAdoptAsLastChild(NodePtr inParent, NodePtr inNewChild) noexcept;
+
+        static String parseJSONString(XML::ParserPos &ioPos) noexcept;
+        static String parseJSONNumber(XML::ParserPos &ioPos) noexcept;
+        bool parseSimpleJSONValue(XML::ParserPos &ioPos, String &outResult, bool &outIsQuoted) noexcept;
 
       protected:
         ParserWeakPtr mThis;
@@ -499,9 +499,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark JSONStrs
-      #pragma mark
+      //
+      // JSONStrs
+      //
 
       struct JSONStrs
       {
@@ -614,25 +614,25 @@ namespace zsLib
         };
 
       public:
-        Generator(UINT writeFlags);
-        Generator(const Generator &) = delete;
+        Generator(UINT writeFlags) noexcept;
+        Generator(const Generator &) noexcept = delete;
 
-        ~Generator();
+        ~Generator() noexcept;
 
       protected:
-        static size_t getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode);
-        static void writeBuffer(const GeneratorPtr &inGenerator, NodePtr inNode, char * &ioPos);
+        static size_t getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode) noexcept;
+        static void writeBuffer(const GeneratorPtr &inGenerator, NodePtr inNode, char * &ioPos) noexcept;
 
-        static void writeBuffer(char * &ioPos, CSTR inString);
+        static void writeBuffer(char * &ioPos, CSTR inString) noexcept;
 
-        JSONStrs &jsonStrs() const {return mStrs;}
+        JSONStrs &jsonStrs() const noexcept {return mStrs;}
 
-        size_t indent(char * &ioPos) const;                 // output 1 indent length (based on depth)
-        size_t copy(char * &ioPos, CSTR inString) const;    // non-interpreted copy
-        size_t fill(char * &ioPos, CSTR inString) const;    // interpreted output
+        size_t indent(char * &ioPos) const noexcept;                 // output 1 indent length (based on depth)
+        size_t copy(char * &ioPos, CSTR inString) const noexcept;    // non-interpreted copy
+        size_t fill(char * &ioPos, CSTR inString) const noexcept;    // interpreted output
 
-        void plusDepth() const  {++mDepth;}
-        void minusDepth() const {--mDepth;}
+        void plusDepth() const noexcept {++mDepth;}
+        void minusDepth() const noexcept {--mDepth;}
 
         void getJSONEncodingMode(
                                  const ElementPtr &el,
@@ -641,7 +641,7 @@ namespace zsLib
                                  GeneratorJSONELementArrayPositions &outPositionIfApplicable,
                                  GeneratorJSONTextModes &outTextModeIfApplicable,
                                  bool &outNextInList
-                                 ) const;
+                                 ) const noexcept;
 
       protected:
         GeneratorWeakPtr mThis;

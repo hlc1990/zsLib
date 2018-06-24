@@ -51,12 +51,12 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::intenral::ParserWarning
-      #pragma mark
+      //
+      // XML::intenral::ParserWarning
+      //
 
       //-----------------------------------------------------------------------
-      static CSTR convertToString(ParserWarningTypes inWarningType)
+      static CSTR convertToString(ParserWarningTypes inWarningType) noexcept
       {
         switch (inWarningType)
         {
@@ -95,7 +95,7 @@ namespace zsLib
           case ParserWarningType_UnexpectedComma:                   return "Parser did not expect a \",\" comma";
           case ParserWarningType_ParserStuck:                       return "Parser stuck at same location and unable to continue";
         }
-        ZS_THROW_INVALID_USAGE("could not find string for warning type")
+        ZS_ASSERT_FAIL("could not find string for warning type");
         return "";
       }
 
@@ -105,16 +105,16 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::ParserWarning
-    #pragma mark
+    //
+    // XML::ParserWarning
+    //
 
     //-------------------------------------------------------------------------
     ParserWarning::ParserWarning(
                                  ParserWarningTypes inWarningType,
                                  const XML::internal::Parser::ParserStack &inStack
-                                 ) :
-    mWarningType(inWarningType)
+                                 ) noexcept :
+      mWarningType(inWarningType)
     {
       ULONG lastRow = 0;
       ULONG lastColumn = 0;
@@ -145,19 +145,19 @@ namespace zsLib
     }
     
     //-------------------------------------------------------------------------
-    ParserWarning::ParserWarning(const ParserWarning &source) :
+    ParserWarning::ParserWarning(const ParserWarning &source) noexcept :
       mWarningType(source.mWarningType),
       mStack(source.mStack)
     {
     }
 
     //-------------------------------------------------------------------------
-    ParserWarning::~ParserWarning()
+    ParserWarning::~ParserWarning() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    String ParserWarning::getAsString(bool inIncludeEntireStack) const
+    String ParserWarning::getAsString(bool inIncludeEntireStack) const noexcept
     {
       // Some issue @ row=1 column=2: xml text
 

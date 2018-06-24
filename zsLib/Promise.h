@@ -47,7 +47,7 @@ namespace zsLib
   template <class Closure>
   interaction IPromiseClosureDelegate : public IPromiseDelegate
   {
-    explicit IPromiseClosureDelegate(const Closure &closure) : mClosure(closure) {}
+    explicit IPromiseClosureDelegate(const Closure &closure) noexcept : mClosure(closure) {}
 
     virtual void onPromiseSettled(PromisePtr promise) { mClosure(); }
     virtual void onPromiseResolved(PromisePtr promise) {}
@@ -62,7 +62,7 @@ namespace zsLib
     explicit IPromiseClosureResolveAndRejectDelegate(
                                                      const ClosureResolve &closureResolve,
                                                      const ClosureResolve &closureReject
-                                                     ) :
+                                                     ) noexcept :
       mClosureResolve(closureResolve),
       mClosureReject(closureReject)
     {}
@@ -90,104 +90,104 @@ namespace zsLib
     Promise(
             const make_private &,
             IMessageQueuePtr queue
-            );
+            ) noexcept;
     Promise(
             const make_private &,
             const std::list<PromisePtr> &promises,
             IMessageQueuePtr queue
-            );
+            ) noexcept;
 
   public:
-    ~Promise();
+    ~Promise() noexcept;
 
-    static PromisePtr create(IMessageQueuePtr queue = IMessageQueuePtr());
+    static PromisePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) noexcept;
     static PromisePtr all(
                           const PromiseList &promises,
                           IMessageQueuePtr queue = IMessageQueuePtr()
-                          );
+                          ) noexcept;
     static PromisePtr allSettled(
                                  const PromiseList &promises,
                                  IMessageQueuePtr queue = IMessageQueuePtr()
-                                 );
+                                 ) noexcept;
     static PromisePtr race(
                            const PromiseList &promises,
                            IMessageQueuePtr queue = IMessageQueuePtr()
-                           );
+                           ) noexcept;
     static PromisePtr broadcast(
                                 const PromiseList &promises,
                                 IMessageQueuePtr queue = IMessageQueuePtr()
-                                );
+                                ) noexcept;
     static PromisePtr broadcast(
                                 const PromiseWeakList &promises,
                                 IMessageQueuePtr queue = IMessageQueuePtr()
-                                );
+                                ) noexcept;
 
-    static PromisePtr createResolved(IMessageQueuePtr queue) {return Promise::createResolved(AnyPtr(), queue);}
+    static PromisePtr createResolved(IMessageQueuePtr queue) noexcept {return Promise::createResolved(AnyPtr(), queue);}
     static PromisePtr createResolved(
                                      AnyPtr value = AnyPtr(),
                                      IMessageQueuePtr queue = IMessageQueuePtr()
-                                     );
-    static PromisePtr createRejected(IMessageQueuePtr queue) {return Promise::createRejected(AnyPtr(), queue);}
+                                     ) noexcept;
+    static PromisePtr createRejected(IMessageQueuePtr queue) noexcept {return Promise::createRejected(AnyPtr(), queue);}
     static PromisePtr createRejected(
                                      AnyPtr reason = AnyPtr(),
                                      IMessageQueuePtr queue = IMessageQueuePtr()
-                                     );
+                                     ) noexcept;
 
-    PUID getID() const {return mID;}
+    PUID getID() const noexcept {return mID;}
 
-    void resolve(AnyPtr value = AnyPtr());
-    void reject(AnyPtr reason = AnyPtr());
+    void resolve(AnyPtr value = AnyPtr()) noexcept;
+    void reject(AnyPtr reason = AnyPtr()) noexcept;
 
     static void resolveAll(
                            const PromiseList &promises,
                            AnyPtr value = AnyPtr()
-                           );
+                           ) noexcept;
     static void resolveAll(
                            const PromiseWeakList &promises,
                            AnyPtr value = AnyPtr()
-                           );
+                           ) noexcept;
     static void rejectAll(
                           const PromiseList &promises,
                           AnyPtr reason = AnyPtr()
-                          );
+                          ) noexcept;
     static void rejectAll(
                           const PromiseWeakList &promises,
                           AnyPtr reason = AnyPtr()
-                          );
+                          ) noexcept;
 
-    void then(IPromiseDelegatePtr delegate);
-    void thenWeak(IPromiseDelegatePtr delegate);
+    void then(IPromiseDelegatePtr delegate) noexcept;
+    void thenWeak(IPromiseDelegatePtr delegate) noexcept;
     template <class Closure>
-    void thenClosure(const Closure &closure)  { then(std::make_shared< IPromiseClosureDelegate<Closure> >(closure)); }
+    void thenClosure(const Closure &closure) noexcept             { then(std::make_shared< IPromiseClosureDelegate<Closure> >(closure)); }
     template <class ClosureResolve, class ClosureReject>
     void thenClosures(
                       const ClosureResolve &closureResolve,
                       const ClosureReject &closureReject
-                      )                       { then(std::make_shared< IPromiseClosureResolveAndRejectDelegate<ClosureResolve, ClosureReject> >(closureResolve, closureReject)); }
+                      ) noexcept                                  { then(std::make_shared< IPromiseClosureResolveAndRejectDelegate<ClosureResolve, ClosureReject> >(closureResolve, closureReject)); }
 
-    bool isSettled() const;
-    bool isResolved() const;
-    bool isRejected() const;
+    bool isSettled() const noexcept;
+    bool isResolved() const noexcept;
+    bool isRejected() const noexcept;
 
-    void background();
+    void background() noexcept;
 
-    const std::list<PromisePtr> &promises() const {return mPromises;}
-
-    template <typename data_type>
-    std::shared_ptr<data_type> value() const {return ZS_DYNAMIC_PTR_CAST(data_type, mValue);}
+    const std::list<PromisePtr> &promises() const noexcept        {return mPromises;}
 
     template <typename data_type>
-    std::shared_ptr<data_type> reason() const {return ZS_DYNAMIC_PTR_CAST(data_type, mReason);}
+    std::shared_ptr<data_type> value() const noexcept             {return ZS_DYNAMIC_PTR_CAST(data_type, mValue);}
 
     template <typename data_type>
-    std::shared_ptr<data_type> userData() const {return ZS_DYNAMIC_PTR_CAST(data_type, mUserData);}
-
-    void setUserData(AnyPtr userData) {mUserData = userData;}
+    std::shared_ptr<data_type> reason() const noexcept            {return ZS_DYNAMIC_PTR_CAST(data_type, mReason);}
 
     template <typename data_type>
-    std::shared_ptr<data_type> referenceHolder() const {return ZS_DYNAMIC_PTR_CAST(data_type, mReferenceHolder);}
+    std::shared_ptr<data_type> userData() const noexcept          {return ZS_DYNAMIC_PTR_CAST(data_type, mUserData);}
 
-    void setReferenceHolder(AnyPtr referenceHolder) {mReferenceHolder = referenceHolder;}
+    void setUserData(AnyPtr userData) noexcept                    {mUserData = userData;}
+
+    template <typename data_type>
+    std::shared_ptr<data_type> referenceHolder() const noexcept   {return ZS_DYNAMIC_PTR_CAST(data_type, mReferenceHolder);}
+
+    void setReferenceHolder(AnyPtr referenceHolder) noexcept      {mReferenceHolder = referenceHolder;}
 
   protected:
     void onPromiseSettled(PromisePtr promise) override;
@@ -219,16 +219,16 @@ namespace zsLib
     PromiseWith(
                 const make_private &,
                 IMessageQueuePtr queue = IMessageQueuePtr()
-                ) : Promise(make_private {}, queue) {}
+                ) noexcept : Promise(make_private {}, queue) {}
 
   public:
-    static PromiseWithTypePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) {
+    static PromiseWithTypePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) noexcept {
       PromiseWithTypePtr pThis(make_shared<PromiseWith>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       return pThis;
     }
 
-    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) {
+    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) noexcept {
       if (!genericPromise) return PromiseWithTypePtr();
 
       PromiseList promises;
@@ -240,30 +240,30 @@ namespace zsLib
       return pThis;
     }
 
-    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
+    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) noexcept {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
     static PromiseWithTypePtr createResolved(
                                              UseDataTypePtr value = UseDataTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(make_shared<PromiseWith>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->resolve(value);
       return pThis;
     }
-    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
+    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) noexcept {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
     static PromiseWithTypePtr createRejected(
                                              UseReasonTypePtr reason = UseReasonTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(make_shared<PromiseWith>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->reject(reason);
       return pThis;
     }
 
-    UseDataTypePtr value() const {return Promise::value<DataType>();}
-    UseReasonTypePtr reason() const {return Promise::reason<UseReasonType>();}
-    UseUserTypePtr userData() const {return Promise::userData<UseUserType>();}
+    UseDataTypePtr value() const noexcept {return Promise::value<DataType>();}
+    UseReasonTypePtr reason() const noexcept {return Promise::reason<UseReasonType>();}
+    UseUserTypePtr userData() const noexcept {return Promise::userData<UseUserType>();}
   };
 
   template <typename DataType, typename ReasonType = zsLib::Any, typename UserType = zsLib::Any>
@@ -302,7 +302,7 @@ namespace zsLib
     PromiseWithHolder(
                       const make_private &,
                       IMessageQueuePtr queue = IMessageQueuePtr()
-                      ) : Promise(make_private {}, queue) {}
+                      ) noexcept : Promise(make_private {}, queue) {}
 
   public:
     static PromiseWithTypePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) {
@@ -311,7 +311,7 @@ namespace zsLib
       return pThis;
     }
 
-    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) {
+    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) noexcept {
       if (!genericPromise) return PromiseWithTypePtr();
 
       PromiseList promises;
@@ -323,34 +323,34 @@ namespace zsLib
       return pThis;
     }
 
-    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
+    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) noexcept {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
     static PromiseWithTypePtr createResolved(
                                              UseDataTypePtr value = UseDataTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(std::make_shared<PromiseWithType>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->resolve(value);
       return pThis;
     }
-    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
+    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) noexcept {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
     static PromiseWithTypePtr createRejected(
                                              UseReasonTypePtr reason = UseReasonTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(std::make_shared<PromiseWithType>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->reject(reason);
       return pThis;
     }
 
-    void resolve(UseDataTypePtr value = UseDataTypePtr()) { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
-    void reject(UseReasonTypePtr reason = UseReasonTypePtr()) { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
-    void setUserData(UseUserTypePtr userData) { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
+    void resolve(UseDataTypePtr value = UseDataTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
+    void reject(UseReasonTypePtr reason = UseReasonTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
+    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
 
-    UseDataTypePtr value() const { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
-    UseReasonTypePtr reason() const { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
-    UseUserTypePtr userData() const { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
+    UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
+    UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
+    UseUserTypePtr userData() const noexcept { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
   };
 
 
@@ -384,16 +384,16 @@ namespace zsLib
     PromiseWithHolderPtr(
                          const make_private &,
                          IMessageQueuePtr queue = IMessageQueuePtr()
-                         ) : Promise(make_private {}, queue) {}
+                         ) noexcept : Promise(make_private {}, queue) {}
 
   public:
-    static PromiseWithTypePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) {
+    static PromiseWithTypePtr create(IMessageQueuePtr queue = IMessageQueuePtr()) noexcept {
       PromiseWithTypePtr pThis(std::make_shared<PromiseWithType>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       return pThis;
     }
 
-    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) {
+    static PromiseWithTypePtr createFrom(PromisePtr genericPromise) noexcept {
       if (!genericPromise) return PromiseWithTypePtr();
 
       PromiseList promises;
@@ -405,34 +405,34 @@ namespace zsLib
       return pThis;
     }
 
-    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
+    static PromiseWithTypePtr createResolved(IMessageQueuePtr queue) noexcept {return PromiseWithType::createResolved(UseDataTypePtr(), queue);}
     static PromiseWithTypePtr createResolved(
                                              UseDataTypePtr value = UseDataTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(std::make_shared<PromiseWithType>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->resolve(value);
       return pThis;
     }
-    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
+    static PromiseWithTypePtr createRejected(IMessageQueuePtr queue) noexcept {return PromiseWithType::createRejected(UseReasonTypePtr(), queue);}
     static PromiseWithTypePtr createRejected(
                                              UseReasonTypePtr reason = UseReasonTypePtr(),
                                              IMessageQueuePtr queue = IMessageQueuePtr()
-                                             ) {
+                                             ) noexcept {
       PromiseWithTypePtr pThis(std::make_shared<PromiseWithType>(make_private{}, queue));
       pThis->mThisWeak = pThis;
       pThis->reject(reason);
       return pThis;
     }
 
-    void resolve(UseDataTypePtr value = UseDataTypePtr()) { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
-    void reject(UseReasonTypePtr reason = UseReasonTypePtr()) { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
-    void setUserData(UseUserTypePtr userData) { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
+    void resolve(UseDataTypePtr value = UseDataTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
+    void reject(UseReasonTypePtr reason = UseReasonTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
+    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
 
-    UseDataTypePtr value() const { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
-    UseReasonTypePtr reason() const { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
-    UseUserTypePtr userData() const { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
+    UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
+    UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
+    UseUserTypePtr userData() const noexcept { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
   };
 
 
@@ -459,7 +459,7 @@ namespace zsLib
 }
 
 ZS_DECLARE_PROXY_WITH_DELEGATE_MESSAGE_QUEUE_OPTIONAL_BEGIN(zsLib::IPromiseDelegate)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseSettled, zsLib::PromisePtr)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseResolved, zsLib::PromisePtr)
-ZS_DECLARE_PROXY_METHOD_1(onPromiseRejected, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseSettled, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseResolved, zsLib::PromisePtr)
+ZS_DECLARE_PROXY_METHOD(onPromiseRejected, zsLib::PromisePtr)
 ZS_DECLARE_PROXY_END()

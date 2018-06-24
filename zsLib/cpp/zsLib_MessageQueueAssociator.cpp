@@ -52,13 +52,13 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
-  MessageQueueAssociator::MessageQueueAssociator(IMessageQueuePtr queue) :
+  MessageQueueAssociator::MessageQueueAssociator(IMessageQueuePtr queue) noexcept :
     mQueue(queue)
   {
   }
 
   //---------------------------------------------------------------------------
-  MessageQueueAssociator::~MessageQueueAssociator()
+  MessageQueueAssociator::~MessageQueueAssociator() noexcept
   {
   }
 

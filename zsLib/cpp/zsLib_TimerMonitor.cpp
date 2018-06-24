@@ -53,28 +53,28 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark TimerMonitorSettingsDefaults
-    #pragma mark
+    //
+    // TimerMonitorSettingsDefaults
+    //
 
     class TimerMonitorSettingsDefaults : public ISettingsApplyDefaultsDelegate
     {
     public:
       //-----------------------------------------------------------------------
-      ~TimerMonitorSettingsDefaults()
+      ~TimerMonitorSettingsDefaults() noexcept
       {
         ISettings::removeDefaults(*this);
       }
 
       //-----------------------------------------------------------------------
-      static TimerMonitorSettingsDefaultsPtr singleton()
+      static TimerMonitorSettingsDefaultsPtr singleton() noexcept
       {
         static SingletonLazySharedPtr<TimerMonitorSettingsDefaults> singleton(create());
         return singleton.singleton();
       }
 
       //-----------------------------------------------------------------------
-      static TimerMonitorSettingsDefaultsPtr create()
+      static TimerMonitorSettingsDefaultsPtr create() noexcept
       {
         auto pThis(make_shared<TimerMonitorSettingsDefaults>());
         ISettings::installDefaults(pThis);
@@ -82,20 +82,20 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() noexcept override
       {
         ISettings::setString(ZSLIB_SETTING_TIMER_MONITOR_THREAD_PRIORITY, "normal");
       }
     };
 
     //-------------------------------------------------------------------------
-    void installTimerMonitorSettingsDefaults()
+    void installTimerMonitorSettingsDefaults() noexcept
     {
       TimerMonitorSettingsDefaults::singleton();
     }
 
     //-------------------------------------------------------------------------
-    TimerMonitor::TimerMonitor() :
+    TimerMonitor::TimerMonitor() noexcept :
       mShouldShutdown(false)
     {
 #ifdef __QNX__
@@ -109,12 +109,12 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::init()
+    void TimerMonitor::init() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    TimerMonitor::~TimerMonitor()
+    TimerMonitor::~TimerMonitor() noexcept
     {
       mThisWeak.reset();
       ZS_LOG_DETAIL(log("destroyed"))
@@ -127,7 +127,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    TimerMonitorPtr TimerMonitor::singleton()
+    TimerMonitorPtr TimerMonitor::singleton() noexcept
     {
       static SingletonLazySharedPtr<TimerMonitor> singleton(TimerMonitor::create());
       TimerMonitorPtr result = singleton.singleton();
@@ -140,7 +140,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    TimerMonitorPtr TimerMonitor::create()
+    TimerMonitorPtr TimerMonitor::create() noexcept
     {
       TimerMonitorPtr pThis(new TimerMonitor);
       pThis->mThisWeak = pThis;
@@ -149,7 +149,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::monitorBegin(TimerPtr timer)
+    void TimerMonitor::monitorBegin(TimerPtr timer) noexcept 
     {
       AutoRecursiveLock lock(mLock);
 
@@ -164,7 +164,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::monitorEnd(Timer &timer)
+    void TimerMonitor::monitorEnd(Timer &timer) noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -179,7 +179,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::operator()()
+    void TimerMonitor::operator()() noexcept
     {
       bool shouldShutdown = false;
 
@@ -221,13 +221,13 @@ namespace zsLib
         }
 
         rc = pthread_mutex_lock(&mMutex);
-        ZS_THROW_BAD_STATE_IF(0 != rc)
+        ZS_ASSERT(0 == rc);
 
         rc = pthread_cond_timedwait(&mCondition, &mMutex, &ts);
-        ZS_THROW_BAD_STATE_IF((0 != rc) && (ETIMEDOUT != rc))
+        ZS_ASSERT((0 == rc) || (ETIMEDOUT == rc));
 
         rc = pthread_mutex_unlock(&mMutex);
-        ZS_THROW_BAD_STATE_IF(0 != rc)
+        ZS_ASSERT(0 == rc);
 #else
         std::unique_lock<std::mutex> flagLock(mFlagLock);
         mFlagNotify.wait_for(flagLock, duration);
@@ -259,13 +259,13 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void TimerMonitor::notifySingletonCleanup()
+    void TimerMonitor::notifySingletonCleanup() noexcept
     {
       cancel();
     }
 
     //-----------------------------------------------------------------------
-    zsLib::Log::Params TimerMonitor::log(const char *message) const
+    zsLib::Log::Params TimerMonitor::log(const char *message) const noexcept
     {
       ElementPtr objectEl = Element::create("TimerMonitor");
 
@@ -281,13 +281,13 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    zsLib::Log::Params TimerMonitor::slog(const char *message)
+    zsLib::Log::Params TimerMonitor::slog(const char *message) noexcept
     {
       return zsLib::Log::Params(message, "TimerMonitor");
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::cancel()
+    void TimerMonitor::cancel() noexcept
     {
       ThreadPtr thread;
       {
@@ -309,7 +309,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Microseconds TimerMonitor::fireTimers()
+    Microseconds TimerMonitor::fireTimers() noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -335,7 +335,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void TimerMonitor::wakeUp()
+    void TimerMonitor::wakeUp() noexcept
     {
 #ifdef __QNX__
       int rc = pthread_mutex_lock(&mMutex);

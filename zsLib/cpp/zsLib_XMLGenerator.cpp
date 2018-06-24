@@ -54,9 +54,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark JSONStrs
-      #pragma mark
+      //
+      // JSONStrs
+      //
 
       static JSONStrs gJSONPretty =
       {
@@ -156,20 +156,20 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark (helpers)
-      #pragma mark
+      //
+      // (helpers)
+      //
 
       //-----------------------------------------------------------------------
 #if 0
-      static Log::Params slog(const char *message)
+      static Log::Params slog(const char *message) noexcept
       {
         return Log::Params(message, "Generator");
       }
 #endif //0
 
       //-------------------------------------------------------------------------
-      static bool objectObjectCheck(const NodePtr &onlyThisNode)
+      static bool objectObjectCheck(const NodePtr &onlyThisNode) noexcept
       {
         if (onlyThisNode->isDocument()) {
           ElementPtr el = onlyThisNode->toDocument()->getFirstChildElement();
@@ -191,12 +191,12 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Generator
-      #pragma mark
+      //
+      // XML::internal::Generator
+      //
 
       //-----------------------------------------------------------------------
-      Generator::Generator(UINT writeFlags) :
+      Generator::Generator(UINT writeFlags) noexcept :
         mWriteFlags(writeFlags),
         mJSONForcedText(ZS_JSON_DEFAULT_FORCED_TEXT),
         mJSONAttributePrefix(ZS_JSON_DEFAULT_ATTRIBUTE_PREFIX),
@@ -205,12 +205,12 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      Generator::~Generator()
-      {
+      Generator::~Generator() noexcept
+      { 
       }
 
       //-----------------------------------------------------------------------
-      size_t Generator::getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode)
+      size_t Generator::getOutputSize(const GeneratorPtr &inGenerator, NodePtr inNode) noexcept
       {
         if (!inNode)
           return 0;
@@ -230,7 +230,7 @@ namespace zsLib
               case XML::Node::NodeType::Unknown:       return inNode->toUnknown()->getOutputSizeXML(inGenerator);
               default:
               {
-                ZS_THROW_BAD_STATE("missing node type in getOutputSize table")
+                ZS_ASSERT_FAIL("missing node type in getOutputSize table");
               }
             }
             break;
@@ -248,7 +248,7 @@ namespace zsLib
               case XML::Node::NodeType::Unknown:       return inNode->toUnknown()->getOutputSizeJSON(inGenerator);
               default:
               {
-                ZS_THROW_BAD_STATE("missing node type in getOutputSize table")
+                ZS_ASSERT_FAIL("missing node type in getOutputSize table");
               }
             }
             break;
@@ -258,7 +258,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Generator::writeBuffer(const GeneratorPtr &inGenerator, NodePtr inNode, char * &ioPos)
+      void Generator::writeBuffer(const GeneratorPtr &inGenerator, NodePtr inNode, char * &ioPos) noexcept
       {
         if (!inNode)
           return;
@@ -278,7 +278,7 @@ namespace zsLib
               case XML::Node::NodeType::Unknown:       return inNode->toUnknown()->writeBufferXML(inGenerator, ioPos);
               default:
               {
-                ZS_THROW_BAD_STATE("missing node type in writeBuffer table")
+                ZS_ASSERT_FAIL("missing node type in writeBuffer table");
               }
             }
             break;
@@ -296,7 +296,7 @@ namespace zsLib
               case XML::Node::NodeType::Unknown:       return inNode->toUnknown()->writeBufferJSON(inGenerator, ioPos);
               default:
               {
-                ZS_THROW_BAD_STATE("missing node type in writeBuffer table")
+                ZS_ASSERT_FAIL("missing node type in writeBuffer table");
               }
             }
             break;
@@ -305,7 +305,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Generator::writeBuffer(char * &ioPos, CSTR inString)
+      void Generator::writeBuffer(char * &ioPos, CSTR inString) noexcept
       {
         if (NULL == inString)
           return;
@@ -316,7 +316,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Generator::indent(char * &ioPos) const
+      size_t Generator::indent(char * &ioPos) const noexcept
       {
         if ((XML::Generator::JSONWriteFlag_PrettyPrint & mWriteFlags) == 0)
           return 0;
@@ -332,7 +332,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Generator::copy(char * &ioPos, CSTR inString) const
+      size_t Generator::copy(char * &ioPos, CSTR inString) const noexcept
       {
         if (NULL == inString) return 0;
 
@@ -345,7 +345,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Generator::fill(char * &ioPos, CSTR inString) const
+      size_t Generator::fill(char * &ioPos, CSTR inString) const noexcept
       {
         if (NULL == inString) return 0;
 
@@ -376,7 +376,7 @@ namespace zsLib
                                           GeneratorJSONELementArrayPositions &outPositionIfApplicable,
                                           GeneratorJSONTextModes &outTextModeIfApplicable,
                                           bool &outNextInList
-                                          ) const
+                                          ) const noexcept
       {
         outNextInList = false;
         outPositionIfApplicable = GeneratorJSONELementArrayPositions_First;
@@ -489,12 +489,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Generator
-    #pragma mark
+    //
+    // XML::Generator
+    //
 
     //-------------------------------------------------------------------------
-    GeneratorPtr Generator::createXMLGenerator(XMLWriteFlags writeFlags)
+    GeneratorPtr Generator::createXMLGenerator(XMLWriteFlags writeFlags) noexcept
     {
       GeneratorPtr pThis(make_shared<Generator>(make_private{}, writeFlags));
       pThis->mThis = pThis;
@@ -506,7 +506,7 @@ namespace zsLib
     GeneratorPtr Generator::createJSONGenerator(
                                                 const char *forcedText,
                                                 char attributePrefix
-                                                )
+                                                ) noexcept
     {
       return Generator::createJSONGenerator(JSONWriteFlag_None, forcedText, attributePrefix);
     }
@@ -516,7 +516,7 @@ namespace zsLib
                                                 JSONWriteFlags writeFlags,
                                                 const char *forcedText,
                                                 char attributePrefix
-                                                )
+                                                ) noexcept
     {
       GeneratorPtr pThis(make_shared<Generator>(make_private{}, writeFlags));
       pThis->mThis = pThis;
@@ -530,13 +530,13 @@ namespace zsLib
     Generator::Generator(
                          const make_private &,
                          UINT writeFlags
-                         ) :
+                         ) noexcept :
       internal::Generator(writeFlags)
     {
     }
 
     //-------------------------------------------------------------------------
-    size_t Generator::getOutputSize(const NodePtr &onlyThisNode) const
+    size_t Generator::getOutputSize(const NodePtr &onlyThisNode) const noexcept
     {
       mGeneratorRoot = onlyThisNode;
 
@@ -568,13 +568,13 @@ namespace zsLib
 
       mGeneratorRoot.reset();
 
-      ZS_THROW_BAD_STATE_IF(0 != mDepth)
+      ZS_ASSERT(0 == mDepth);
 
       return result;
     }
 
     //-------------------------------------------------------------------------
-    std::unique_ptr<char[]> Generator::write(const NodePtr &onlyThisNode, size_t *outLength) const
+    std::unique_ptr<char[]> Generator::write(const NodePtr &onlyThisNode, size_t *outLength) const noexcept
     {
       size_t totalSize = getOutputSize(onlyThisNode);
 
@@ -613,25 +613,25 @@ namespace zsLib
 
       mGeneratorRoot.reset();
 
-      ZS_THROW_BAD_STATE_IF(0 != mDepth)
+      ZS_ASSERT(0 == mDepth);
 
       return buffer;
     }
 
     //-------------------------------------------------------------------------
-    GeneratorPtr Generator::toGenerator() const
+    GeneratorPtr Generator::toGenerator() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    Generator::XMLWriteFlags Generator::getXMLWriteFlags() const
+    Generator::XMLWriteFlags Generator::getXMLWriteFlags() const noexcept
     {
       return static_cast<XMLWriteFlags>(mWriteFlags);
     }
 
     //-------------------------------------------------------------------------
-    Generator::JSONWriteFlags Generator::getJSONWriteFlags() const
+    Generator::JSONWriteFlags Generator::getJSONWriteFlags() const noexcept
     {
       return static_cast<JSONWriteFlags>(mWriteFlags);
     }

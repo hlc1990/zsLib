@@ -228,82 +228,82 @@ namespace testing
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->then(callback);
         promise->resolve();
       }
 
       {
         PromisePtr promise = Promise::create(mThreadUser);
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->then(callback);
         promise->resolve();
       }
 
       {
         PromisePtr promise = Promise::create(mThreadUser);
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->then(callback);
         promise->reject();
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->then(callbackWithQueue);
         promise->reject();
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->resolve();
         promise->then(callbackWithQueue);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->reject();
         promise->then(callback);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->resolve(Any1::create("any1resolve"));
         promise->then(callbackWithQueue);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->resolve(Any2::create("any2resolve"));
         promise->then(callback);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->reject(Any1::create("any1reject"));
         promise->then(callback);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->reject(Any1::create("any1reject-b"));
         promise->then(callback);
       }
 
       {
         PromisePtr promise = Promise::create();
-        TESTING_CHECK(promise)
+        TESTING_CHECK(nullptr != promise)
         promise->reject(Any2::create("any2reject"));
         promise->then(callbackWithQueue);
       }
@@ -479,7 +479,7 @@ namespace testing
         }
 
         PromisePtr laterPromise = weakPromise.lock();
-        TESTING_CHECK(laterPromise)
+        TESTING_CHECK(nullptr != laterPromise)
 
         laterPromise->resolve();
       }

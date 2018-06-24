@@ -53,16 +53,16 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Subsystem
-  #pragma mark
+  //
+  // Subsystem
+  //
 
   //---------------------------------------------------------------------------
   Subsystem::Subsystem(
                        CSTR inName,
                        Log::Level inOutputLevel,
                        Log::Level inEventingLevel
-                       ) :
+                       ) noexcept :
     mSubsystem(inName),
     mOutputLevel(static_cast<Subsystem::LevelType>(inOutputLevel)),
     mEventingLevel(static_cast<Subsystem::LevelType>(inEventingLevel))
@@ -70,31 +70,31 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Subsystem::notifyNewSubsystem()
+  void Subsystem::notifyNewSubsystem() noexcept
   {
     Log::notifyNewSubsystem(this);
   }
 
   //---------------------------------------------------------------------------
-  void Subsystem::setOutputLevel(Log::Level inLevel)
+  void Subsystem::setOutputLevel(Log::Level inLevel) noexcept
   {
     mOutputLevel = inLevel;
   }
 
   //---------------------------------------------------------------------------
-  Log::Level Subsystem::getOutputLevel() const
+  Log::Level Subsystem::getOutputLevel() const noexcept
   {
     return mOutputLevel;
   }
 
   //---------------------------------------------------------------------------
-  void Subsystem::setEventingLevel(Log::Level inLevel)
+  void Subsystem::setEventingLevel(Log::Level inLevel) noexcept
   {
     mEventingLevel = inLevel;
   }
 
   //---------------------------------------------------------------------------
-  Log::Level Subsystem::getEventingLevel() const
+  Log::Level Subsystem::getEventingLevel() const noexcept
   {
     return mEventingLevel;
   }
@@ -105,27 +105,27 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (helpers)
-    #pragma mark
+    //
+    // (helpers)
+    //
 
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log
-    #pragma mark
+    //
+    // Log
+    //
 
 
     //-------------------------------------------------------------------------
-    Log::EventingWriter::EventingWriter()
+    Log::EventingWriter::EventingWriter() noexcept
     {      
     }
     
     //-------------------------------------------------------------------------
-    Log::EventingWriter::~EventingWriter()
+    Log::EventingWriter::~EventingWriter() noexcept
     {
     }
 
@@ -133,12 +133,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Log
-    #pragma mark
+    //
+    // Log
+    //
 
     //-------------------------------------------------------------------------
-    Log::Log(const make_private &) :
+    Log::Log(const make_private &) noexcept :
         mOutputListeners(make_shared<OutputListenerList>()),
         mEventingListeners(make_shared<EventingListenerList>()),
         mEventingProviderListeners(make_shared<EventingProviderListenerList>())
@@ -146,18 +146,18 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Log::~Log()
+    Log::~Log() noexcept
     {      
     }
 
     //-------------------------------------------------------------------------
-    void Log::initSingleton()
+    void Log::initSingleton() noexcept
     {
       zsLib::Log::singleton();
     }
 
     //-------------------------------------------------------------------------
-    String Log::paramize(const char *name)
+    String Log::paramize(const char *name) noexcept
     {
       if (!name) return String();
 
@@ -204,7 +204,7 @@ namespace zsLib
             }
           }
 
-          *dest = tolower(gliph);
+          *dest = static_cast<char>(tolower(gliph));
           ++dest;
           ++source;
 
@@ -350,9 +350,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark (output methods)
-  #pragma mark
+  //
+  // (output methods)
+  //
 
   //---------------------------------------------------------------------------
   void Log::addOutputListener(ILogOutputDelegatePtr delegate)
@@ -637,9 +637,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark (eventing methods)
-  #pragma mark
+  //
+  // (eventing methods)
+  //
 
   //---------------------------------------------------------------------------
   void Log::addEventingListener(ILogEventingDelegatePtr delegate)
@@ -677,7 +677,6 @@ namespace zsLib
         for (auto iter = refThis.mSubsystems.begin(); iter != refThis.mSubsystems.end(); ++iter)
         {
           auto *subsystem = (*iter);
-          auto *name = subsystem->getName();
 
           String subsystemName(subsystem->getName());
 
@@ -1183,9 +1182,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Log::Params
-  #pragma mark
+  //
+  // Log::Params
+  //
 
   //---------------------------------------------------------------------------
   Log::Param::Param(const Param &param) :
@@ -1393,9 +1392,9 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark Log::Params
-  #pragma mark
+  //
+  // Log::Params
+  //
 
   //---------------------------------------------------------------------------
   Log::Params::Params()

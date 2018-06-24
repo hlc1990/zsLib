@@ -50,27 +50,27 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Document
-      #pragma mark
+      //
+      // XML::internal::Document
+      //
 
       //-----------------------------------------------------------------------
       Document::Document(
                          bool inElementNameIsCaseSensative,
                          bool inAttributeNameIsCaseSensative
-                         ) :
+                         ) noexcept :
         mElementNameCaseSensative(inElementNameIsCaseSensative),
         mAttributeNameCaseSensative(inAttributeNameIsCaseSensative)
       {
       }
 
       //-----------------------------------------------------------------------
-      Document::~Document()
+      Document::~Document() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      size_t Document::getOutputSizeXML(const GeneratorPtr &generator) const
+      size_t Document::getOutputSizeXML(const GeneratorPtr &generator) const noexcept
       {
         DocumentPtr self(mThis.lock());
 
@@ -85,7 +85,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Document::writeBufferXML(const GeneratorPtr &generator, char * &ioPos) const
+      void Document::writeBufferXML(const GeneratorPtr &generator, char * &ioPos) const noexcept
       {
         DocumentPtr self(mThis.lock());
 
@@ -101,7 +101,7 @@ namespace zsLib
       size_t Document::actualWriteJSON(
                                        const GeneratorPtr &inGenerator,
                                        char * &ioPos
-                                       ) const
+                                       ) const noexcept
       {
         const Generator &generator = (*inGenerator);
 
@@ -156,20 +156,20 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Document::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Document::getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept
       {
         char *ioPos = NULL;
         return actualWriteJSON(inGenerator, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      void Document::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Document::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         actualWriteJSON(inGenerator, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Document::cloneAssignParent(NodePtr inParent) const
+      NodePtr Document::cloneAssignParent(NodePtr inParent) const noexcept
       {
         DocumentPtr newObject(XML::Document::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -189,16 +189,16 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Document
-    #pragma mark
+    //
+    // XML::Document
+    //
 
     //-------------------------------------------------------------------------
     Document::Document(
                        const make_private &,
                        bool inElementNameIsCaseSensative,
                        bool inAttributeNameIsCaseSensative
-                       ) :
+                       ) noexcept :
       internal::Document(inElementNameIsCaseSensative, inAttributeNameIsCaseSensative)
     {
     }
@@ -207,7 +207,7 @@ namespace zsLib
     DocumentPtr Document::create(
                                  bool inElementNameIsCaseSensative,
                                  bool inAttributeNameIsCaseSensative
-                                 )
+                                 ) noexcept
     {
       DocumentPtr pThis(make_shared<Document>(make_private{}, inElementNameIsCaseSensative, inAttributeNameIsCaseSensative));
       pThis->mThis = pThis;
@@ -219,7 +219,7 @@ namespace zsLib
                                               const char *inXMLDocument,
                                               bool inElementNameIsCaseSensative,
                                               bool inAttributeNameIsCaseSensative
-                                              )
+                                              ) noexcept
     {
       ParserPtr parser = Parser::createXMLParser();
       return parser->parse(inXMLDocument, inElementNameIsCaseSensative, inAttributeNameIsCaseSensative);
@@ -232,7 +232,7 @@ namespace zsLib
                                                char attributePrefix,
                                                bool inElementNameIsCaseSensative,
                                                bool inAttributeNameIsCaseSensative
-                                               )
+                                               ) noexcept
     {
       ParserPtr parser = Parser::createJSONParser(forcedText, attributePrefix);
       return parser->parse(inJSONDocument, inElementNameIsCaseSensative, inAttributeNameIsCaseSensative);
@@ -245,38 +245,38 @@ namespace zsLib
                                                char attributePrefix,
                                                bool inElementNameIsCaseSensative,
                                                bool inAttributeNameIsCaseSensative
-                                               )
+                                               ) noexcept
     {
       ParserPtr parser = Parser::createAutoDetectParser(forcedText, attributePrefix);
       return parser->parse(inDocument, inElementNameIsCaseSensative, inAttributeNameIsCaseSensative);
     }
 
     //-------------------------------------------------------------------------
-    void Document::setElementNameIsCaseSensative(bool inCaseSensative)
+    void Document::setElementNameIsCaseSensative(bool inCaseSensative) noexcept
     {
       mElementNameCaseSensative = inCaseSensative;
     }
 
     //-------------------------------------------------------------------------
-    bool Document::isElementNameIsCaseSensative() const
+    bool Document::isElementNameIsCaseSensative() const noexcept
     {
       return mElementNameCaseSensative;
     }
 
     //-------------------------------------------------------------------------
-    void Document::setAttributeNameIsCaseSensative(bool inCaseSensative)
+    void Document::setAttributeNameIsCaseSensative(bool inCaseSensative) noexcept
     {
       mAttributeNameCaseSensative = inCaseSensative;
     }
 
     //-------------------------------------------------------------------------
-    bool Document::isAttributeNameIsCaseSensative() const
+    bool Document::isAttributeNameIsCaseSensative() const noexcept
     {
       return mAttributeNameCaseSensative;
     }
 
     //-------------------------------------------------------------------------
-    std::unique_ptr<char[]> Document::writeAsXML(size_t *outLength) const
+    std::unique_ptr<char[]> Document::writeAsXML(size_t *outLength) const noexcept
     {
       GeneratorPtr generator = Generator::createXMLGenerator();
       return generator->write(mThis.lock(), outLength);
@@ -286,27 +286,27 @@ namespace zsLib
     std::unique_ptr<char[]> Document::writeAsJSON(
                                                     bool prettyPrint,
                                                     size_t *outLength
-                                                    ) const
+                                                    ) const noexcept
     {
       GeneratorPtr generator = Generator::createJSONGenerator(prettyPrint ? Generator::JSONWriteFlag_PrettyPrint : Generator::JSONWriteFlag_None);
       return generator->write(mThis.lock(), outLength);
     }
 
     //-------------------------------------------------------------------------
-    std::unique_ptr<char[]> Document::writeAsJSON(size_t *outLength) const
+    std::unique_ptr<char[]> Document::writeAsJSON(size_t *outLength) const noexcept
     {
       GeneratorPtr generator = Generator::createJSONGenerator();
       return generator->write(mThis.lock(), outLength);
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Document::clone() const
+    NodePtr Document::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Document::clear()
+    void Document::clear() noexcept
     {
       mElementNameCaseSensative = true;
       mAttributeNameCaseSensative = true;
@@ -315,25 +315,25 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Document::getNodeType()
+    Node::NodeType::Type Document::getNodeType() const noexcept
     {
       return NodeType::Document;
     }
 
     //-------------------------------------------------------------------------
-    bool Document::isDocument() const
+    bool Document::isDocument() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Document::toNode() const 
+    NodePtr Document::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    DocumentPtr Document::toDocument() const
+    DocumentPtr Document::toDocument() const noexcept
     {
       return mThis.lock();
     }

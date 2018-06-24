@@ -50,6 +50,8 @@ namespace Testing
 
   void setup();
   void runAllTests();
+
+  struct Check { static bool get(bool value) { return value; } };
 }
 
 #ifdef _WIN32
@@ -80,7 +82,7 @@ protected:
     if (c == CharTraits::eof())
       return CharTraits::not_eof(c);
 
-    m_outputBuffer.push_back(c);
+    m_outputBuffer.push_back(static_cast<T>(c));
     if (c == TEXT('\n'))
       sync();
 
@@ -159,20 +161,20 @@ debugostream &getDebugCout();
       { xTestCase(); }                                              \
       catch(...)                                                    \
       { TESTING_STDOUT() << "***UNCAUGHT EXCEPTION IN***: " #xTestCase "\n"; Testing::failed(); }   \
-      TESTING_STDOUT() << "ENDING:       " #xTestCase "\n\n";              \
-    }                                                               \
+      TESTING_STDOUT() << "ENDING:       " #xTestCase "\n\n";               \
+    }                                                                       \
   } g_Test_##xTestCase;
 
 #define TESTING_CHECK(xValue)                                         \
   {                                                                   \
-    if (!(xValue))                                                    \
+    if (!(Testing::Check::get(xValue)))                               \
     { TESTING_STDOUT() << "***FAILED***: " #xValue "\n"; Testing::failed(); } \
-    else                                                                             \
+    else                                                                      \
     { TESTING_STDOUT() << "PASSED:       " #xValue "\n"; Testing::passed(); } \
   }
 
 #define TESTING_EQUAL(xValue1, xValue2)                             \
-  if (!((xValue1) == (xValue2)))                                    \
+  if (!Testing::Check::get((xValue1) == (xValue2)))                 \
   { std::stringstream sv1, sv2; sv1 << (xValue1); sv2 << (xValue2); TESTING_STDOUT() << "***FAILED***: " #xValue1 " == " #xValue2 ", V1=" << (sv1.str().c_str()) << ", V2=" << (sv2.str().c_str()) << "\n"; Testing::failed(); }                   \
   else                                                              \
   { std::stringstream sv1, sv2; sv1 << (xValue1); sv2 << (xValue2); TESTING_STDOUT() << "PASSED:       " #xValue1 " == " #xValue2 ", V1=" << (sv1.str().c_str()) << ", V2=" << (sv2.str().c_str()) << "\n"; Testing::passed(); }

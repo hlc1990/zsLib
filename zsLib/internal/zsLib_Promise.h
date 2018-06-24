@@ -57,16 +57,16 @@ namespace zsLib
         PromiseState_Resolved,
         PromiseState_Rejected,
       };
-      static const char *toString(PromiseStates state);
+      static const char *toString(PromiseStates state) noexcept;
 
     public:
-      Promise(IMessageQueuePtr queue);
+      Promise(IMessageQueuePtr queue) noexcept;
       Promise(
               const std::list<PromisePtr> &promises,
               IMessageQueuePtr queue
-              );
+              ) noexcept;
 
-      ~Promise();
+      ~Promise() noexcept;
 
     protected:
       PromiseWeakPtr mThisWeak;

@@ -47,9 +47,9 @@ namespace zsLib
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager
-    #pragma mark
+    //
+    // MessageQueueManager
+    //
 
     class MessageQueueManager : public IMessageQueueManager,
                                 public IWakeDelegate,
@@ -70,80 +70,80 @@ namespace zsLib
       typedef std::map<MessageQueueName, MessageQueueThreadPoolPair> MessageQueuePoolMap;
 
     public:
-      MessageQueueManager(const make_private &);
+      MessageQueueManager(const make_private &) noexcept;
 
     protected:
-      void init();
+      void init() noexcept;
 
-      static MessageQueueManagerPtr create();
+      static MessageQueueManagerPtr create() noexcept;
 
     protected:
-      static MessageQueueManagerPtr singleton();
+      static MessageQueueManagerPtr singleton() noexcept;
 
     public:
-      ~MessageQueueManager();
+      ~MessageQueueManager() noexcept;
 
     protected:
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueManager => IMessageQueueManager
-      #pragma mark
+      //
+      // MessageQueueManager => IMessageQueueManager
+      //
 
-      IMessageQueuePtr getMessageQueueForGUIThread();
-      IMessageQueuePtr getMessageQueue(const char *assignedQueueName);
+      IMessageQueuePtr getMessageQueueForGUIThread() noexcept;
+      IMessageQueuePtr getMessageQueue(const char *assignedQueueName) noexcept;
 
       IMessageQueuePtr getThreadPoolQueue(
                                           const char *assignedThreadPoolQueueName,
                                           const char *registeredQueueName = NULL,
                                           size_t minThreadsRequired = 4
-                                          );
+                                          ) noexcept;
 
       void registerMessageQueueThreadPriority(
                                               const char *assignedQueueName,
                                               ThreadPriorities priority
-                                              );
+                                              ) noexcept;
 
-      MessageQueueMapPtr getRegisteredQueues();
+      MessageQueueMapPtr getRegisteredQueues() noexcept;
 
-      size_t getTotalUnprocessedMessages() const;
+      size_t getTotalUnprocessedMessages() const noexcept;
 
-      void shutdownAllQueues();
+      void shutdownAllQueues() noexcept;
 
-      virtual void blockUntilDone();
+      virtual void blockUntilDone() noexcept;
 
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueManager => IWakeDelegate
-      #pragma mark
+      //
+      // MessageQueueManager => IWakeDelegate
+      //
 
       void onWake() override;
 
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueManager => ISingletonManagerDelegate
-      #pragma mark
+      //
+      // MessageQueueManager => ISingletonManagerDelegate
+      //
 
-      void notifySingletonCleanup() override;
-
-    protected:
-      //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueManager => (internal)
-      #pragma mark
-
-      Params log(const char *message) const;
-      static Params slog(const char *message);
-      Params debug(const char *message) const;
-
-      virtual ElementPtr toDebug() const;
-
-      void cancel();
+      void notifySingletonCleanup() noexcept override;
 
     protected:
       //---------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueManager => (data)
-      #pragma mark
+      //
+      // MessageQueueManager => (internal)
+      //
+
+      Params log(const char *message) const noexcept;
+      static Params slog(const char *message) noexcept;
+      Params debug(const char *message) const noexcept;
+
+      virtual ElementPtr toDebug() const noexcept;
+
+      void cancel() noexcept;
+
+    protected:
+      //---------------------------------------------------------------------
+      //
+      // MessageQueueManager => (data)
+      //
 
       AutoPUID mID;
       mutable RecursiveLock mLock;

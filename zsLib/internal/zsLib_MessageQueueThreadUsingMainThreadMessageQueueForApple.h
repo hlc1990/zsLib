@@ -50,46 +50,37 @@ namespace zsLib
 
     class MessageQueueThreadUsingMainThreadMessageQueueForApple : public MessageQueueThread, public IMessageQueueNotify
     {
-    public:
-      struct Exceptions
-      {
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted);
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueSourceNotAdded);
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueSourceNotValid);
-        //ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueSourceAlreadyDeleted);
-      };
-
     protected:
-      MessageQueueThreadUsingMainThreadMessageQueueForApple();
-      static MessageQueueThreadUsingMainThreadMessageQueueForApplePtr create();
+      MessageQueueThreadUsingMainThreadMessageQueueForApple() noexcept;
+      static MessageQueueThreadUsingMainThreadMessageQueueForApplePtr create() ;
 
       void init();
 
     public:
-      ~MessageQueueThreadUsingMainThreadMessageQueueForApple();
+      ~MessageQueueThreadUsingMainThreadMessageQueueForApple() noexcept;
 
-      static MessageQueueThreadUsingMainThreadMessageQueueForApplePtr singleton();
+      static MessageQueueThreadUsingMainThreadMessageQueueForApplePtr singleton() noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message);
+      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
 
-      virtual size_type getTotalUnprocessedMessages() const;
+      virtual size_type getTotalUnprocessedMessages() const noexcept;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted();
+      virtual void notifyMessagePosted() noexcept;
 
       // IMessageQueueThread
-      virtual void waitForShutdown();
+      virtual void waitForShutdown() noexcept;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority);
+      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
 
-      virtual void processMessagesFromThread();
+      virtual void processMessagesFromThread() noexcept;
 
     public:
       virtual void process();
 
     protected:
-      static zsLib::Log::Params slog(const char *message);
+      static zsLib::Log::Params slog(const char *message) noexcept;
 
     protected:
       mutable Lock mLock;

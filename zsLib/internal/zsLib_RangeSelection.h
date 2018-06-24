@@ -61,9 +61,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark RangeSelection
-    #pragma mark
+    //
+    // RangeSelection
+    //
 
     template <
       typename RangeType, 
@@ -87,10 +87,10 @@ namespace zsLib
 
     public:
       //-----------------------------------------------------------------------
-      RangeSelection() {}
+      RangeSelection() noexcept {}
 
       //-----------------------------------------------------------------------
-      RangeSelection(const RangeSelection &op2) :
+      RangeSelection(const RangeSelection &op2) noexcept :
         allows_(op2.allows_),
         denies_(op2.denies_)
       {
@@ -100,7 +100,7 @@ namespace zsLib
       ~RangeSelection() {}
 
       //-----------------------------------------------------------------------
-      RangeSelection &operator=(const RangeSelection &op2)
+      RangeSelection &operator=(const RangeSelection &op2) noexcept
       {
         if (this == &(op2)) return *this;
         allows_ = op2.allows_;
@@ -110,13 +110,13 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void importFromSetting(const char *key) throw (zsLib::Exceptions::InvalidArgument)
+      void importFromSetting(const char *key) noexcept(false) // throws zsLib::Exceptions::InvalidArgument
       {
         importFromString(zsLib::ISettings::getString(key).c_str());
       }
 
       //-----------------------------------------------------------------------
-      void importFromString(const char *previousExportString) throw (zsLib::Exceptions::InvalidArgument)
+      void importFromString(const char *previousExportString) noexcept(false) // throws zsLib::Exceptions::InvalidArgument
       {
         typedef zsLib::Numeric<UseRangeType> UseNumeric;
         typedef typename UseNumeric::ValueOutOfRange ValueOutOfRange;
@@ -179,13 +179,13 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void exportToSetting(const char *key) const
+      void exportToSetting(const char *key) const noexcept
       {
         zsLib::ISettings::setString(key, exportToString().c_str());
       }
 
       //-----------------------------------------------------------------------
-      String exportToString() const
+      String exportToString() const noexcept
       {
         auto doc = Document::create();
         auto rootEl = Element::create("range");
@@ -239,7 +239,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void reset()
+      void reset() noexcept
       {
         dirty_ = true;
         allows_.clear();
@@ -250,7 +250,7 @@ namespace zsLib
       void allow(
                  UseRangeType from,
                  UseRangeType to
-                 )
+                 ) noexcept
       {
         dirty_ = true;
         if (from > to) return;
@@ -261,7 +261,7 @@ namespace zsLib
       void deny(
                 UseRangeType from,
                 UseRangeType to
-                )
+                ) noexcept
       {
         dirty_ = true;
         if (from > to) return;
@@ -272,7 +272,7 @@ namespace zsLib
       void removeAllow(
                        UseRangeType from,
                        UseRangeType to
-                       )
+                       ) noexcept
       {
         if (from > to) return;
         for (auto iter_doNotUse = allows_.begin(); iter_doNotUse != allows_.end(); ) {
@@ -291,7 +291,7 @@ namespace zsLib
       void removeDeny(
                       UseRangeType from,
                       UseRangeType to
-                      )
+                      ) noexcept
       {
         if (from > to) return;
         for (auto iter_doNotUse = denies_.begin(); iter_doNotUse != denies_.end(); ) {
@@ -307,7 +307,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      UseRangeType getRandomPosition(UseLargeUnsignedType randomInputValue) throw(::zsLib::Exceptions::BadState)
+      UseRangeType getRandomPosition(UseLargeUnsignedType randomInputValue) noexcept(false) // throws ::zsLib::Exceptions::BadState
       {
         calculate();
         throwRangeSelectionBadStateIf(count_ < 1, "count_ < 1");
@@ -337,7 +337,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool isAllowed(UseRangeType value)
+      bool isAllowed(UseRangeType value) noexcept
       {
         calculate();
         for (auto iter = allowed_.begin(); iter != allowed_.end(); ++iter) {
@@ -352,7 +352,7 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      void calculate()
+      void calculate() noexcept
       {
         if (!dirty_) return;
         allowed_.clear();
@@ -363,7 +363,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void calculateAllows()
+      void calculateAllows() noexcept
       {
         if (allows_.size() < 1) {
           // legal range is entire scope of values if allowed is not specified
@@ -472,7 +472,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void calculateDenies()
+      void calculateDenies() noexcept
       {
         if (denies_.size() < 1) return;
 
@@ -664,7 +664,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void calculateCount()
+      void calculateCount() noexcept
       {
         count_ = 0;
 
@@ -681,9 +681,9 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark RangeSelection => (data)
-      #pragma mark
+      //
+      // RangeSelection => (data)
+      //
 
       bool dirty_ {true};
 

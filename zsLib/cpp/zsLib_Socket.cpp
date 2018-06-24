@@ -310,7 +310,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  SocketPtr Socket::create() throw(Exceptions::Unspecified)
+  SocketPtr Socket::create() noexcept(false)
   {
     SocketPtr object(new Socket);
     object->mThis = object;
@@ -318,19 +318,19 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  SocketPtr Socket::createUDP(Create::Family inFamily) throw(Exceptions::Unspecified)
+  SocketPtr Socket::createUDP(Create::Family inFamily) noexcept(false)
   {
     return create(inFamily, Create::Datagram, Create::UDP);
   }
 
   //---------------------------------------------------------------------------
-  SocketPtr Socket::createTCP(Create::Family inFamily) throw(Exceptions::Unspecified)
+  SocketPtr Socket::createTCP(Create::Family inFamily) noexcept(false)
   {
     return create(inFamily, Create::Stream, Create::TCP);
   }
 
   //---------------------------------------------------------------------------
-  SocketPtr Socket::create(Create::Family inFamily, Create::Type inType, Create::Protocol inProtocol) throw(Exceptions::Unspecified)
+  SocketPtr Socket::create(Create::Family inFamily, Create::Type inType, Create::Protocol inProtocol) noexcept(false)
   {
     internal::socketInit();
     SOCKET socket = ::socket(inFamily, inType, inProtocol);
@@ -354,7 +354,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Socket::Socket() throw(Exceptions::Unspecified) :
+  Socket::Socket() noexcept(false) :
     mSocket(INVALID_SOCKET)
   {
     linkSocketMonitor();
@@ -364,10 +364,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  Socket::~Socket() throw(
-                          Exceptions::WouldBlock,
-                          Exceptions::Unspecified
-                          )
+  Socket::~Socket() noexcept(false)
   {
     try {
       close();
@@ -379,21 +376,21 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool Socket::isValid() const
+  bool Socket::isValid() const noexcept
   {
     AutoRecursiveLock lock(mLock);
     return INVALID_SOCKET != mSocket;
   }
 
   //---------------------------------------------------------------------------
-  SOCKET Socket::getSocket() const
+  SOCKET Socket::getSocket() const noexcept
   {
     AutoRecursiveLock lock(mLock);
     return mSocket;
   }
 
   //---------------------------------------------------------------------------
-  SOCKET Socket::orphan()
+  SOCKET Socket::orphan() noexcept
   {
     setDelegate();    // clear out the delegate
 
@@ -407,7 +404,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::adopt(SOCKET inSocket)
+  void Socket::adopt(SOCKET inSocket) noexcept
   {
     close();
 
@@ -419,7 +416,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::setDelegate(ISocketDelegatePtr originalDelegate) throw (Socket::Exceptions::InvalidSocket)
+  void Socket::setDelegate(ISocketDelegatePtr originalDelegate) noexcept(false)
   {
     ISocketDelegatePtr delegate = ISocketDelegateProxy::createWeak(originalDelegate);
 
@@ -460,7 +457,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::monitor(Monitor::Options options)
+  void Socket::monitor(Monitor::Options options) noexcept
   {
     ISocketDelegatePtr delegate;
     bool monitorRead = true;
@@ -497,7 +494,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::close() throw(Exceptions::WouldBlock, Exceptions::Unspecified)
+  void Socket::close() noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -527,7 +524,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IPAddress Socket::getLocalAddress() const throw (Exceptions::InvalidSocket, Exceptions::Unspecified)
+  IPAddress Socket::getLocalAddress() const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -564,7 +561,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IPAddress Socket::getRemoteAddress() const throw (Exceptions::InvalidSocket, Exceptions::Unspecified)
+  IPAddress Socket::getRemoteAddress() const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -600,7 +597,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  static int handleError(bool *outWouldBlock)
+  static int handleError(bool *outWouldBlock) noexcept
   {
     int error = WSAGetLastError();
 
@@ -620,7 +617,7 @@ namespace zsLib
   static int handleError(
                          int error,
                          int *outNoThrowErrorResult
-                         )
+                         ) noexcept
   {
     if (0 == error) {
       error = WSAGetLastError();
@@ -638,11 +635,7 @@ namespace zsLib
   void Socket::bind(
                     const IPAddress &inBindIP,
                     int *outNoThrowErrorResult
-                    ) const throw(
-                                  Exceptions::InvalidSocket,
-                                  Exceptions::AddressInUse,
-                                  Exceptions::Unspecified
-                                  )
+                    ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -682,11 +675,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::listen() const throw(
-                                    Exceptions::InvalidSocket,
-                                    Exceptions::AddressInUse,
-                                    Exceptions::Unspecified
-                                   )
+  void Socket::listen() const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -721,11 +710,7 @@ namespace zsLib
                            IPAddress &outRemoteIP,
                            bool *outWouldBlock,
                            int *outNoThrowErrorResult
-                           ) const throw(
-                                         Exceptions::InvalidSocket,
-                                         Exceptions::ConnectionReset,
-                                         Exceptions::Unspecified
-                                         )
+                           ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -785,15 +770,7 @@ namespace zsLib
                        const IPAddress &inDestination,
                        bool *outWouldBlock,
                        int *outNoThrowErrorResult
-                       ) const throw(
-                                     Exceptions::InvalidSocket,
-                                     Exceptions::WouldBlock,
-                                     Exceptions::AddressInUse,
-                                     Exceptions::NetworkNotReachable,
-                                     Exceptions::HostNotReachable,
-                                     Exceptions::Timeout,
-                                     Exceptions::Unspecified
-                                     )
+                       ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -861,16 +838,7 @@ namespace zsLib
                          bool *outWouldBlock,
                          ULONG inFlags,
                          int *outNoThrowErrorResult
-                         ) const throw(
-                                       Exceptions::InvalidSocket,
-                                       Exceptions::WouldBlock,
-                                       Exceptions::Shutdown,
-                                       Exceptions::ConnectionReset,
-                                       Exceptions::ConnectionAborted,
-                                       Exceptions::Timeout,
-                                       Exceptions::BufferTooSmall,
-                                       Exceptions::Unspecified
-                                       )
+                         ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -947,15 +915,7 @@ namespace zsLib
                              bool *outWouldBlock,
                              ULONG inFlags,
                              int *outNoThrowErrorResult
-                             ) const throw(
-                                           Exceptions::InvalidSocket,
-                                           Exceptions::WouldBlock,
-                                           Exceptions::Shutdown,
-                                           Exceptions::ConnectionReset,
-                                           Exceptions::Timeout,
-                                           Exceptions::BufferTooSmall,
-                                           Exceptions::Unspecified
-                                           )
+                             ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1037,17 +997,7 @@ namespace zsLib
                       bool *outWouldBlock,
                       ULONG inFlags,
                       int *outNoThrowErrorResult
-                      ) const throw(
-                                    Exceptions::InvalidSocket,
-                                    Exceptions::WouldBlock,
-                                    Exceptions::Shutdown,
-                                    Exceptions::HostNotReachable,
-                                    Exceptions::ConnectionAborted,
-                                    Exceptions::ConnectionReset,
-                                    Exceptions::Timeout,
-                                    Exceptions::BufferTooSmall,
-                                    Exceptions::Unspecified
-                                    )
+                      ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1119,18 +1069,7 @@ namespace zsLib
                         bool *outWouldBlock,
                         ULONG inFlags,
                         int *outNoThrowErrorResult
-                        ) const throw(
-                                      Exceptions::InvalidSocket,
-                                      Exceptions::WouldBlock,
-                                      Exceptions::Shutdown,
-                                      Exceptions::Timeout,
-                                      Exceptions::HostNotReachable,
-                                      Exceptions::ConnectionAborted,
-                                      Exceptions::ConnectionReset,
-                                      Exceptions::Timeout,
-                                      Exceptions::BufferTooSmall,
-                                      Exceptions::Unspecified
-                                      )
+                        ) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1204,7 +1143,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::shutdown(Shutdown::Options inOptions) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified)
+  void Socket::shutdown(Shutdown::Options inOptions) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1240,7 +1179,7 @@ namespace zsLib
                                  int inOptionName,
                                  BYTE *inOptionValue,
                                  socklen_t inOptionLength
-                                 )
+                                 ) noexcept(false) // throws Socket::Exceptions::Unspecified
     {
       int result = ::setsockopt(inSocket, inLevel, inOptionName, (const char *)inOptionValue, inOptionLength);
       ZS_EVENTING_6(x, i, Debug, SocketSetOption, zs, Socket, Option, socket, socket, static_cast<uint64_t>(inSocket), int, result, result, int, level, inLevel, int, optionName, inOptionName, binary, optionValue, inOptionValue, size, optionValueSize, inOptionLength);
@@ -1260,7 +1199,7 @@ namespace zsLib
                                  int inOptionName,
                                  BYTE *outOptionValue,
                                  socklen_t inOptionLength
-                                 )
+                                 ) noexcept(false) // throws Socket::Exceptions::Unspecified
     {
       socklen_t length = inOptionLength;
       int result = ::getsockopt(inSocket, inLevel, inOptionName, (char *)outOptionValue, &length);
@@ -1278,17 +1217,13 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
-  void Socket::setBlocking(bool enabled) const throw(Exceptions::InvalidSocket, Exceptions::Unspecified)
+  void Socket::setBlocking(bool enabled) const noexcept(false)
   {
     setOptionFlag(SetOptionFlag::NonBlocking, !enabled);
   }
 
   //---------------------------------------------------------------------------
-  void Socket::setOptionFlag(Socket::SetOptionFlag::Options inOption, bool inEnabled) const throw(
-                                                                                                  Exceptions::InvalidSocket,
-                                                                                                  Exceptions::UnsupportedSocketOption,
-                                                                                                  Exceptions::Unspecified
-                                                                                                  )
+  void Socket::setOptionFlag(Socket::SetOptionFlag::Options inOption, bool inEnabled) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1340,11 +1275,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::setOptionValue(Socket::SetOptionValue::Options inOption, ULONG inValue) const throw(
-                                                                                                   Exceptions::InvalidSocket,
-                                                                                                   Exceptions::UnsupportedSocketOption,
-                                                                                                   Exceptions::Unspecified
-                                                                                                   )
+  void Socket::setOptionValue(Socket::SetOptionValue::Options inOption, ULONG inValue) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1367,11 +1298,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool Socket::getOptionFlag(GetOptionFlag::Options inOption) const throw(
-                                                                          Exceptions::InvalidSocket,
-                                                                          Exceptions::UnsupportedSocketOption,
-                                                                          Exceptions::Unspecified
-                                                                          )
+  bool Socket::getOptionFlag(GetOptionFlag::Options inOption) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1412,11 +1339,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ULONG Socket::getOptionValue(GetOptionValue::Options inOption) const throw(
-                                                                             Exceptions::InvalidSocket,
-                                                                             Exceptions::UnsupportedSocketOption,
-                                                                             Exceptions::Unspecified
-                                                                             )
+  ULONG Socket::getOptionValue(GetOptionValue::Options inOption) const noexcept(false)
   {
     internal::ignoreSigTermOnThread();
 
@@ -1467,7 +1390,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::onReadReadyReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified)
+  void Socket::onReadReadyReset() const noexcept(false)
   {
     {
       AutoRecursiveLock lock(mLock);
@@ -1484,7 +1407,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::onWriteReadyReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified)
+  void Socket::onWriteReadyReset() const noexcept(false)
   {
     {
       AutoRecursiveLock lock(mLock);
@@ -1499,7 +1422,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Socket::onExceptionReset() const throw(Exceptions::DelegateNotSet, Exceptions::InvalidSocket, Exceptions::Unspecified)
+  void Socket::onExceptionReset() const noexcept(false)
   {
     {
       AutoRecursiveLock lock(mLock);

@@ -45,9 +45,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThreadPoolDispatcherThread
-    #pragma mark
+    //
+    // MessageQueueThreadPoolDispatcherThread
+    //
 
     class MessageQueueThreadPoolDispatcherThread
     {
@@ -179,9 +179,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThreadPoolQueueNotifier
-    #pragma mark
+    //
+    // MessageQueueThreadPoolQueueNotifier
+    //
 
     class MessageQueueThreadPoolQueueNotifier : public IMessageQueueNotify
     {
@@ -193,18 +193,18 @@ namespace zsLib
       MessageQueueThreadPoolQueueNotifier(
         const make_private &,
         MessageQueueThreadPoolPtr pool
-      ) :
+      ) noexcept :
         mPool(pool)
       {
       }
 
-      ~MessageQueueThreadPoolQueueNotifier()
+      ~MessageQueueThreadPoolQueueNotifier() noexcept
       {
       }
 
     public:
       //-----------------------------------------------------------------------
-      static MessageQueueThreadPoolQueueNotifierPtr create(MessageQueueThreadPoolPtr pool) {
+      static MessageQueueThreadPoolQueueNotifierPtr create(MessageQueueThreadPoolPtr pool) noexcept  {
         MessageQueueThreadPoolQueueNotifierPtr pThis(make_shared<MessageQueueThreadPoolQueueNotifier>(make_private{}, pool));
         pThis->mThisWeak = pThis;
         pThis->init();
@@ -212,7 +212,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      IMessageQueuePtr getMessageQueue()
+      IMessageQueuePtr getMessageQueue() noexcept
       {
         auto queue = mQueue;
         mQueue.reset();
@@ -220,7 +220,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void processQueue()
+      void processQueue() noexcept
       {
         auto queue = mQueueWeak.lock();
         if (queue) {
@@ -237,19 +237,19 @@ namespace zsLib
 
     protected:
       //-----------------------------------------------------------------------
-      void init()
+      void init() noexcept
       {
         mQueue = MessageQueue::create(mThisWeak.lock());
         mQueueWeak = mQueue;
       }
 
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark MessageQueueThreadPoolQueue => IMessageQueueNotify
-      #pragma mark
+      //
+      // MessageQueueThreadPoolQueue => IMessageQueueNotify
+      //
 
       //-----------------------------------------------------------------------
-      void notifyMessagePosted() override;
+      void notifyMessagePosted() noexcept override;
 
     protected:
       MessageQueueThreadPoolQueueNotifierWeakPtr mThisWeak;
@@ -263,7 +263,7 @@ namespace zsLib
     };
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPoolQueueNotifier::notifyMessagePosted()
+    void MessageQueueThreadPoolQueueNotifier::notifyMessagePosted() noexcept
     {
       bool posted = mPosted.exchange(true);
       if (posted) return;
@@ -275,27 +275,27 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueThreadPool
-    #pragma mark
+    //
+    // MessageQueueThreadPool
+    //
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPool::MessageQueueThreadPool(const make_private &)
+    MessageQueueThreadPool::MessageQueueThreadPool(const make_private &) noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPool::~MessageQueueThreadPool()
+    MessageQueueThreadPool::~MessageQueueThreadPool() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::init()
+    void MessageQueueThreadPool::init() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue)
+    void MessageQueueThreadPool::notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue) noexcept
     {
       MessageQueueThreadPoolDispatcherThreadPtr idle;
 
@@ -316,7 +316,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher)
+    void MessageQueueThreadPool::notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher) noexcept
     {
       {
         AutoLock lock(mLock);
@@ -332,7 +332,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::processOneQueue()
+    void MessageQueueThreadPool::processOneQueue() noexcept
     {
       MessageQueueThreadPoolQueueNotifierPtr notifier;
 
@@ -349,7 +349,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPoolPtr MessageQueueThreadPool::create()
+    MessageQueueThreadPoolPtr MessageQueueThreadPool::create() noexcept
     {
       MessageQueueThreadPoolPtr pThis(make_shared<MessageQueueThreadPool>(make_private{}));
       pThis->mThisWeak = pThis;
@@ -361,7 +361,7 @@ namespace zsLib
     void MessageQueueThreadPool::createThread(
       const char *threadName,
       ThreadPriorities threadPriority
-    )
+    ) noexcept
     {
       MessageQueueThreadPoolDispatcherThreadPtr dispatcher = MessageQueueThreadPoolDispatcherThread::create(mThisWeak.lock(), threadName, threadPriority);
 
@@ -370,7 +370,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::waitForShutdown()
+    void MessageQueueThreadPool::waitForShutdown() noexcept
     {
       while (true)
       {
@@ -393,7 +393,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueThreadPool::setThreadPriority(ThreadPriorities threadPriority)
+    void MessageQueueThreadPool::setThreadPriority(ThreadPriorities threadPriority) noexcept
     {
       DispatcherThreadList threads;
 
@@ -412,14 +412,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool MessageQueueThreadPool::hasPendingMessages()
+    bool MessageQueueThreadPool::hasPendingMessages() noexcept
     {
       AutoLock lock(mLock);
       return mPendingQueues.size() > 0;
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueuePtr MessageQueueThreadPool::createQueue()
+    IMessageQueuePtr MessageQueueThreadPool::createQueue() noexcept
     {
       MessageQueueThreadPoolQueueNotifierPtr notifier = MessageQueueThreadPoolQueueNotifier::create(mThisWeak.lock());
       return notifier->getMessageQueue();
@@ -428,7 +428,7 @@ namespace zsLib
   } // namespace internal
 
   //---------------------------------------------------------------------------
-  IMessageQueueThreadPoolPtr IMessageQueueThreadPool::create()
+  IMessageQueueThreadPoolPtr IMessageQueueThreadPool::create() noexcept
   {
     return internal::MessageQueueThreadPool::create();
   }

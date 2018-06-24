@@ -62,12 +62,12 @@ namespace zsLib
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Settings
-    #pragma mark
+    //
+    // Settings
+    //
 
     //-----------------------------------------------------------------------
-    void Settings::setup(ISettingsDelegatePtr delegate)
+    void Settings::setup(ISettingsDelegatePtr delegate) noexcept
     {
       StoredSettingsMapPtr stored;
 
@@ -133,7 +133,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SettingsPtr Settings::singleton()
+    SettingsPtr Settings::singleton() noexcept
     {
       AutoRecursiveLock lock(*IHelper::getGlobalLock());
       static SingletonLazySharedPtr<Settings> singleton(Settings::create());
@@ -145,7 +145,7 @@ namespace zsLib
     }
       
     //-------------------------------------------------------------------------
-    Settings::Settings(const make_private &) :
+    Settings::Settings(const make_private &) noexcept :
       mStored(make_shared<StoredSettingsMap>()),
       mDefaultsDelegates(make_shared<DefaultsDelegatesList>())
     {
@@ -153,20 +153,20 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Settings::~Settings()
+    Settings::~Settings() noexcept
     {
       mThisWeak.reset();
       ZS_LOG_DETAIL(log("destroyed"))
     }
 
     //-------------------------------------------------------------------------
-    SettingsPtr Settings::convert(ISettingsPtr settings)
+    SettingsPtr Settings::convert(ISettingsPtr settings) noexcept
     {
       return ZS_DYNAMIC_PTR_CAST(Settings, settings);
     }
 
     //-------------------------------------------------------------------------
-    SettingsPtr Settings::create()
+    SettingsPtr Settings::create() noexcept
     {
       SettingsPtr pThis(make_shared<Settings>(make_private{}));
       pThis->mThisWeak = pThis;
@@ -177,12 +177,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Settings => ISettings
-    #pragma mark
+    //
+    // Settings => ISettings
+    //
 
     //-------------------------------------------------------------------------
-    String Settings::getString(const char *key) const
+    String Settings::getString(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -216,7 +216,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    LONG Settings::getInt(const char *key) const
+    LONG Settings::getInt(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -261,7 +261,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    ULONG Settings::getUInt(const char *key) const
+    ULONG Settings::getUInt(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -306,7 +306,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    bool Settings::getBool(const char *key) const
+    bool Settings::getBool(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -351,7 +351,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    float Settings::getFloat(const char *key) const
+    float Settings::getFloat(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -395,7 +395,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    double Settings::getDouble(const char *key) const
+    double Settings::getDouble(const char *key) const noexcept
     {
       ISettingsDelegatePtr delegate;
 
@@ -442,7 +442,7 @@ namespace zsLib
     void Settings::setString(
                               const char *key,
                               const char *value
-                              )
+                              ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetString, zs, Settings, Info,
@@ -471,7 +471,7 @@ namespace zsLib
     void Settings::setInt(
                           const char *key,
                           LONG value
-                          )
+                          ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetInt, zs, Settings, Info,
@@ -500,7 +500,7 @@ namespace zsLib
     void Settings::setUInt(
                             const char *key,
                             ULONG value
-                            )
+                            ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetUInt, zs, Settings, Info,
@@ -529,7 +529,7 @@ namespace zsLib
     void Settings::setBool(
                             const char *key,
                             bool value
-                            )
+                            ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetBool, zs, Settings, Info,
@@ -558,7 +558,7 @@ namespace zsLib
     void Settings::setFloat(
                             const char *key,
                             float value
-                            )
+                            ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetFloat, zs, Settings, Info,
@@ -587,7 +587,7 @@ namespace zsLib
     void Settings::setDouble(
                               const char *key,
                               double value
-                              )
+                              ) noexcept
     {
       ZS_EVENTING_3(
                     x, i, Debug, SettingSetDouble, zs, Settings, Info,
@@ -613,7 +613,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void Settings::clear(const char *key)
+    void Settings::clear(const char *key) noexcept
     {
       ZS_EVENTING_2(
                     x, i, Debug, SettingClear, zs, Settings, Info,
@@ -641,7 +641,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    bool Settings::apply(const char *jsonSettings)
+    bool Settings::apply(const char *jsonSettings) noexcept
     {
       ZS_EVENTING_2(
                     x, i, Debug, SettingApply, zs, Settings, Info,
@@ -792,7 +792,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Settings::applyDefaults()
+    void Settings::applyDefaults() noexcept
     {
       ZS_EVENTING_1(
                     x, i, Debug, SettingApplyDefaults, zs, Settings, Info,
@@ -820,7 +820,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Settings::installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate)
+    void Settings::installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate) noexcept
     {
       if (!defaultsDelegate) return;
 
@@ -851,7 +851,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Settings::removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate)
+    void Settings::removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate) noexcept
     {
       AutoRecursiveLock lock(mLock);
       auto replacementList = make_shared<DefaultsDelegatesList>();
@@ -873,7 +873,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Settings::clearAll()
+    void Settings::clearAll() noexcept
     {
       ZS_EVENTING_1(
                     x, i, Debug, SettingClearAll, zs, Settings, Info,
@@ -897,7 +897,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void Settings::verifySettingExists(const char *key) throw (InvalidUsage)
+    void Settings::verifySettingExists(const char *key) noexcept(false)
     {
       ZS_THROW_INVALID_ARGUMENT_IF(!key)
 
@@ -953,23 +953,38 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void Settings::verifyRequiredSettings() throw (InvalidUsage)
+    void Settings::verifyRequiredSettings() noexcept(false)
     {
       applyDefaultsIfNoDelegatePresent();
 
       // check any required settings here:
+
+      decltype(mDefaultsDelegates) applyList;
+
+      {
+        AutoRecursiveLock lock(mLock);
+        applyList = mDefaultsDelegates;
+      }
+
+      for (auto iter = applyList->begin(); iter != applyList->end(); ++iter)
+      {
+        auto delegate = (*iter).lock();
+        if (!delegate) continue;
+        delegate->notifyVerifyRequiredSettings();
+      }
+
     }
 
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    #pragma mark
-    #pragma mark Settings => (internal)
-    #pragma mark
+    //
+    // Settings => (internal)
+    //
 
     //-----------------------------------------------------------------------
-    Settings::Params Settings::log(const char *message) const
+    Settings::Params Settings::log(const char *message) const noexcept
     {
       ElementPtr objectEl = Element::create("zsLib::Settings");
       IHelper::debugAppend(objectEl, "id", mID);
@@ -977,13 +992,13 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    Settings::Params Settings::slog(const char *message)
+    Settings::Params Settings::slog(const char *message) noexcept
     {
       return Params(message, "zsLib::Settings");
     }
 
     //-----------------------------------------------------------------------
-    void Settings::applyDefaultsIfNoDelegatePresent()
+    void Settings::applyDefaultsIfNoDelegatePresent() noexcept
     {
       {
         AutoRecursiveLock lock(mLock);
@@ -992,7 +1007,7 @@ namespace zsLib
         if (mAppliedDefaults) return;
       }
 
-      ZS_LOG_WARNING(Detail, log("To prevent issues with missing settings, the default settings are being applied. Recommend installing a settings delegate to fetch settings required from a externally."))
+      ZS_LOG_WARNING(Detail, log("To prevent issues with missing settings, the default settings are being applied. Recommend installing a settings delegate to fetch settings required externally."))
 
       applyDefaults();
     }
@@ -1003,12 +1018,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark ISettings
-  #pragma mark
+  //
+  // ISettings
+  //
 
   //---------------------------------------------------------------------------
-  void ISettings::setup(ISettingsDelegatePtr delegate)
+  void ISettings::setup(ISettingsDelegatePtr delegate) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1016,7 +1031,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  String ISettings::getString(const char *key)
+  String ISettings::getString(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return String();
@@ -1024,7 +1039,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  LONG ISettings::getInt(const char *key)
+  LONG ISettings::getInt(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return 0;
@@ -1032,7 +1047,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  ULONG ISettings::getUInt(const char *key)
+  ULONG ISettings::getUInt(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return 0;
@@ -1040,7 +1055,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool ISettings::getBool(const char *key)
+  bool ISettings::getBool(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return false;
@@ -1048,7 +1063,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  float ISettings::getFloat(const char *key)
+  float ISettings::getFloat(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return 0.0f;
@@ -1056,7 +1071,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  double ISettings::getDouble(const char *key)
+  double ISettings::getDouble(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return 0.0;
@@ -1067,7 +1082,7 @@ namespace zsLib
   void ISettings::setString(
                             const char *key,
                             const char *value
-                            )
+                            ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1078,7 +1093,7 @@ namespace zsLib
   void ISettings::setInt(
                           const char *key,
                           LONG value
-                          )
+                          ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1089,7 +1104,7 @@ namespace zsLib
   void ISettings::setUInt(
                           const char *key,
                           ULONG value
-                          )
+                          ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1100,7 +1115,7 @@ namespace zsLib
   void ISettings::setBool(
                           const char *key,
                           bool value
-                          )
+                          ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1111,7 +1126,7 @@ namespace zsLib
   void ISettings::setFloat(
                             const char *key,
                             float value
-                            )
+                            ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1122,7 +1137,7 @@ namespace zsLib
   void ISettings::setDouble(
                             const char *key,
                             double value
-                            )
+                            ) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1130,7 +1145,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::clear(const char *key)
+  void ISettings::clear(const char *key) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1138,7 +1153,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  bool ISettings::apply(const char *jsonSettings)
+  bool ISettings::apply(const char *jsonSettings) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return false;
@@ -1146,7 +1161,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::applyDefaults()
+  void ISettings::applyDefaults() noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1154,7 +1169,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate)
+  void ISettings::installDefaults(ISettingsApplyDefaultsDelegatePtr defaultsDelegate) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1162,7 +1177,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate)
+  void ISettings::removeDefaults(ISettingsApplyDefaultsDelegate &defaultsDelegate) noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1170,7 +1185,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::clearAll()
+  void ISettings::clearAll() noexcept
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1178,7 +1193,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::verifySettingExists(const char *key) throw (InvalidUsage)
+  void ISettings::verifySettingExists(const char *key) noexcept(false)
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;
@@ -1186,7 +1201,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void ISettings::verifyRequiredSettings() throw (InvalidUsage)
+  void ISettings::verifyRequiredSettings() noexcept(false)
   {
     internal::SettingsPtr singleton = internal::Settings::singleton();
     if (!singleton) return;

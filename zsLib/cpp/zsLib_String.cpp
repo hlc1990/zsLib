@@ -88,41 +88,45 @@ namespace zsLib
     typedef std::basic_string<char, ci_char_traits> ci_string;
   } // namespace internal
 
-  String::String() : std::string()
+  String::String() noexcept : std::string()
   {
   }
 
-  String::String(CSTR value) : std::string(value ? value : std::string())
+  String::String(const String &source) noexcept  : std::string(source)
+  {  
+  }
+
+  String::String(String &&source) noexcept : std::string(std::move(source))
   {
   }
 
-  String::String(CWSTR value) : std::string(internal::convertToString(value))
+  String::String(CSTR value) noexcept : std::string(value ? value : std::string())
   {
   }
 
-  String::String(CSTR value, size_t length) : std::string(value ? value : static_cast<const char *>(NULL), length)
+  String::String(CWSTR value) noexcept : std::string(internal::convertToString(value))
   {
   }
 
-  String::String(CWSTR value, size_t length)
+  String::String(CSTR value, size_t length) noexcept : std::string(value ? value : static_cast<const char *>(NULL), length)
+  {
+  }
+
+  String::String(CWSTR value, size_t length) noexcept
   {
     std::wstring temp(value, length);
     (*this) = String(temp);
   }
 
-  String::String(const std::string &value) : std::string(value)
+  String::String(const std::string &value) noexcept : std::string(value)
   {
   }
 
-  String::String(const std::wstring &value) : std::string(internal::convertToString(value))
+  String::String(const std::wstring &value) noexcept : std::string(internal::convertToString(value))
   {
   }
 
-  String::String(const String &value) : std::string(value)
-  {
-  }
-
-  String String::copyFrom(CSTR source, size_t maxCharacters)
+  String String::copyFrom(CSTR source, size_t maxCharacters) noexcept
   {
     if (!source) return String();
 
@@ -137,7 +141,7 @@ namespace zsLib
     return String((CSTR)copy.get());
   }
 
-  String String::copyFromUnicodeSafe(CSTR source, size_t maxCharacters)
+  String String::copyFromUnicodeSafe(CSTR source, size_t maxCharacters) noexcept
   {
     if (!source) return String();
 
@@ -152,32 +156,32 @@ namespace zsLib
     return String((CSTR)copy.get());
   }
 
-  std::wstring String::wstring() const
+  std::wstring String::wstring() const noexcept
   {
     return internal::convertToWString(*this);
   }
 
-  bool String::isEmpty() const
+  bool String::isEmpty() const noexcept
   {
     return empty();
   }
 
-  bool String::hasData() const
+  bool String::hasData() const noexcept
   {
     return !empty();
   }
 
-  size_t String::getLength() const
+  size_t String::getLength() const noexcept
   {
     return (*this).size();
   }
 
-  String::operator CSTR() const
+  String::operator CSTR() const noexcept
   {
     return (*this).c_str();
   }
-
-  String &String::operator=(const std::string &value)
+  
+  String &String::operator=(const std::string &value) noexcept
   {
     if (this == &value)
       return *this;
@@ -186,12 +190,12 @@ namespace zsLib
     return *this;
   }
 
-  String &String::operator=(const std::wstring &value)
+  String &String::operator=(const std::wstring &value) noexcept
   {
     return (*this) = String(value);
   }
 
-  String &String::operator=(const String &value)
+  String &String::operator=(const String &value) noexcept
   {
     if (this == &value)
       return *this;
@@ -200,32 +204,32 @@ namespace zsLib
     return *this;
   }
 
-  String &String::operator=(CSTR value)
+  String &String::operator=(CSTR value) noexcept
   {
-    (*(dynamic_cast<std::string *>(this))) = value;
+    (*(static_cast<std::string *>(this))) = value;
     return *this;
   }
 
-  String &String::operator=(CWSTR value)
+  String &String::operator=(CWSTR value) noexcept
   {
     return (*this) = String(value);
   }
 
-  int String::compareNoCase(CSTR value) const
+  int String::compareNoCase(CSTR value) const noexcept
   {
     internal::ci_string str1(*this);
     internal::ci_string str2(value);
     return str1.compare(str2);
   }
 
-  int String::compareNoCase(const String &value) const
+  int String::compareNoCase(const String &value) const noexcept
   {
     internal::ci_string str1(*this);
     internal::ci_string str2(value);
     return str1.compare(str2);
   }
 
-  void String::toLower()
+  void String::toLower() noexcept
   {
 #ifdef __QNX__
     char *buffer = new char[length()+1];
@@ -243,11 +247,11 @@ namespace zsLib
     delete [] buffer;
     buffer = NULL;
 #else
-    for (auto & c: *this) c = tolower((UCHAR)c);
+    for (auto & c: *this) c = static_cast<char>(tolower((UCHAR)c));
 #endif //__QNX__
   }
 
-  void String::toUpper()
+  void String::toUpper() noexcept
   {
 #ifdef __QNX__
     char *buffer = new char[length()+1];
@@ -265,44 +269,42 @@ namespace zsLib
     delete [] buffer;
     buffer = NULL;
 #else
-    for (auto & c: *this) c = toupper((UCHAR)c);
+    for (auto & c: *this) c = static_cast<char>(toupper((UCHAR)c));
 #endif //__QNX__
   }
 
   namespace internal {
-    struct one_of_check : public std::unary_function<char,bool>{
-      one_of_check(CSTR strip) : mStrip(strip) {}
+    struct one_of_check {
+      one_of_check(CSTR strip) noexcept : mStrip(strip) {}
 
-      bool operator()(const char &c)
+      bool operator()(const char &c) noexcept
       {
-        return NULL != strchr(mStrip, (UCHAR)c);
+        return NULL == strchr(mStrip, (UCHAR)c);
       }
 
       CSTR mStrip;
     };
   }
 
-  void String::trim(CSTR chars)
+  void String::trim(CSTR chars) noexcept
   {
-    const std::string &s = (*this);
-
-    auto  wsfront=std::find_if_not(s.begin(),s.end(), internal::one_of_check(chars));
-    *this = std::string(wsfront,std::find_if_not(s.rbegin(),std::string::const_reverse_iterator(wsfront), internal::one_of_check(chars)).base());
+    trimLeft(chars);
+    trimRight(chars);
   }
 
-  void String::trimLeft(CSTR chars)
+  void String::trimLeft(CSTR chars) noexcept
   {
-    const std::string &s = (*this);
-    *this = std::string(std::find_if_not(s.begin(), s.end(), internal::one_of_check(chars)), s.end());
+    function<bool(const char &)> checker = internal::one_of_check(chars);
+    erase(begin(), std::find_if(begin(), end(), checker));
   }
 
-  void String::trimRight(CSTR chars)
+  void String::trimRight(CSTR chars) noexcept
   {
-    const std::string &s = (*this);
-    *this = std::string(s.begin(),std::find_if_not(s.rbegin(),std::string::const_reverse_iterator(s.begin()), internal::one_of_check(chars)).base());
+    function<bool(const char &)> checker = internal::one_of_check(chars);
+    erase(std::find_if(rbegin(), rend(), checker).base(), end());
   }
 
-  size_t String::lengthUnicodeSafe() const
+  size_t String::lengthUnicodeSafe() const noexcept
   {
     CSTR str = this->c_str();
     if (NULL == str)
@@ -317,7 +319,7 @@ namespace zsLib
     return size;
   }
 
-  WCHAR String::atUnicodeSafe(size_t pos) const
+  WCHAR String::atUnicodeSafe(size_t pos) const noexcept(false)
   {
     CSTR str = this->c_str();
     if (NULL == str) {
@@ -335,10 +337,9 @@ namespace zsLib
       ++size;
     }
     throw std::out_of_range("String::atUnicodeSafe passed an index value too large");
-    return 0;
   }
 
-  String String::substrUnicodeSafe(size_t from, size_t n) const
+  String String::substrUnicodeSafe(size_t from, size_t n) const noexcept
   {
     CSTR startOfString = (*this).c_str();
     CSTR start = startOfString;
@@ -365,7 +366,7 @@ namespace zsLib
     return String(this->substr(start - startOfString, to - start));
   }
 
-  void String::replaceAll(CSTR findStr, CSTR replaceStr, size_t totalOccurances)
+  void String::replaceAll(CSTR findStr, CSTR replaceStr, size_t totalOccurances) noexcept
   {
     if (NULL == findStr)
       findStr = "";
@@ -592,6 +593,8 @@ namespace zsLib
       outUTF8 += length;
     }
 
+    constexpr static bool isSameSize(size_t size1, size_t size2) { return size1 == size2; }
+
     static std::unique_ptr<WCHAR[]> utf8ToUnicodeConvert(CSTR szInUTF8)
     {
       if (NULL == szInUTF8)
@@ -606,7 +609,7 @@ namespace zsLib
       CSTR szSource = szInUTF8;
       WCHAR *pDest = result.get();
 
-      if (sizeof(WORD) == sizeof(WCHAR))
+      if (isSameSize(sizeof(WORD), sizeof(WCHAR)))
       {
         while (0 != *szSource)
         {
@@ -642,7 +645,7 @@ namespace zsLib
       CWSTR szSource = szInUnicodeString;
       CHAR *pDest = result.get();
 
-      if (sizeof(WORD) == sizeof(WCHAR))
+      if (isSameSize(sizeof(WORD), sizeof(WCHAR)))
       {
         UTF16 value = 1;
         BYTE checkBOM[sizeof(value)];

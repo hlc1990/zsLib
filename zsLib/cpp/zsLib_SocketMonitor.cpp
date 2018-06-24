@@ -61,9 +61,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (helpers)
-    #pragma mark
+    //
+    // (helpers)
+    //
 
     static String friendly(SocketSet::event_type events)
     {
@@ -110,28 +110,28 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketMonitorSettingsDefaults
-    #pragma mark
+    //
+    // SocketMonitorSettingsDefaults
+    //
 
     class SocketMonitorSettingsDefaults : public ISettingsApplyDefaultsDelegate
     {
     public:
       //-----------------------------------------------------------------------
-      ~SocketMonitorSettingsDefaults()
+      ~SocketMonitorSettingsDefaults() noexcept
       {
         ISettings::removeDefaults(*this);
       }
 
       //-----------------------------------------------------------------------
-      static SocketMonitorSettingsDefaultsPtr singleton()
+      static SocketMonitorSettingsDefaultsPtr singleton() noexcept
       {
         static SingletonLazySharedPtr<SocketMonitorSettingsDefaults> singleton(create());
         return singleton.singleton();
       }
 
       //-----------------------------------------------------------------------
-      static SocketMonitorSettingsDefaultsPtr create()
+      static SocketMonitorSettingsDefaultsPtr create() noexcept
       {
         auto pThis(make_shared<SocketMonitorSettingsDefaults>());
         ISettings::installDefaults(pThis);
@@ -139,14 +139,14 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() noexcept override
       {
         ISettings::setString(ZSLIB_SETTING_SOCKET_MONITOR_THREAD_PRIORITY, "normal");
       }
     };
 
     //-------------------------------------------------------------------------
-    void installSocketMonitorSettingsDefaults()
+    void installSocketMonitorSettingsDefaults() noexcept
     {
       SocketMonitorSettingsDefaults::singleton();
     }
@@ -155,9 +155,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketMonitorLoadBalancer
-    #pragma mark
+    //
+    // SocketMonitorLoadBalancer
+    //
     
     class SocketMonitorLoadBalancer : public ISingletonManagerDelegate
     {
@@ -176,7 +176,7 @@ namespace zsLib
     protected:
 
       //-----------------------------------------------------------------------
-      static SocketMonitorLoadBalancerPtr create()
+      static SocketMonitorLoadBalancerPtr create() noexcept
       {
         auto pThis(make_shared<SocketMonitorLoadBalancer>(make_private{}));
         pThis->thisWeak_ = pThis;
@@ -185,7 +185,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static SocketMonitorLoadBalancerPtr singleton()
+      static SocketMonitorLoadBalancerPtr singleton() noexcept
       {
         static SingletonLazySharedPtr<SocketMonitorLoadBalancer> singleton(create());
 
@@ -199,13 +199,13 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void init()
+      void init() noexcept
       {
       }
 
     public:
       //-----------------------------------------------------------------------
-      SocketMonitorLoadBalancer(const make_private &) :
+      SocketMonitorLoadBalancer(const make_private &) noexcept :
         shutdownQueue_(IMessageQueueThread::createBasic("zsLib.SocketMonitorLoadBalancer", ThreadPriority_LowPriority)),
 #ifdef _WIN32
         maxSocketsPerMonitor_(WSA_MAXIMUM_WAIT_EVENTS)
@@ -217,14 +217,14 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      ~SocketMonitorLoadBalancer()
+      ~SocketMonitorLoadBalancer() noexcept
       {
         thisWeak_.reset();
         cancel();
       }
 
       //-----------------------------------------------------------------------
-      static SocketMonitorPtr link()
+      static SocketMonitorPtr link() noexcept
       {
         auto pThis = singleton();
         if (!pThis) return SocketMonitorPtr();
@@ -233,7 +233,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static void unlink(PUID id)
+      static void unlink(PUID id) noexcept
       {
         auto pThis = singleton();
         if (!pThis) return;
@@ -244,23 +244,23 @@ namespace zsLib
     protected:
 
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark SocketMonitorLoadBalancer => ISingletonManagerDelegate
-      #pragma mark
+      //
+      // SocketMonitorLoadBalancer => ISingletonManagerDelegate
+      //
 
       //-----------------------------------------------------------------------
-      void notifySingletonCleanup() override
+      void notifySingletonCleanup() noexcept override
       {
         cancel();
       }
 
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark SocketMonitorLoadBalancer => (internal)
-      #pragma mark
+      //
+      // SocketMonitorLoadBalancer => (internal)
+      //
 
       //-----------------------------------------------------------------------
-      void cancel()
+      void cancel() noexcept
       {
         SocketMonitorMap monitors;
 
@@ -284,7 +284,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      SocketMonitorPtr internalLink()
+      SocketMonitorPtr internalLink() noexcept
       {
         AutoRecursiveLock lock(lock_);
 
@@ -323,7 +323,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void internalUnlink(PUID id)
+      void internalUnlink(PUID id) noexcept
       {
         SocketMonitorPtr shutdownMonitor;
 
@@ -357,7 +357,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static zsLib::Log::Params slog(const char *message)
+      static zsLib::Log::Params slog(const char *message) noexcept
       {
         return zsLib::Log::Params(message, "SocketMonitorLoadBalancer");
       }
@@ -378,18 +378,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketSet
-    #pragma mark
+    //
+    // SocketSet
+    //
 
     //-------------------------------------------------------------------------
-    SocketSet::SocketSet()
+    SocketSet::SocketSet() noexcept
     {
       ZS_LOG_BASIC(log("created"))
     }
 
     //-------------------------------------------------------------------------
-    SocketSet::~SocketSet()
+    SocketSet::~SocketSet() noexcept
     {
       ZS_LOG_BASIC(log("destroyed"))
 
@@ -422,7 +422,7 @@ namespace zsLib
     SocketSet::poll_fd *SocketSet::preparePollingFDs(
                                                      poll_size &outSize,
                                                      EventHandle * &outEvents
-                                                     )
+                                                     ) noexcept
     {
       outSize = mOfficialCount;
       outEvents = NULL;
@@ -484,9 +484,9 @@ namespace zsLib
     void SocketSet::firedEvent(
                                SocketPtr socket,
                                event_type event
-                               )
+                               ) noexcept
     {
-      ZS_THROW_BAD_STATE_IF(mPollingFiredEventCount >= mPollingCount) // can never grow larger than the polling count
+      ZS_ASSERT(mPollingFiredEventCount < mPollingCount); // can never grow larger than the polling count
 
       mPollingFiredEvents[mPollingFiredEventCount].first = socket;
       mPollingFiredEvents[mPollingFiredEventCount].second = event;
@@ -496,7 +496,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SocketSet::FiredEventPair *SocketSet::getFiredEvents(poll_size &outSize)
+    SocketSet::FiredEventPair *SocketSet::getFiredEvents(poll_size &outSize) noexcept
     {
       outSize = mPollingFiredEventCount;
       ZS_LOG_INSANE(log("get fired events") + ZS_PARAM("fired count", mPollingFiredEventCount))
@@ -504,9 +504,9 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketSet::delegateGone(SocketPtr socket)
+    void SocketSet::delegateGone(SocketPtr socket) noexcept
     {
-      ZS_THROW_BAD_STATE_IF(mPollingSocketsWithDelegateGoneCount >= mPollingCount) // can never grow larger than the polling count
+      ZS_ASSERT(mPollingSocketsWithDelegateGoneCount < mPollingCount); // can never grow larger than the polling count
 
       mPollingSocketsWithDelegateGone[mPollingSocketsWithDelegateGoneCount] = socket;
       ++mPollingSocketsWithDelegateGoneCount;
@@ -515,7 +515,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SocketPtr *SocketSet::getSocketsWithDelegateGone(poll_size &outSize)
+    SocketPtr *SocketSet::getSocketsWithDelegateGone(poll_size &outSize) noexcept
     {
       outSize = mPollingSocketsWithDelegateGoneCount;
       ZS_LOG_INSANE(log("get delegates gone") + ZS_PARAM("gone count", mPollingSocketsWithDelegateGoneCount))
@@ -523,7 +523,7 @@ namespace zsLib
     }
     
     //-------------------------------------------------------------------------
-    void SocketSet::clear()
+    void SocketSet::clear() noexcept
     {
       ZS_LOG_DETAIL(log("clear"))
 
@@ -543,7 +543,7 @@ namespace zsLib
 
 #ifdef _WIN32
     //-------------------------------------------------------------------------
-    void SocketSet::setWakeUpEvent(HANDLE eventHandle)
+    void SocketSet::setWakeUpEvent(HANDLE eventHandle) noexcept
     {
       ZS_LOG_TRACE(log("wakeup event created") + ZS_PARAM("event", (PTRNUMBER)eventHandle))
 
@@ -563,7 +563,7 @@ namespace zsLib
 #endif //_WIN32
 
     //-------------------------------------------------------------------------
-    void SocketSet::reset(SOCKET socket)
+    void SocketSet::reset(SOCKET socket) noexcept
     {
       ZS_LOG_INSANE(log("reset") + ZS_PARAM("handle", socket))
 
@@ -625,7 +625,7 @@ namespace zsLib
     void SocketSet::reset(
                           SOCKET socket,
                           event_type events
-                          )
+                          ) noexcept
     {
       if (0 == events) {  // no events?
         reset(socket);
@@ -652,7 +652,7 @@ namespace zsLib
     void SocketSet::addEvents(
                               SOCKET socket,
                               event_type events
-                              )
+                              ) noexcept
     {
       if (0 == events) return;  // noop
 
@@ -667,8 +667,9 @@ namespace zsLib
       event_type temp = mOfficialSet[index].events;
       mOfficialSet[index].events = mOfficialSet[index].events | events;
 #ifdef _WIN32
-      auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
-      assert(0 == selectResult);
+      ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+      ZS_MAYBE_USED(selectResult);
+      ZS_ASSERT(0 == selectResult);
 #endif //_WIN32
 
       mDirty = mDirty || (temp != mOfficialSet[index].events);
@@ -680,7 +681,7 @@ namespace zsLib
     void SocketSet::removeEvents(
                                  SOCKET socket,
                                  event_type events
-                                 )
+                                 ) noexcept
     {
       SocketIndexMap::iterator found = mSocketIndexes.find(socket);
       if (found == mSocketIndexes.end()) {
@@ -698,17 +699,19 @@ namespace zsLib
         ZS_LOG_TRACE(log("remove events no longer needs to monitor as no events are being monitored") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty))
         reset(socket);
       } else {
-        ZS_LOG_INSANE(log("remove events found existing thus updating") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty))
+        ZS_LOG_INSANE(log("remove events found existing thus updating") + ZS_PARAM("handle", socket) + ZS_PARAM("index", index) + ZS_PARAM("events", friendly(events)) + ZS_PARAM("now", friendly(mOfficialSet[index].events)) + ZS_PARAM("previous", friendly(temp)) + ZS_PARAM("dirty", mDirty));
 
 #ifdef _WIN32
-      auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
-      assert(0 == selectResult);
+        ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, mOfficialHandleSet[index], toNetworkEvents(mOfficialSet[index].events));
+        ZS_MAYBE_USED(selectResult);
+
+        ZS_ASSERT(0 == selectResult);
 #endif //_WIN32
       }
     }
 
     //-------------------------------------------------------------------------
-    void SocketSet::minOfficialAllocation(poll_size minSize)
+    void SocketSet::minOfficialAllocation(poll_size minSize) noexcept
     {
       if (mOfficialAllocationSize < minSize) {
         ZS_LOG_TRACE(log("offical allocation resizing") + ZS_PARAM("min", minSize) + ZS_PARAM("allocated", mOfficialAllocationSize))
@@ -745,7 +748,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketSet::minPollingAllocation(poll_size minSize)
+    void SocketSet::minPollingAllocation(poll_size minSize) noexcept
     {
       if (mPollingAllocationSize < minSize) {
         ZS_LOG_TRACE(log("polling allocation resizing") + ZS_PARAM("min", minSize) + ZS_PARAM("allocated", mPollingAllocationSize))
@@ -793,7 +796,7 @@ namespace zsLib
     void SocketSet::append(
                            SOCKET socket,
                            event_type events
-                           )
+                           ) noexcept
     {
       ZS_LOG_TRACE(log("new socket being monitored") + ZS_PARAM("handle", socket) + ZS_PARAM("events", friendly(events)))
 
@@ -811,8 +814,9 @@ namespace zsLib
         eventHandle = NULL;
         ZS_LOG_WARNING(Detail, log("create event handle failed") + ZS_PARAM("error", WSAGetLastError()))
       } else {
-        auto selectResult = WSAEventSelect(socket, eventHandle, toNetworkEvents(events));
-        assert(0 == selectResult);
+        ZS_MAYBE_USED() auto selectResult = WSAEventSelect(socket, eventHandle, toNetworkEvents(events));
+        ZS_MAYBE_USED(selectResult);
+        ZS_ASSERT(0 == selectResult);
       }
       mOfficialHandleSet[mOfficialCount] = eventHandle;
       mOfficialHandleHolderSet[mOfficialCount] = make_shared<EventHandleHolder>(eventHandle);
@@ -824,7 +828,7 @@ namespace zsLib
 
 #ifdef _WIN32
     //-----------------------------------------------------------------------
-    long SocketSet::toNetworkEvents(event_type events)
+    long SocketSet::toNetworkEvents(event_type events) noexcept
     {
       long result {};
       if (0 != (POLLRDNORM & events)) {
@@ -841,7 +845,7 @@ namespace zsLib
 #endif //_WIN32
 
     //-----------------------------------------------------------------------
-    zsLib::Log::Params SocketSet::log(const char *message) const
+    zsLib::Log::Params SocketSet::log(const char *message) const noexcept
     {
       ElementPtr objectEl = Element::create("SocketSet");
 
@@ -860,12 +864,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketSet::EventHandleHolder
-    #pragma mark
+    //
+    // SocketSet::EventHandleHolder
+    //
 
     //-------------------------------------------------------------------------
-    SocketSet::EventHandleHolder::EventHandleHolder(EventHandle handle) :
+    SocketSet::EventHandleHolder::EventHandleHolder(EventHandle handle) noexcept :
       mEventHandle(handle)
     {
 #ifdef _WIN32
@@ -874,7 +878,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SocketSet::EventHandleHolder::~EventHandleHolder()
+    SocketSet::EventHandleHolder::~EventHandleHolder() noexcept
     {
 #ifdef _WIN32
       ZS_LOG_TRACE(slog("closing event handle", "SocketSet::EventHandleHolder") + ZS_PARAM("event", (PTRNUMBER)mEventHandle))
@@ -889,24 +893,24 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketMonitor
-    #pragma mark
+    //
+    // SocketMonitor
+    //
 
     //-------------------------------------------------------------------------
-    SocketMonitor::SocketMonitor()
+    SocketMonitor::SocketMonitor() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    SocketMonitor::~SocketMonitor()
+    SocketMonitor::~SocketMonitor() noexcept
     {
       mThisWeak.reset();
       cancel();
     }
 
     //-------------------------------------------------------------------------
-    SocketMonitorPtr SocketMonitor::create()
+    SocketMonitorPtr SocketMonitor::create() noexcept
     {
       SocketMonitorPtr pThis = SocketMonitorPtr(new SocketMonitor);
       pThis->mThisWeak = pThis;
@@ -914,13 +918,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    SocketMonitorPtr SocketMonitor::link()
+    SocketMonitorPtr SocketMonitor::link() noexcept
     {
       return SocketMonitorLoadBalancer::link();
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::unlink()
+    void SocketMonitor::unlink() noexcept
     {
       SocketMonitorLoadBalancer::unlink(mID);
     }
@@ -931,7 +935,7 @@ namespace zsLib
                                      bool monitorRead,
                                      bool monitorWrite,
                                      bool monitorException
-                                     )
+                                     ) noexcept
     {
       EventPtr event;
       {
@@ -975,7 +979,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::monitorEnd(zsLib::Socket &socket)
+    void SocketMonitor::monitorEnd(zsLib::Socket &socket) noexcept
     {
       EventPtr event;
       {
@@ -1008,7 +1012,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::monitorRead(const zsLib::Socket &socket)
+    void SocketMonitor::monitorRead(const zsLib::Socket &socket) noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -1033,7 +1037,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::monitorWrite(const zsLib::Socket &socket)
+    void SocketMonitor::monitorWrite(const zsLib::Socket &socket) noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -1058,7 +1062,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::monitorException(const zsLib::Socket &socket)
+    void SocketMonitor::monitorException(const zsLib::Socket &socket) noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -1083,7 +1087,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::operator()()
+    void SocketMonitor::operator()() noexcept
     {
       debugSetCurrentThreadName("org.zsLib.socketMonitor");
 
@@ -1129,7 +1133,9 @@ namespace zsLib
 
         ZS_LOG_INSANE(log("poll completed") + ZS_PARAM("result", result) + ZS_PARAM("error", lastError));
 
+#ifndef _WIN32
         bool redoWakeupSocket = false;
+#endif //ndef _WIN32
 
         // select completed, do notifications from select
         {
@@ -1375,14 +1381,14 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::shutdown()
+    void SocketMonitor::shutdown() noexcept
     {
       ZS_LOG_DETAIL(log("shutdown called"));
       cancel();
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::cancel()
+    void SocketMonitor::cancel() noexcept
     {
       ZS_LOG_DETAIL(log("cancel called"));
 
@@ -1408,7 +1414,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::processWaiting()
+    void SocketMonitor::processWaiting() noexcept
     {
       if (mWaitingForRebuildList.size() < 1) return;
       for (EventList::iterator iter = mWaitingForRebuildList.begin(); iter != mWaitingForRebuildList.end(); ++iter)
@@ -1420,7 +1426,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::wakeUp()
+    void SocketMonitor::wakeUp() noexcept
     {
 #ifdef _WIN32
       if (NULL == mWakeupEvent) return;
@@ -1454,7 +1460,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::createWakeUpSocket()
+    void SocketMonitor::createWakeUpSocket() noexcept
     {
 #ifdef _WIN32
       mWakeupEvent = CreateEventEx(NULL, NULL, 0, EVENT_ALL_ACCESS);
@@ -1542,7 +1548,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void SocketMonitor::cleanWakeUpSocket()
+    void SocketMonitor::cleanWakeUpSocket() noexcept
     {
 #ifdef _WIN32
       if (NULL != mWakeupEvent) {
@@ -1555,7 +1561,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    zsLib::Log::Params SocketMonitor::log(const char *message) const
+    zsLib::Log::Params SocketMonitor::log(const char *message) const noexcept
     {
       ElementPtr objectEl = Element::create("SocketMonitor");
 
@@ -1571,7 +1577,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    zsLib::Log::Params SocketMonitor::slog(const char *message)
+    zsLib::Log::Params SocketMonitor::slog(const char *message) noexcept
     {
       return zsLib::Log::Params(message, "SocketMonitor");
     }

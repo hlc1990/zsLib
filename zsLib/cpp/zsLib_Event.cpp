@@ -40,7 +40,7 @@ namespace zsLib
   namespace internal
   {
     //-------------------------------------------------------------------------
-    Event::Event(bool manualReset) 
+    Event::Event(bool manualReset) noexcept
 #ifndef ZSLIB_INTERNAL_USE_WIN32_EVENT
     : mManualReset(manualReset)
 #endif //ndef 
@@ -51,7 +51,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    Event::~Event()
+    Event::~Event() noexcept
     {
 #ifdef ZSLIB_INTERNAL_USE_WIN32_EVENT
       if (NULL != mEvent) {
@@ -64,12 +64,13 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  EventPtr Event::create(bool manualReset) {
+  EventPtr Event::create(bool manualReset) noexcept
+  {
     return make_shared<Event>(manualReset);
   }
 
   //---------------------------------------------------------------------------
-  void Event::reset()
+  void Event::reset() noexcept
   {
 #ifdef ZSLIB_INTERNAL_USE_WIN32_EVENT
     if (NULL == mEvent) return;
@@ -80,7 +81,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Event::wait()
+  void Event::wait() noexcept
   {
 #ifdef ZSLIB_INTERNAL_USE_WIN32_EVENT
     if (NULL == mEvent) return;
@@ -99,7 +100,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void Event::notify()
+  void Event::notify() noexcept
   {
 #ifdef ZSLIB_INTERNAL_USE_WIN32_EVENT
     if (NULL == mEvent) return;

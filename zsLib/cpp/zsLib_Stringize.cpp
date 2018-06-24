@@ -55,9 +55,9 @@ namespace zsLib
     };
 
     //-----------------------------------------------------------------------
-    String convert(ULONGLONG value, size_t base)
+    String convert(ULONGLONG value, size_t base) noexcept
     {
-      ZS_THROW_INVALID_USAGE_IF((base < 2) || (base > (10+26)));
+      ZS_ASSERT((base > 1) && (base <= (10+26)));
 
       char buffer[sizeof(ULONGLONG)*8+2];
       char *startPos = &(buffer[0]);
@@ -80,7 +80,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    String timeToString(const Time &value)
+    String timeToString(const Time &value) noexcept
     {
       if (Time() == value) return String();
 
@@ -99,7 +99,7 @@ namespace zsLib
                             const Seconds &secPart,
                             std::intmax_t fractionalPart,
                             std::intmax_t den
-                            )
+                            ) noexcept
     {
 
       if (den < 1) {
@@ -120,7 +120,7 @@ namespace zsLib
     }
 
     //-----------------------------------------------------------------------
-    void trimTrailingZeros(std::string &value)
+    void trimTrailingZeros(std::string &value) noexcept
     {
       if (std::string::npos == value.find('.')) return;
 
@@ -142,13 +142,13 @@ namespace zsLib
   }
 
   //-----------------------------------------------------------------------
-  String string(const IPAddress & x, bool includePort)
+  String string(const IPAddress & x, bool includePort) noexcept
   {
     return x.string(includePort);
   }
 
   //-----------------------------------------------------------------------
-  String string(const Socket & x)
+  String string(const Socket & x) noexcept
   {
     auto socket = x.getSocket();
     if (INVALID_SOCKET == socket) return "INVALID_SOCKET";
@@ -156,7 +156,7 @@ namespace zsLib
   }
 
   //-----------------------------------------------------------------------
-  String string(const SocketPtr & x)
+  String string(const SocketPtr & x) noexcept
   {
     if (!x) return String();
     auto socket = x->getSocket();

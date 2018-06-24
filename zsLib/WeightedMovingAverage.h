@@ -41,28 +41,28 @@ namespace zsLib
   public:
     typedef XAVERAGETYPE AverageType;
 
-    WeightedMovingAverage(AverageType weightOfNewValues = 0.20) : mWeightOfNewValues(weightOfNewValues) {}
+    WeightedMovingAverage(AverageType weightOfNewValues = 0.20) noexcept : mWeightOfNewValues(weightOfNewValues) {}
 
-    WeightedMovingAverage &operator+=(float value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(double value) { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(float value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(double value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
 
-    WeightedMovingAverage &operator+=(bool value) { adjust(static_cast<AverageType>(value ? 1.0 : 0.0)); return (*this); }
-    WeightedMovingAverage &operator+=(CHAR value) { (*this) += static_cast<int>(value); return (*this); }
-    WeightedMovingAverage &operator+=(UCHAR value) { (*this) += static_cast<unsigned int>(value); return (*this); }
-    WeightedMovingAverage &operator+=(SHORT value) { (*this) += static_cast<int>(value); return (*this); }
-    WeightedMovingAverage &operator+=(USHORT value) { (*this) += static_cast<unsigned int>(value); return (*this); }
-    WeightedMovingAverage &operator+=(int value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(unsigned int value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(long value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(unsigned long value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(long long value) { adjust(static_cast<AverageType>(value)); return (*this); }
-    WeightedMovingAverage &operator+=(unsigned long long value) { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(bool value) noexcept { adjust(static_cast<AverageType>(value ? 1.0 : 0.0)); return (*this); }
+    WeightedMovingAverage &operator+=(CHAR value) noexcept { (*this) += static_cast<int>(value); return (*this); }
+    WeightedMovingAverage &operator+=(UCHAR value) noexcept { (*this) += static_cast<unsigned int>(value); return (*this); }
+    WeightedMovingAverage &operator+=(SHORT value) noexcept { (*this) += static_cast<int>(value); return (*this); }
+    WeightedMovingAverage &operator+=(USHORT value) noexcept { (*this) += static_cast<unsigned int>(value); return (*this); }
+    WeightedMovingAverage &operator+=(int value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(unsigned int value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(long value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(unsigned long value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(long long value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
+    WeightedMovingAverage &operator+=(unsigned long long value) noexcept { adjust(static_cast<AverageType>(value)); return (*this); }
 
     template <typename data_type>
-    data_type value() const { return static_cast<data_type>(mLastValue); }
+    data_type value() const noexcept { return static_cast<data_type>(mLastValue); }
 
   protected:
-    void adjust(AverageType input)
+    void adjust(AverageType input) noexcept
     {
       if (mFirstAdjustment) {
         mLastValue = input;
@@ -89,28 +89,28 @@ namespace zsLib
   public:
     typedef XAVERAGETYPE AverageType;
 
-    WeightedMovingAverageUsingTotal(AverageType weightOfNewValues = 0.20) : mCalculator(weightOfNewValues) {}
+    WeightedMovingAverageUsingTotal(AverageType weightOfNewValues = 0.20) noexcept : mCalculator(weightOfNewValues) {}
 
-    WeightedMovingAverageUsingTotal &operator+=(float newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(double newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(float newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(double newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
 
-    WeightedMovingAverageUsingTotal &operator+=(bool newTotal) { adjust(static_cast<AverageType>(newTotal ? 1.0 : 0.0)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(CHAR newTotal) { (*this) += static_cast<int>(newTotal); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(UCHAR newTotal) { (*this) += static_cast<unsigned int>(newTotal); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(SHORT newTotal) { (*this) += static_cast<int>(newTotal); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(USHORT newTotal) { (*this) += static_cast<unsigned int>(newTotal); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(int newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(unsigned int newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(long newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(unsigned long newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(long long newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
-    WeightedMovingAverageUsingTotal &operator+=(unsigned long long newTotal) { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(bool newTotal) noexcept { adjust(static_cast<AverageType>(newTotal ? 1.0 : 0.0)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(CHAR newTotal) noexcept { (*this) += static_cast<int>(newTotal); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(UCHAR newTotal) noexcept { (*this) += static_cast<unsigned int>(newTotal); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(SHORT newTotal) noexcept { (*this) += static_cast<int>(newTotal); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(USHORT newTotal) noexcept { (*this) += static_cast<unsigned int>(newTotal); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(int newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(unsigned int newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(long newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(unsigned long newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(long long newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
+    WeightedMovingAverageUsingTotal &operator+=(unsigned long long newTotal) noexcept { adjust(static_cast<AverageType>(newTotal)); return (*this); }
 
     template <typename data_type>
-    data_type value() const { return mCalculator.template value<data_type>(); }
+    data_type value() const noexcept { return mCalculator.template value<data_type>(); }
 
   protected:
-    void adjust(AverageType newTotal)
+    void adjust(AverageType newTotal) noexcept
     {
       AverageType nextValue = (newTotal - mLastTotal);
       mLastTotal = newTotal;

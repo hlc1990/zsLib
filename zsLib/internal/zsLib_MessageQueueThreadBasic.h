@@ -49,29 +49,29 @@ namespace zsLib
                                     public IMessageQueueNotify
     {
     protected:
-      MessageQueueThreadBasic(const char *threadName);
+      MessageQueueThreadBasic(const char *threadName) noexcept;
 
     public:
-      ~MessageQueueThreadBasic();
+      ~MessageQueueThreadBasic() noexcept;
 
-      static MessageQueueThreadBasicPtr create(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority);
+      static MessageQueueThreadBasicPtr create(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority) noexcept;
 
-      void operator () ();
+      void operator ()() noexcept;
 
       // IMessageQueue
-      void post(IMessageQueueMessageUniPtr message) override;
+      void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
 
-      size_type getTotalUnprocessedMessages() const override;
+      size_type getTotalUnprocessedMessages() const noexcept override;
 
       // IMessageQueueNotify
-      void notifyMessagePosted() override;
+      void notifyMessagePosted() noexcept override;
 
       // IMessageQueueThread
-      void waitForShutdown() override;
+      void waitForShutdown() noexcept override;
 
-      void setThreadPriority(ThreadPriorities threadPriority) override;
+      void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
-      void processMessagesFromThread() override;
+      void processMessagesFromThread() noexcept override;
 
     protected:
       ThreadPtr mThread;

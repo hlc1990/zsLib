@@ -61,37 +61,37 @@ namespace zsLib
       ZS_DECLARE_TYPEDEF_PTR(zsLib::XML::Text, Text)
 
     protected:
-      TimerMonitor();
-      TimerMonitor(const TimerMonitor &) = delete;
+      TimerMonitor() noexcept;
+      TimerMonitor(const TimerMonitor &) noexcept = delete;
 
-      void init();
+      void init() noexcept;
 
     public:
       ~TimerMonitor();
 
-      static TimerMonitorPtr singleton();
-      static TimerMonitorPtr create();
+      static TimerMonitorPtr singleton() noexcept;
+      static TimerMonitorPtr create() noexcept;
 
-      void monitorBegin(TimerPtr timer);
-      void monitorEnd(Timer &timer);
+      void monitorBegin(TimerPtr timer) noexcept;
+      void monitorEnd(Timer &timer) noexcept;
 
-      void operator()();
+      void operator()() noexcept;
 
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark TimerMonitor => ISingletonManagerDelegate
-      #pragma mark
+      //
+      // TimerMonitor => ISingletonManagerDelegate
+      //
 
-      void notifySingletonCleanup() override;
+      void notifySingletonCleanup() noexcept override;
 
     private:
-      zsLib::Log::Params log(const char *message) const;
-      static zsLib::Log::Params slog(const char *message);
+      zsLib::Log::Params log(const char *message) const noexcept;
+      static zsLib::Log::Params slog(const char *message) noexcept;
 
-      void cancel();
+      void cancel() noexcept;
 
-      Microseconds fireTimers();
-      void wakeUp();
+      Microseconds fireTimers() noexcept;
+      void wakeUp() noexcept;
 
     private:
       AutoPUID mID;

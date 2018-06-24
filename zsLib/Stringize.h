@@ -42,11 +42,11 @@ namespace zsLib
   class Stringize
   {
   public:
-    Stringize(const t_type &value, size_t base = 10) : mValue(value), mBase(base)        {}
-    Stringize(const Stringize &value) : mValue(value.mValue), mBase(value.mBase)  {}
+    Stringize(const t_type &value, size_t base = 10) noexcept : mValue(value), mBase(base)        {}
+    Stringize(const Stringize &value) noexcept : mValue(value.mValue), mBase(value.mBase)  {}
 
-    operator String() const;
-    String string() {return (String)(*this);}
+    operator String() const noexcept;
+    String string() noexcept {return (String)(*this);}
 
   private:
     const t_type &mValue;
@@ -54,14 +54,14 @@ namespace zsLib
   };
 
   template<class T>
-  String string( const T & x, size_t base = 10  )
+  String string( const T & x, size_t base = 10  ) noexcept
   {
     return Stringize<T>(x, base).string();
   }
 
-  String string(const IPAddress & x, bool includePort = true);
-  String string(const Socket &x);
-  String string(const SocketPtr &x);
+  String string(const IPAddress & x, bool includePort = true) noexcept;
+  String string(const Socket &x) noexcept;
+  String string(const SocketPtr &x) noexcept;
 
 } // namespace zsLib
 

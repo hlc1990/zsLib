@@ -52,36 +52,36 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Element
-      #pragma mark
+      //
+      // XML::internal::Element
+      //
 
       //-----------------------------------------------------------------------
-      Element::Element()
+      Element::Element() noexcept
       {        
       }
 
       //-----------------------------------------------------------------------
-      Element::~Element()
+      Element::~Element() noexcept
       {        
       }
 
       //-----------------------------------------------------------------------
-      void Element::parse(XML::ParserPos &ioPos)
+      void Element::parse(XML::ParserPos &ioPos) noexcept
       {
         ElementPtr temp = mThis.lock();
         actualParse(temp, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      size_t Element::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Element::getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept
       {
         class Walker : public WalkSink
         {
         public:
           Walker(size_t &outResult, const GeneratorPtr &generator) : mGenerator(generator), mResult(outResult) {}
 
-          bool onElementEnter(ElementPtr inNode) override
+          bool onElementEnter(ElementPtr inNode) noexcept override
           {
             mResult += strlen("<");
             if (inNode->getValue().isEmpty()) {
@@ -125,10 +125,10 @@ namespace zsLib
             return false;
           }
 
-          bool onText(TextPtr inNode) override                     {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          bool onComment(CommentPtr inNode) override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          bool onDeclarationEnter(DeclarationPtr inNode) override  {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
-          bool onUnknown(UnknownPtr inNode) override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onText(TextPtr inNode) noexcept override                     {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onComment(CommentPtr inNode) noexcept override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onDeclarationEnter(DeclarationPtr inNode) noexcept override  {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
+          bool onUnknown(UnknownPtr inNode) noexcept override               {mResult += inNode->getOutputSizeXML(mGenerator); return false;}
 
         private:
           const GeneratorPtr &mGenerator;
@@ -151,7 +151,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Element::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Element::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         class Walker : public WalkSink
         {
@@ -161,7 +161,7 @@ namespace zsLib
             mPos(pos)
           {}
 
-          bool onElementEnter(ElementPtr inNode) override
+          bool onElementEnter(ElementPtr inNode) noexcept override
           {
             Generator::writeBuffer(mPos, "<");
             if (inNode->getValue().isEmpty()) {
@@ -192,7 +192,7 @@ namespace zsLib
             return false;
           }
 
-          bool onElementExit(ElementPtr inNode) override
+          bool onElementExit(ElementPtr inNode) noexcept override
           {
             bool forceEndTag = (0 != (XML::Generator::XMLWriteFlag_ForceElementEndTag & (mGenerator->getXMLWriteFlags())));
 
@@ -210,10 +210,10 @@ namespace zsLib
             return false;
           }
 
-          bool onText(TextPtr inNode) override                     {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          bool onComment(CommentPtr inNode) override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          bool onDeclarationEnter(DeclarationPtr inNode) override  {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
-          bool onUnknown(UnknownPtr inNode) override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onText(TextPtr inNode) noexcept override                     {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onComment(CommentPtr inNode) noexcept override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onDeclarationEnter(DeclarationPtr inNode) noexcept override  {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
+          bool onUnknown(UnknownPtr inNode) noexcept override               {Generator::writeBuffer(mGenerator, inNode, mPos); return false;}
 
         private:
           const GeneratorPtr &mGenerator;
@@ -236,7 +236,7 @@ namespace zsLib
       size_t Element::actualWriteJSON(
                                       const GeneratorPtr &inGenerator,
                                       char * &ioPos
-                                      ) const
+                                      ) const noexcept
       {
         class Walker : public WalkSink
         {
@@ -245,7 +245,7 @@ namespace zsLib
                  const GeneratorPtr &generator,
                  char * &pos,
                  size_t &result
-                 ) :
+                 ) noexcept :
           mGeneratorPtr(generator),
           mGenerator(*generator),
           mPos(pos),
@@ -254,7 +254,7 @@ namespace zsLib
           mStrs(generator->jsonStrs())
           {}
 
-          bool onElementEnter(ElementPtr el) override
+          bool onElementEnter(ElementPtr el) noexcept override
           {
             Generator::GeneratorJSONElementModes mode = Generator::GeneratorJSONElementMode_ObjectType;
             Generator::GeneratorJSONELementChildStates childState = Generator::GeneratorJSONELementChildState_None;
@@ -411,7 +411,7 @@ namespace zsLib
             return false;
           }
 
-          bool onElementExit(ElementPtr el) override
+          bool onElementExit(ElementPtr el) noexcept override
           {
             Generator::GeneratorJSONElementModes mode = Generator::GeneratorJSONElementMode_ObjectType;
             Generator::GeneratorJSONELementChildStates childState = Generator::GeneratorJSONELementChildState_None;
@@ -486,20 +486,20 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Element::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Element::getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept
       {
         char *pos = NULL;
         return actualWriteJSON(inGenerator, pos);
       }
       
       //-----------------------------------------------------------------------
-      void Element::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Element::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         actualWriteJSON(inGenerator, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Element::cloneAssignParent(NodePtr inParent) const
+      NodePtr Element::cloneAssignParent(NodePtr inParent) const noexcept
       {
         ElementPtr newObject(XML::Element::create());
         Parser::safeAdoptAsLastChild(inParent, newObject);
@@ -578,7 +578,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Element::cloneAttributes(ElementPtr inOriginalElement)
+      void Element::cloneAttributes(ElementPtr inOriginalElement) noexcept
       {
         NodePtr newObject = mThis.lock();
 
@@ -591,7 +591,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Element::actualParse(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos)
+      void Element::actualParse(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos) noexcept
       {
         ULONG totalPushes = 0;  // used to keep track how many stack positions are pushed on by this method doing its parse
 
@@ -602,13 +602,13 @@ namespace zsLib
         while (*ioPos)
         {
           // this must be a <
-          ZS_THROW_BAD_STATE_IF('<' != *ioPos)
+          ZS_ASSERT('<' == *ioPos);
 
           ++ioPos;
           ioCurrentElement->mName = Parser::parseLegalName(ioPos);
 
           // could not have got in here if this was an illegal name
-          ZS_THROW_BAD_STATE_IF(ioCurrentElement->mName.isEmpty())
+          ZS_ASSERT(ioCurrentElement->mName.hasData());
 
           parseAttributes(ioCurrentElement, ioPos);
 
@@ -648,14 +648,14 @@ namespace zsLib
               continue;
 
             // must be a new element, or an end of element
-            ZS_THROW_BAD_STATE_IF('<' != *ioPos)
+            ZS_ASSERT('<' == *ioPos);
 
             foundStartTag = parseNewElement(ioCurrentElement, ioPos, totalPushes);
             if (foundStartTag)
               break;
 
             // this must be an end tag
-            ZS_THROW_BAD_STATE_IF(!ioPos.isString("</"))
+            ZS_ASSERT(ioPos.isString("</"));
 
             foundEndTag = true;
             parseEndTag(ioCurrentElement, ioPos, totalPushes);
@@ -677,7 +677,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Element::parseAttributes(ElementPtr inCurrentElement, XML::ParserPos &ioPos)
+      void Element::parseAttributes(ElementPtr inCurrentElement, XML::ParserPos &ioPos) noexcept
       {
         while ((*ioPos) &&
                ('>' != *ioPos) &&
@@ -717,7 +717,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Element::parseTagSingleElementEndSlash(XML::ParserPos &ioPos)
+      bool Element::parseTagSingleElementEndSlash(XML::ParserPos &ioPos) noexcept
       {
         if ('/' != *ioPos)
           return false;
@@ -741,7 +741,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Element::parseIsDocumentSingleElement(ElementPtr inCurrentElement, XML::ParserPos &ioPos)
+      bool Element::parseIsDocumentSingleElement(ElementPtr inCurrentElement, XML::ParserPos &ioPos) noexcept
       {
         bool caseSensative = (ioPos.getDocument())->isElementNameIsCaseSensative();
 
@@ -764,7 +764,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      bool Element::parseNewElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes)
+      bool Element::parseNewElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept
       {
         if (!Parser::isLegalName(*(ioPos + 1), true))
           return false;
@@ -780,7 +780,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Element::parseEndTag(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes)
+      void Element::parseEndTag(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept
       {
         XML::ParserPos temp(ioPos);
 
@@ -809,7 +809,7 @@ namespace zsLib
             return;
           }
 
-          ZS_THROW_BAD_STATE("This should have been skipped by the outer parser")
+          ZS_ASSERT_FAIL("This should have been skipped by the outer parser");
         }
 
         // if this end tag does not belong to the current element, the break out and give to outer element a chance to parse
@@ -859,17 +859,17 @@ namespace zsLib
           return;
         }
 
-        ZS_THROW_BAD_STATE_IF(!temp.isEOF())
+        ZS_ASSERT(temp.isEOF());
 
         (ioPos.getParser())->addWarning(ParserWarningType_NoEndBracketFound, ioPos);
         ioPos = temp;
       }
 
       //-----------------------------------------------------------------------
-      void Element::parsePopElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes)
+      void Element::parsePopElement(ElementPtr &ioCurrentElement, XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept
       {
         // this element is popped off the stack
-        ZS_THROW_BAD_STATE_IF(0 == ioTotalPushes)
+        ZS_ASSERT(ioTotalPushes > 0);
         (ioPos.getParser())->popPos();
         --ioTotalPushes;
 
@@ -881,11 +881,11 @@ namespace zsLib
           return;
         }
         ioCurrentElement = parent->toElement();
-        ZS_THROW_BAD_STATE_IF(!ioCurrentElement)
+        ZS_ASSERT(ioCurrentElement);
       }
 
       //-----------------------------------------------------------------------
-      void Element::parsePopPushes(XML::ParserPos &ioPos, ULONG &ioTotalPushes)
+      void Element::parsePopPushes(XML::ParserPos &ioPos, ULONG &ioTotalPushes) noexcept
       {
         // this is done just in case the parser suddenly completes with some remaining stack still pushed at the end
         // since we aren't using the auto-stack to ensure the stack remains properly intact
@@ -903,18 +903,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Element
-    #pragma mark
+    //
+    // XML::Element
+    //
 
     //-------------------------------------------------------------------------
-    Element::Element(const make_private &) :
+    Element::Element(const make_private &) noexcept :
       internal::Element()
     {
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Element::create(const char *name)
+    ElementPtr Element::create(const char *name) noexcept
     {
       ElementPtr newObject(make_shared<Element>(make_private{}));
       newObject->mThis = newObject;
@@ -926,7 +926,7 @@ namespace zsLib
     String Element::getText(
                             bool inCompressWhiteSpace,
                             bool inIncludeTextOfChildElements
-                            )
+                            ) noexcept
     {
       // result will include all entities, to be converted later if required
       String result;
@@ -949,8 +949,8 @@ namespace zsLib
         class TextWalker : public WalkSink
         {
         public:
-          TextWalker(String &outResult) : mResult(outResult) {}
-          bool onText(TextPtr inNode) override
+          TextWalker(String &outResult) noexcept : mResult(outResult) {}
+          bool onText(TextPtr inNode) noexcept override
           {
             mResult += inNode->getValue();
             return false;
@@ -977,7 +977,7 @@ namespace zsLib
     String Element::getTextDecoded(
                                    bool inCompressWhiteSpace,
                                    bool inIncludeTextOfChildElements
-                                   )
+                                   ) noexcept
     {
       // result will include all entities, to be converted later if required
       String result;
@@ -1000,8 +1000,8 @@ namespace zsLib
         class TextWalker : public WalkSink
         {
         public:
-          TextWalker(String &outResult) : mResult(outResult) {}
-          bool onText(TextPtr inNode) override
+          TextWalker(String &outResult) noexcept : mResult(outResult) {}
+          bool onText(TextPtr inNode) noexcept override
           {
             mResult += inNode->getValueDecoded();
             return false;
@@ -1025,7 +1025,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::findAttribute(String inName) const
+    AttributePtr Element::findAttribute(String inName) const noexcept
     {
       DocumentPtr document(getDocument());
 
@@ -1053,7 +1053,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Element::getAttributeValue(String inName) const
+    String Element::getAttributeValue(String inName) const noexcept
     {
       AttributePtr attribute = findAttribute(inName);
       if (attribute)
@@ -1063,7 +1063,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::findAttributeChecked(String inName) const throw(Exceptions::CheckFailed)
+    AttributePtr Element::findAttributeChecked(String inName) const noexcept(false)
     {
       AttributePtr result = findAttribute(inName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1071,7 +1071,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Element::getAttributeValueChecked(String inName) const throw(Exceptions::CheckFailed)
+    String Element::getAttributeValueChecked(String inName) const noexcept(false)
     {
       AttributePtr result = findAttribute(inName);
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1079,7 +1079,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Element::setAttribute(String inName, String inValue, bool inQuoted)
+    bool Element::setAttribute(String inName, String inValue, bool inQuoted) noexcept
     {
       AttributePtr attribute = Attribute::create();
       attribute->setName(inName);
@@ -1089,9 +1089,9 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Element::setAttribute(AttributePtr inAttribute)
+    bool Element::setAttribute(AttributePtr inAttribute) noexcept
     {
-      ZS_THROW_INVALID_USAGE_IF(!inAttribute)
+      ZS_ASSERT(inAttribute);
 
       bool replaced = deleteAttribute(inAttribute->getName());
       mThis.lock()->adoptAsLastChild(inAttribute);
@@ -1099,7 +1099,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Element::deleteAttribute(String inName)
+    bool Element::deleteAttribute(String inName) noexcept
     {
       AttributePtr attribute = findAttribute(inName);
       if (!attribute)
@@ -1110,25 +1110,25 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool Element::hasAttributes() const
+    bool Element::hasAttributes() const noexcept
     {
       return (bool)mFirstAttribute;
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::getFirstAttribute() const
+    AttributePtr Element::getFirstAttribute() const noexcept
     {
       return mFirstAttribute;
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::getLastAttribute() const
+    AttributePtr Element::getLastAttribute() const noexcept
     {
       return mLastAttribute;
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::getFirstAttributeChecked() const throw(Exceptions::CheckFailed)
+    AttributePtr Element::getFirstAttributeChecked() const noexcept(false)
     {
       AttributePtr result = getFirstAttribute();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1136,7 +1136,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Element::getLastAttributeChecked() const throw(Exceptions::CheckFailed)
+    AttributePtr Element::getLastAttributeChecked() const noexcept(false)
     {
       AttributePtr result = getLastAttribute();
       ZS_THROW_CUSTOM_IF(Exceptions::CheckFailed, !result)
@@ -1144,7 +1144,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Element::adoptAsFirstChild(NodePtr inNode)
+    void Element::adoptAsFirstChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
@@ -1182,7 +1182,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Element::adoptAsLastChild(NodePtr inNode)
+    void Element::adoptAsLastChild(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
@@ -1220,13 +1220,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Element::clone() const
+    NodePtr Element::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Element::clear()
+    void Element::clear() noexcept
     {
       mName.clear();
       NodePtr child = mFirstAttribute;
@@ -1241,31 +1241,31 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Element::getValue() const
+    String Element::getValue() const noexcept
     {
       return mName;
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Element::getNodeType()
+    Node::NodeType::Type Element::getNodeType() const noexcept
     {
       return NodeType::Element;
     }
 
     //-------------------------------------------------------------------------
-    bool Element::isElement() const
+    bool Element::isElement() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Element::toNode() const
+    NodePtr Element::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr Element::toElement() const
+    ElementPtr Element::toElement() const noexcept
     {
       return mThis.lock();
     }

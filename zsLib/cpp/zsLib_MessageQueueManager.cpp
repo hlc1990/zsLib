@@ -54,36 +54,36 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark (helpers)
-    #pragma mark
+    //
+    // (helpers)
+    //
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark SocketMonitorSettingsDefaults
-    #pragma mark
+    //
+    // SocketMonitorSettingsDefaults
+    //
 
     class MessageQueueManagerSettingsDefaults : public ISettingsApplyDefaultsDelegate
     {
     public:
       //-----------------------------------------------------------------------
-      ~MessageQueueManagerSettingsDefaults()
+      ~MessageQueueManagerSettingsDefaults() noexcept
       {
         ISettings::removeDefaults(*this);
       }
 
       //-----------------------------------------------------------------------
-      static MessageQueueManagerSettingsDefaultsPtr singleton()
+      static MessageQueueManagerSettingsDefaultsPtr singleton() noexcept
       {
         static SingletonLazySharedPtr<MessageQueueManagerSettingsDefaults> singleton(create());
         return singleton.singleton();
       }
 
       //-----------------------------------------------------------------------
-      static MessageQueueManagerSettingsDefaultsPtr create()
+      static MessageQueueManagerSettingsDefaultsPtr create() noexcept
       {
         auto pThis(make_shared<MessageQueueManagerSettingsDefaults>());
         ISettings::installDefaults(pThis);
@@ -91,14 +91,14 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void notifySettingsApplyDefaults() override
+      void notifySettingsApplyDefaults() noexcept override
       {
         ISettings::setBool(ZSLIB_SETTING_MESSAGE_QUEUE_MANAGER_PROCESS_APPLICATION_MESSAGE_QUEUE_ON_QUIT, false);
       }
     };
 
     //-------------------------------------------------------------------------
-    void installMessageQueueManagerSettingsDefaults()
+    void installMessageQueueManagerSettingsDefaults() noexcept
     {
       MessageQueueManagerSettingsDefaults::singleton();
     }
@@ -107,12 +107,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager
-    #pragma mark
+    //
+    // MessageQueueManager
+    //
 
     //-------------------------------------------------------------------------
-    MessageQueueManager::MessageQueueManager(const make_private &) :
+    MessageQueueManager::MessageQueueManager(const make_private &) noexcept :
       mPending(0),
       mProcessApplicationQueueOnShutdown(ISettings::getBool(ZSLIB_SETTING_MESSAGE_QUEUE_MANAGER_PROCESS_APPLICATION_MESSAGE_QUEUE_ON_QUIT))
     {
@@ -120,13 +120,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueManager::init()
+    void MessageQueueManager::init() noexcept
     {
       // AutoRecursiveLock lock(mLock);
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueManagerPtr MessageQueueManager::create()
+    MessageQueueManagerPtr MessageQueueManager::create() noexcept
     {
       MessageQueueManagerPtr pThis(make_shared<MessageQueueManager>(make_private{}));
       pThis->mThisWeak = pThis;
@@ -135,7 +135,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueManagerPtr MessageQueueManager::singleton()
+    MessageQueueManagerPtr MessageQueueManager::singleton() noexcept
     {
       AutoRecursiveLock lock(*IHelper::getGlobalLock());
       static SingletonLazySharedPtr<MessageQueueManager> singleton(create());
@@ -151,7 +151,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueManager::~MessageQueueManager()
+    MessageQueueManager::~MessageQueueManager() noexcept
     {
       ZS_LOG_BASIC(log("destroyed"))
       mThisWeak.reset();
@@ -162,18 +162,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager => IMessageQueueManager
-    #pragma mark
+    //
+    // MessageQueueManager => IMessageQueueManager
+    //
 
     //-------------------------------------------------------------------------
-    IMessageQueuePtr MessageQueueManager::getMessageQueueForGUIThread()
+    IMessageQueuePtr MessageQueueManager::getMessageQueueForGUIThread() noexcept
     {
       return getMessageQueue(ZSLIB_MESSAGE_QUEUE_MANAGER_RESERVED_GUI_THREAD_NAME);
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueuePtr MessageQueueManager::getMessageQueue(const char *assignedQueueName)
+    IMessageQueuePtr MessageQueueManager::getMessageQueue(const char *assignedQueueName) noexcept
     {
       String name(assignedQueueName);
 
@@ -217,7 +217,7 @@ namespace zsLib
                                                              const char *assignedThreadPoolQueueName,
                                                              const char *registeredQueueName,
                                                              size_t minThreadsRequired
-                                                             )
+                                                             ) noexcept
     {
       String poolName(assignedThreadPoolQueueName);
       String name(registeredQueueName);
@@ -276,9 +276,9 @@ namespace zsLib
 
     //-------------------------------------------------------------------------
     void MessageQueueManager::registerMessageQueueThreadPriority(
-                                                                  const char *assignedQueueName,
-                                                                  ThreadPriorities priority
-                                                                  )
+                                                                 const char *assignedQueueName,
+                                                                 ThreadPriorities priority
+                                                                 ) noexcept
     {
       ZS_DECLARE_TYPEDEF_PTR(zsLib::IMessageQueueThread, IMessageQueueThread);
 
@@ -326,7 +326,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    IMessageQueueManager::MessageQueueMapPtr MessageQueueManager::getRegisteredQueues()
+    IMessageQueueManager::MessageQueueMapPtr MessageQueueManager::getRegisteredQueues() noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -340,7 +340,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    size_t MessageQueueManager::getTotalUnprocessedMessages() const
+    size_t MessageQueueManager::getTotalUnprocessedMessages() const noexcept
     {
       AutoRecursiveLock lock(mLock);
 
@@ -360,7 +360,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueManager::shutdownAllQueues()
+    void MessageQueueManager::shutdownAllQueues() noexcept
     {
       ZS_LOG_DETAIL(log("shutdown all queues called"))
 
@@ -371,7 +371,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueManager::blockUntilDone()
+    void MessageQueueManager::blockUntilDone() noexcept
     {
       bool processApplicationQueueOnShutdown = false;
 
@@ -427,9 +427,9 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager => IWakeDelegate
-    #pragma mark
+    //
+    // MessageQueueManager => IWakeDelegate
+    //
 
     //-------------------------------------------------------------------------
     void MessageQueueManager::onWake()
@@ -521,12 +521,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager => IMessageQueueManagerForBackgrounding
-    #pragma mark
+    //
+    // MessageQueueManager => IMessageQueueManagerForBackgrounding
+    //
 
     //-------------------------------------------------------------------------
-    void MessageQueueManager::notifySingletonCleanup()
+    void MessageQueueManager::notifySingletonCleanup() noexcept
     {
       shutdownAllQueues();
       blockUntilDone();
@@ -541,12 +541,12 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark MessageQueueManager => (internal)
-    #pragma mark
+    //
+    // MessageQueueManager => (internal)
+    //
 
     //-------------------------------------------------------------------------
-    MessageQueueManager::Params MessageQueueManager::log(const char *message) const
+    MessageQueueManager::Params MessageQueueManager::log(const char *message) const noexcept
     {
       ElementPtr objectEl = Element::create("MessageQueueManager");
       IHelper::debugAppend(objectEl, "id", mID);
@@ -554,19 +554,19 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueManager::Params MessageQueueManager::slog(const char *message)
+    MessageQueueManager::Params MessageQueueManager::slog(const char *message) noexcept
     {
       return Params(message, "MessageQueueManager");
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueManager::Params MessageQueueManager::debug(const char *message) const
+    MessageQueueManager::Params MessageQueueManager::debug(const char *message) const noexcept
     {
       return Params(message, toDebug());
     }
 
     //-------------------------------------------------------------------------
-    ElementPtr MessageQueueManager::toDebug() const
+    ElementPtr MessageQueueManager::toDebug() const noexcept
     {
       AutoRecursiveLock lock(mLock);
       ElementPtr resultEl = Element::create("MessageQueueManager");
@@ -587,7 +587,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void MessageQueueManager::cancel()
+    void MessageQueueManager::cancel() noexcept
     {
       ZS_LOG_DEBUG(log("cancel called"))
 
@@ -664,12 +664,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  #pragma mark
-  #pragma mark IMessageQueueManager
-  #pragma mark
+  //
+  // IMessageQueueManager
+  //
 
   //---------------------------------------------------------------------------
-  IMessageQueuePtr IMessageQueueManager::getMessageQueueForGUIThread()
+  IMessageQueuePtr IMessageQueueManager::getMessageQueueForGUIThread() noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return IMessageQueuePtr();
@@ -677,7 +677,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IMessageQueuePtr IMessageQueueManager::getMessageQueue(const char *assignedQueueName)
+  IMessageQueuePtr IMessageQueueManager::getMessageQueue(const char *assignedQueueName) noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return IMessageQueuePtr();
@@ -689,7 +689,7 @@ namespace zsLib
                                                             const char *assignedThreadPoolQueueName,
                                                             const char *registeredQueueName,
                                                             size_t minThreadsRequired
-                                                            )
+                                                            ) noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return IMessageQueuePtr();
@@ -700,7 +700,7 @@ namespace zsLib
   void IMessageQueueManager::registerMessageQueueThreadPriority(
                                                                 const char *assignedQueueName,
                                                                 ThreadPriorities priority
-                                                                )
+                                                                ) noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return;
@@ -708,7 +708,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  IMessageQueueManager::MessageQueueMapPtr IMessageQueueManager::getRegisteredQueues()
+  IMessageQueueManager::MessageQueueMapPtr IMessageQueueManager::getRegisteredQueues() noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return make_shared<IMessageQueueManager::MessageQueueMap>();
@@ -716,7 +716,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  size_t IMessageQueueManager::getTotalUnprocessedMessages()
+  size_t IMessageQueueManager::getTotalUnprocessedMessages() noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return 0;
@@ -724,7 +724,7 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
-  void IMessageQueueManager::shutdownAllQueues()
+  void IMessageQueueManager::shutdownAllQueues() noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return;
@@ -732,7 +732,7 @@ namespace zsLib
   }
 
   //-------------------------------------------------------------------------
-  void IMessageQueueManager::blockUntilDone()
+  void IMessageQueueManager::blockUntilDone() noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return;

@@ -47,29 +47,29 @@ namespace zsLib
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
       //-----------------------------------------------------------------------
-      #pragma mark
-      #pragma mark XML::internal::Attribute
-      #pragma mark
+      //
+      // XML::internal::Attribute
+      //
 
       //-----------------------------------------------------------------------
-      Attribute::Attribute() :
+      Attribute::Attribute() noexcept :
         mValuelessAttribute(false),
         mHasQuotes(true)
       {
       }
 
       //-----------------------------------------------------------------------
-      Attribute::~Attribute()
+      Attribute::~Attribute() noexcept
       {
       }
 
       //-----------------------------------------------------------------------
-      bool Attribute::parse(XML::ParserPos &ioPos)
+      bool Attribute::parse(XML::ParserPos &ioPos) noexcept
       {
         Parser::AutoStack stack(ioPos);
 
         mName = Parser::parseLegalName(ioPos);
-        ZS_THROW_BAD_STATE_IF(mName.isEmpty())
+        ZS_ASSERT(mName.hasData());
 
         mValuelessAttribute = false;
 
@@ -169,19 +169,19 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      static String normalizeAttributeValue(const String &input)
+      static String normalizeAttributeValue(const String &input) noexcept
       {
         String output = XML::Parser::convertFromEntities(input);
         return XML::Parser::makeAttributeEntitySafe(output, '\"');
       }
 
       //-----------------------------------------------------------------------
-      size_t Attribute::getOutputSizeXML(const GeneratorPtr &inGenerator) const
+      size_t Attribute::getOutputSizeXML(const GeneratorPtr &inGenerator) const noexcept
       {
         bool hasQuotes = mHasQuotes;
 
         size_t result = 0;
-        ZS_THROW_INVALID_USAGE_IF(mName.isEmpty())
+        ZS_ASSERT(mName.hasData());
         result += mName.getLength();
         if (!mValuelessAttribute)
         {
@@ -201,11 +201,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      void Attribute::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Attribute::writeBufferXML(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         bool hasQuotes = mHasQuotes;
 
-        ZS_THROW_INVALID_USAGE_IF(mName.isEmpty())
+        ZS_ASSERT(mName.hasData());
         Generator::writeBuffer(ioPos, mName);
         if (!mValuelessAttribute)
         {
@@ -233,7 +233,7 @@ namespace zsLib
       size_t Attribute::actualWriteJSON(
                                         const GeneratorPtr &inGenerator,
                                         char * &ioPos
-                                        ) const
+                                        ) const noexcept
       {
         const Generator &generator = (*inGenerator);
 
@@ -267,20 +267,20 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      size_t Attribute::getOutputSizeJSON(const GeneratorPtr &inGenerator) const
+      size_t Attribute::getOutputSizeJSON(const GeneratorPtr &inGenerator) const noexcept
       {
         char *ioPos = NULL;
         return actualWriteJSON(inGenerator, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      void Attribute::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const
+      void Attribute::writeBufferJSON(const GeneratorPtr &inGenerator, char * &ioPos) const noexcept
       {
         actualWriteJSON(inGenerator, ioPos);
       }
 
       //-----------------------------------------------------------------------
-      NodePtr Attribute::cloneAssignParent(NodePtr inParent) const
+      NodePtr Attribute::cloneAssignParent(NodePtr inParent) const noexcept
       {
         AttributePtr newObject(XML::Attribute::create());
 
@@ -300,18 +300,18 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    #pragma mark
-    #pragma mark XML::Attribute
-    #pragma mark
+    //
+    // XML::Attribute
+    //
 
     //-------------------------------------------------------------------------
-    Attribute::Attribute(const make_private &) :
+    Attribute::Attribute(const make_private &) noexcept :
       internal::Attribute()
     {
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Attribute::create()
+    AttributePtr Attribute::create() noexcept
     {
       AttributePtr object(make_shared<Attribute>(make_private{}));
       object->mThis = object;
@@ -319,13 +319,13 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Attribute::getName() const
+    String Attribute::getName() const noexcept
     {
       return mName;
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::setName(String inName)
+    void Attribute::setName(String inName) noexcept
     {
       // remember the attribute's parent
       NodePtr parent = getParent();
@@ -356,13 +356,13 @@ namespace zsLib
         }
         else
         {
-          ZS_THROW_INVALID_USAGE("attributes are only allowed on elements and declarations")
+          ZS_ASSERT_FAIL("attributes are only allowed on elements and declarations");
         }
       }
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::setValue(String inValue)
+    void Attribute::setValue(String inValue) noexcept
     {
       mValue = inValue;
       mValuelessAttribute = false;
@@ -371,31 +371,31 @@ namespace zsLib
       {
         if (String::npos != mValue.find('\"'))
         {
-          ZS_THROW_INVALID_USAGE("value cannot contain both set of quotes, one must be escaped using entities")
+          ZS_ASSERT_FAIL("value cannot contain both set of quotes, one must be escaped using entities");
         }
       }
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::setQuoted(bool inQuoted)
+    void Attribute::setQuoted(bool inQuoted) noexcept
     {
       mHasQuotes = inQuoted;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::getFirstChild() const
+    NodePtr Attribute::getFirstChild() const noexcept
     {
       return NodePtr();
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::getLastChild() const
+    NodePtr Attribute::getLastChild() const noexcept
     {
       return NodePtr();
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::getFirstSibling() const
+    NodePtr Attribute::getFirstSibling() const noexcept
     {
       NodePtr parent = getParent();
       if (parent)
@@ -406,13 +406,13 @@ namespace zsLib
         if (parent->isDeclaration())
           return parent->toDeclaration()->mFirstAttribute;
 
-        ZS_THROW_INVALID_USAGE("attributes only belong on elements and declarations")
+        ZS_ASSERT_FAIL("attributes only belong on elements and declarations");
       }
       return NodePtr();
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::getLastSibling() const
+    NodePtr Attribute::getLastSibling() const noexcept
     {
       NodePtr parent = getParent();
       if (parent)
@@ -423,13 +423,13 @@ namespace zsLib
         if (parent->isDeclaration())
           return parent->toDeclaration()->mLastAttribute;
 
-        ZS_THROW_INVALID_USAGE("attributes only belong on elements and declarations")
+        ZS_ASSERT_FAIL("attributes only belong on elements and declarations");
       }
       return NodePtr();
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::orphan()
+    void Attribute::orphan() noexcept
     {
       NodePtr parent = getParent();
 
@@ -458,7 +458,7 @@ namespace zsLib
         }
         else
         {
-          ZS_THROW_INVALID_USAGE("attributes only belong on elements and declarations")
+          ZS_ASSERT_FAIL("attributes only belong on elements and declarations");
         }
       }
 
@@ -475,27 +475,27 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::adoptAsFirstChild(NodePtr inNode)
+    void Attribute::adoptAsFirstChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("attributes cannot have children")
+      ZS_ASSERT_FAIL("attributes cannot have children");
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::adoptAsLastChild(NodePtr inNode)
+    void Attribute::adoptAsLastChild(NodePtr inNode) noexcept
     {
-      ZS_THROW_INVALID_USAGE("attributes cannot have children")
+      ZS_ASSERT_FAIL("attributes cannot have children");
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::adoptAsPreviousSibling(NodePtr inNode)
+    void Attribute::adoptAsPreviousSibling(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       NodePtr parent = mParent.lock();
 
-      ZS_THROW_INVALID_USAGE_IF(!parent)  // you cannot add as a sibling if there is no parent
-      ZS_THROW_INVALID_USAGE_IF(!inNode->isAttribute())  // you cannot add another but attributes as sibling to attributes
+      ZS_ASSERT_MESSAGE(parent, "cannot add as a sibling if there is no parent");
+      ZS_ASSERT_MESSAGE(inNode->isAttribute(), "cannot add any other type but attributes as sibling to attributes");
 
       // orphan the node first
       inNode->orphan();
@@ -522,20 +522,20 @@ namespace zsLib
       }
       else
       {
-        ZS_THROW_BAD_STATE("attributes can only exist on elements and declarations")
+        ZS_ASSERT_FAIL("attributes can only exist on elements and declarations");
       }
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::adoptAsNextSibling(NodePtr inNode)
+    void Attribute::adoptAsNextSibling(NodePtr inNode) noexcept
     {
       if (!inNode)
         return;
 
       NodePtr parent = mParent.lock();
 
-      ZS_THROW_INVALID_USAGE_IF(!parent)  // you cannot add as a sibling if there is no parent
-      ZS_THROW_INVALID_USAGE_IF(!inNode->isAttribute())  // you cannot add another but attributes as sibling to attributes
+      ZS_ASSERT_MESSAGE(parent, "cannot add as a sibling if there is no parent");
+      ZS_ASSERT_MESSAGE(inNode->isAttribute(), "cannot add any other type but attributes as sibling to attributes");
 
       // orphan the node first
       inNode->orphan();
@@ -562,29 +562,29 @@ namespace zsLib
       }
       else
       {
-        ZS_THROW_BAD_STATE("attributes can only exist on elements and declarations")
+        ZS_ASSERT_FAIL("attributes can only exist on elements and declarations");
       }
     }
 
     //-------------------------------------------------------------------------
-    bool Attribute::hasChildren()
+    bool Attribute::hasChildren() noexcept
     {
       return false;
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::removeChildren()
+    void Attribute::removeChildren() noexcept
     {
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::clone() const
+    NodePtr Attribute::clone() const noexcept
     {
       return cloneAssignParent(NodePtr());
     }
 
     //-------------------------------------------------------------------------
-    void Attribute::clear()
+    void Attribute::clear() noexcept
     {
       mName.clear();
       mValue.clear();
@@ -592,37 +592,37 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    String Attribute::getValue() const
+    String Attribute::getValue() const noexcept
     {
       return mValue;
     }
 
     //-------------------------------------------------------------------------
-    String Attribute::getValueDecoded() const
+    String Attribute::getValueDecoded() const noexcept
     {
       return Parser::convertFromEntities(mValue);
     }
 
     //-------------------------------------------------------------------------
-    Node::NodeType::Type Attribute::getNodeType()
+    Node::NodeType::Type Attribute::getNodeType() const noexcept
     {
       return NodeType::Attribute;
     }
 
     //-------------------------------------------------------------------------
-    bool Attribute::isAttribute() const
+    bool Attribute::isAttribute() const noexcept
     {
       return true;
     }
 
     //-------------------------------------------------------------------------
-    NodePtr Attribute::toNode() const
+    NodePtr Attribute::toNode() const noexcept
     {
       return mThis.lock();
     }
 
     //-------------------------------------------------------------------------
-    AttributePtr Attribute::toAttribute() const
+    AttributePtr Attribute::toAttribute() const noexcept
     {
       return mThis.lock();
     }

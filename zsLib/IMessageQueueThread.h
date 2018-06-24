@@ -46,24 +46,24 @@ namespace zsLib
     ThreadPriority_RealtimePriority
   };
 
-  const char *toString(ThreadPriorities priority);
-  ThreadPriorities threadPriorityFromString(const char *str);
+  const char *toString(ThreadPriorities priority) noexcept;
+  ThreadPriorities threadPriorityFromString(const char *str) noexcept;
 
   void setThreadPriority(
                          Thread &thread,
                          ThreadPriorities threadPriority
-                         );
+                         ) noexcept;
 
   interaction IMessageQueueThread : public IMessageQueue
   {
-    static IMessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority);
-    static IMessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue();
+    static IMessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority) noexcept;
+    static IMessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue() noexcept;
 
-    virtual void waitForShutdown() = 0;
+    virtual void waitForShutdown() noexcept = 0;
 
-    virtual void setThreadPriority(ThreadPriorities priority) = 0;
+    virtual void setThreadPriority(ThreadPriorities priority) noexcept = 0;
 
-    virtual void processMessagesFromThread() = 0;
+    virtual void processMessagesFromThread() noexcept = 0;
   };
 
 #ifdef __QNX__
