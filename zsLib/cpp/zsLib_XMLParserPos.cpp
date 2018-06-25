@@ -71,7 +71,7 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      ParserPos::~ParserPos()
+      ParserPos::~ParserPos() noexcept
       {
       }
 

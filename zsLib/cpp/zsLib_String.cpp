@@ -452,8 +452,8 @@ namespace zsLib
       if ((utf32Char > ZS_INTERNAL_UTF32_MAKE_SURROGATE_BETEWEEN_MIN) &&
           (utf32Char < ZS_INTERNAL_UTF32_MAKE_SURROGATE_BETEWEEN_MAX)) {
         utf32Char -= ZS_INTERNAL_UTF16_BASE_INDEX;
-        UTF16 surrogate1 = (ZS_INTERNAL_UTF16_HIGH_BITS_FLAG | (utf32Char >> 10) & ZS_INTERNAL_UTF16_MASK_10_BITS_VALUE);
-        UTF16 surrogate2 = (ZS_INTERNAL_UTF16_LOW_BITS_FLAG | (utf32Char & ZS_INTERNAL_UTF16_MASK_10_BITS_VALUE));
+        UTF16 surrogate1 = (ZS_INTERNAL_UTF16_HIGH_BITS_FLAG | ((utf32Char >> 10) & ZS_INTERNAL_UTF16_MASK_10_BITS_VALUE));
+        UTF16 surrogate2 = (ZS_INTERNAL_UTF16_LOW_BITS_FLAG | ((utf32Char & ZS_INTERNAL_UTF16_MASK_10_BITS_VALUE)));
         memcpy(outResult, &surrogate1, sizeof(surrogate1));
         ++outResult;
         memcpy(outResult, &surrogate2, sizeof(surrogate2));

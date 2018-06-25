@@ -54,6 +54,11 @@ Please read the leading comments before using the class.
 #ifndef SAFEINT_HPP
 #define SAFEINT_HPP
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#endif /* __clang__ */
+
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedef"
@@ -7063,5 +7068,8 @@ SafeInt< T, E > operator |( U lhs, SafeInt< T, E > rhs ) SAFEINT_NOTHROW
 #pragma GCC diagnostic pop
 #endif /* __GNUC__ */
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#endif /* __clang__ */
 #endif
 

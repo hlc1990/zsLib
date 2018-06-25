@@ -161,7 +161,7 @@ namespace zsLib
     {
     public:
       //-----------------------------------------------------------------------
-      SocketInit()
+      SocketInit() noexcept(false)
       {
         WSADATA data;
         memset(&data, 0, sizeof(data));
@@ -172,11 +172,11 @@ namespace zsLib
       }
 
       //-----------------------------------------------------------------------
-      ~SocketInit()
+      ~SocketInit() noexcept
       {
         int result = WSACleanup();
         if (0 != result) {
-          ZS_THROW_CUSTOM_PROPERTIES_1(zsLib::Socket::Exceptions::Unspecified, result, String("WSACleanup failed with error code: ") + string(result))
+          ZS_ASSERT_FAIL("WSACleanup failed with error code");
         }
       }
     };
@@ -1344,8 +1344,9 @@ namespace zsLib
     internal::ignoreSigTermOnThread();
 
     AutoRecursiveLock lock(mLock);
-    ZS_THROW_CUSTOM_IF(Exceptions::InvalidSocket, !isValid())
-    ZS_THROW_CUSTOM_PROPERTIES_1_IF(Socket::Exceptions::UnsupportedSocketOption, -1 == inOption, ENOSYS)
+    ZS_THROW_CUSTOM_IF(Exceptions::InvalidSocket, !isValid());
+    auto checknotsupportedfunc = [inOption](int value) {return value == inOption; };
+    ZS_THROW_CUSTOM_PROPERTIES_1_IF(Socket::Exceptions::UnsupportedSocketOption, checknotsupportedfunc(-1), ENOSYS);
 
     if (GetOptionValue::ReadyToReadSizeInBytes == inOption)
     {

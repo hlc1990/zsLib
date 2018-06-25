@@ -87,17 +87,19 @@ namespace zsLib
         wndClass.lpszClassName = mHiddenWindowClassName;
 
         mRegisteredWindowClass = ::RegisterClass(&wndClass);
-        ZS_THROW_BAD_STATE_MSG_IF(0 == mRegisteredWindowClass, "RegisterClass failed with error: " + zsLib::string(::GetLastError()))
+        ZS_ASSERT(0 != mRegisteredWindowClass);
 
         mCustomMessage = ::RegisterWindowMessage(mCustomMessageName);
-        ZS_THROW_BAD_STATE_IF(0 == mCustomMessage)
+        ZS_ASSERT(0 != mCustomMessage);
       }
 
       ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsGlobal() noexcept
       {
         if (0 != mRegisteredWindowClass)
         {
-          ZS_THROW_BAD_STATE_IF(0 == ::UnregisterClass(mHiddenWindowClassName, mModule))
+          auto result = ::UnregisterClass(mHiddenWindowClassName, mModule);
+          ZS_MAYBE_USED(result);
+          ZS_ASSERT(0 != result);
           mRegisteredWindowClass = 0;
         }
       }
@@ -154,7 +156,7 @@ namespace zsLib
         getGlobal().mModule,
         NULL
       );
-      ZS_THROW_BAD_STATE_IF(NULL == mHWND)
+      ZS_ASSERT(NULL != mHWND);
     }
 
     //-------------------------------------------------------------------------
@@ -168,7 +170,9 @@ namespace zsLib
     {
       if (NULL != mHWND)
       {
-        ZS_THROW_BAD_STATE_IF(0 == ::DestroyWindow(mHWND))
+        auto result = ::DestroyWindow(mHWND);
+        ZS_MAYBE_USED(result);
+        ZS_ASSERT(0 != result);
         mHWND = NULL;
       }
     }
@@ -189,7 +193,7 @@ namespace zsLib
     void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::post(IMessageQueueMessageUniPtr message) noexcept(false)
     {
       if (mIsShutdown) {
-        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
+        ZS_ASSERT_FAIL("message posted to message queue after message queue was deleted.");
       }
       mQueue->post(std::move(message));
     }
@@ -205,10 +209,12 @@ namespace zsLib
     {
       AutoLock lock(mLock);
       if (NULL == mHWND) {
-        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
+        ZS_ASSERT_FAIL("message posted to message queue after message queue was deleted.");
       }
 
-      ZS_THROW_BAD_STATE_IF(0 == ::PostMessage(mHWND, getGlobal().mCustomMessage, (WPARAM)0, (LPARAM)0))
+      auto result = ::PostMessage(mHWND, getGlobal().mCustomMessage, (WPARAM)0, (LPARAM)0);
+      ZS_MAYBE_USED(result);
+      ZS_ASSERT(0 != result);
     }
 
     //-------------------------------------------------------------------------
@@ -218,7 +224,9 @@ namespace zsLib
 
       if (NULL != mHWND)
       {
-        ZS_THROW_BAD_STATE_IF(0 == ::DestroyWindow(mHWND))
+        auto result = ::DestroyWindow(mHWND);
+        ZS_MAYBE_USED(result);
+        ZS_ASSERT(0 != result);
         mHWND = NULL;
       }
 

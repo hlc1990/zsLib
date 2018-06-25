@@ -67,7 +67,7 @@ namespace zsLib
       void init() noexcept;
 
     public:
-      ~TimerMonitor();
+      ~TimerMonitor() noexcept;
 
       static TimerMonitorPtr singleton() noexcept;
       static TimerMonitorPtr create() noexcept;

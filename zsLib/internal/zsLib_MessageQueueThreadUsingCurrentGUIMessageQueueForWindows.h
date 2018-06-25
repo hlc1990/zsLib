@@ -55,7 +55,7 @@ namespace zsLib
       void setup() noexcept;
 
     public:
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows();
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWindows() noexcept;
 
       static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr singleton() noexcept;
 

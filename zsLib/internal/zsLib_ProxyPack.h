@@ -44,9 +44,6 @@ namespace zsLib
     template <typename TYPE>
     inline void ProxyPack(TYPE &member, TYPE &value) noexcept
     {
-#ifdef _WIN32
-      sizeof(TYPE);
-#endif //_WIN32
       member = value;
     }
 
