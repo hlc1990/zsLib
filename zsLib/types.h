@@ -205,6 +205,8 @@ namespace zsLib
   {
   public:
     typedef type UseType;
+    typedef type value_type;
+    
   public:
     Optional() noexcept {}
 
@@ -233,6 +235,7 @@ namespace zsLib
     }
 
     bool hasValue() const noexcept {return mHasValue;}
+    bool has_value() const noexcept {return mHasValue;}
     UseType &value() noexcept {return mType;}
     const UseType &value() const noexcept {return mType;}
     operator UseType() const noexcept {return mType;}
