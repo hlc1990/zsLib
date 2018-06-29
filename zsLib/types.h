@@ -202,6 +202,7 @@ namespace zsLib
 
 #ifdef ZS__LATER__HAS_STD_OPTIONAL
   using Optional = std::optional;
+  using optional = std::optional;
 #else
   template <typename type>
   class Optional
@@ -247,6 +248,8 @@ namespace zsLib
     bool mHasValue {false};
     UseType mType {};
   };
+
+  using optional = Optional;
 #endif //ZS_HAS_STD_OPTIONAL
 
   namespace Exceptions
