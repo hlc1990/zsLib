@@ -299,6 +299,13 @@ static_assert(ZS_INTERNAL_MACRO_SELECT_WITH_PROPERTY_5(ZS_INTERNAL_VERIFY_CHOICE
 
 #include <memory>
 
+#ifdef __has_include
+#if (__has_include(<optional>)) && (__cplusplus >= 201703L)
+#include <optional>
+#define ZS_HAS_STD_OPTIONAL
+#endif //(__has_include(<optional>)) && (__cplusplus >= 201703L)
+#endif //__has_include
+
 #define ZS_INTERNAL_DECLARE_PTR(xExistingType)                                                      \
   typedef std::shared_ptr<xExistingType> xExistingType##Ptr;                                        \
   typedef std::weak_ptr<xExistingType> xExistingType##WeakPtr;                                      \

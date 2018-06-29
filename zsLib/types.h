@@ -200,6 +200,9 @@ namespace zsLib
 
   typedef AutoInitializedPUID AutoPUID;
 
+#ifdef ZS__LATER__HAS_STD_OPTIONAL
+  using Optional = std::optional;
+#else
   template <typename type>
   class Optional
   {
@@ -244,6 +247,7 @@ namespace zsLib
     bool mHasValue {false};
     UseType mType {};
   };
+#endif //ZS_HAS_STD_OPTIONAL
 
   namespace Exceptions
   {
