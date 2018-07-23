@@ -91,7 +91,7 @@ namespace testing
 
   interaction Subscription
   {
-    virtual void cancel() = 0;
+    virtual void cancel() noexcept = 0;
   };
 
   ZS_DECLARE_INTERACTION_PROXY(ITestProxyDelegate)
