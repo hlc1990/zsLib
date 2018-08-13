@@ -346,7 +346,7 @@ namespace zsLib
 
     void resolve(UseDataTypePtr value = UseDataTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
     void reject(UseReasonTypePtr reason = UseReasonTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
-    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
+    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->value_ = userData; Promise::setUserData(value); }
 
     UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
     UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
@@ -428,7 +428,7 @@ namespace zsLib
 
     void resolve(UseDataTypePtr value = UseDataTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseDataType >(); result->value_ = value; Promise::resolve(result); }
     void reject(UseReasonTypePtr reason = UseReasonTypePtr()) noexcept { auto result = std::make_shared< AnyHolderUseReasonType >(); result->value_ = reason; Promise::reject(result); }
-    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserTypePtr>(); value->_value = userData; Promise::setUserData(value); }
+    void setUserData(UseUserTypePtr userData) noexcept { auto value = std::make_shared< AnyHolderUseUserType >(); value->value_ = userData; Promise::setUserData(value); }
 
     UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
     UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
