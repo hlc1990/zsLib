@@ -48,7 +48,7 @@
 #include <Windows.h>
 #include <tchar.h>
 
-using namespace Windows::UI::Core;
+using namespace winrt::Windows::UI::Core;
 
 namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 

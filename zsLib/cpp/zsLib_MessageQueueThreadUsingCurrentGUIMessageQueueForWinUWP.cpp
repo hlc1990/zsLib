@@ -32,7 +32,7 @@
 #include <zsLib/types.h>
 #include <zsLib/internal/platform.h>
 
-#ifdef WINUWP
+#if defined(WINUWP) && defined(__cplusplus_winrt)
 
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
@@ -183,4 +183,5 @@ namespace zsLib
   }
 }
 
-#endif //WINUWP
+#endif // defined(WINUWP) && defined(__cplusplus_winrt)
+

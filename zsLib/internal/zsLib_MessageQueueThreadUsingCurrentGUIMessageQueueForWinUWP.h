@@ -34,7 +34,7 @@
 #ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
 #define ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
 
-#ifdef __cplusplus_winrt
+#if defined(WINUWP) && defined(__cplusplus_winrt)
 
 #include <Windows.h>
 
@@ -100,6 +100,6 @@ namespace zsLib
   }
 }
 
-#endif //__cplusplus_winrt
+#endif //defined(WINUWP) && defined(__cplusplus_winrt)
 
 #endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
