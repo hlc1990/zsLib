@@ -149,6 +149,16 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::isRunningOnUIThread() const noexcept
+    {
+      AutoLock lock(mLock);
+
+      ZS_ASSERT(nullptr != mDispatcher);
+
+      return mDispatcher.HasThreadAccess();
+    }
+
+    //-------------------------------------------------------------------------
     void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::notifyMessagePosted() noexcept
     {
       CoreDispatcher dispatcher {nullptr};
