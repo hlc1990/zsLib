@@ -81,7 +81,7 @@ namespace zsLib
 
       virtual size_type getTotalUnprocessedMessages() const noexcept;
 
-      virtual bool isRunningOnUIThread() const noexcept;
+      virtual bool isCurrent() const noexcept;
 
       // IMessageQueueNotify
       virtual void notifyMessagePosted() noexcept;

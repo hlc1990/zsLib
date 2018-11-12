@@ -149,7 +149,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::isRunningOnUIThread() const noexcept
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::isCurrent() const noexcept
     {
       AutoLock lock(mLock);
 

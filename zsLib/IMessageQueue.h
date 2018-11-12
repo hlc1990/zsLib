@@ -81,6 +81,6 @@ namespace zsLib
 
     virtual size_type getTotalUnprocessedMessages() const noexcept = 0;
 
-    virtual bool isRunningOnUIThread() const noexcept = 0;
+    virtual bool isCurrent() const noexcept = 0;
   };
 }

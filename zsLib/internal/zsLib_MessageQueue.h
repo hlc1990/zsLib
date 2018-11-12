@@ -76,7 +76,7 @@ namespace zsLib
 
       size_type getTotalUnprocessedMessages() const noexcept override;
 
-      virtual bool isRunningOnUIThread() const noexcept { return false; }
+      virtual bool isCurrent() const noexcept { return false; }
 
     public:
       //-----------------------------------------------------------------------
