@@ -114,5 +114,7 @@ compile_single_event_macro("zslib_events") {
   sources = [
     "zsLib/cpp/zsLib.events.json",
   ]
-    
+  
+  idlOutputPath = "../Internal"
+  idlAlreadyCompletedFlag =  "zsLib_eventsCompiled.flg"
 }
