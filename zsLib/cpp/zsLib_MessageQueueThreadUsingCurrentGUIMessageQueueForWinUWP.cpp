@@ -145,6 +145,15 @@ namespace zsLib
       return mQueue->getTotalUnprocessedMessages();
     }
 
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::isCurrentThread() const noexcept
+    {
+      ZS_ASSERT(nullptr != mDispatcher);
+
+      return mDispatcher->HasThreadAccess;
+    }
+
     //-------------------------------------------------------------------------
     void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::notifyMessagePosted() noexcept
     {

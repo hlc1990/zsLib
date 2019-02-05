@@ -49,7 +49,7 @@ namespace zsLib
     ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP)
 
     class MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP : public MessageQueueThread,
-                                                                    public IMessageQueueNotify
+                                                                   public IMessageQueueNotify
     {
     public:
       typedef Windows::UI::Core::CoreDispatcher CoreDispatcher;
@@ -72,17 +72,21 @@ namespace zsLib
       static bool hasDispatcher(bool ready = false) noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
+      void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
 
-      virtual size_type getTotalUnprocessedMessages() const noexcept;
+      size_type getTotalUnprocessedMessages() const noexcept override;
+
+      bool isCurrentThread() const noexcept override;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted() noexcept;
+      void notifyMessagePosted() noexcept override;
+
+      // (duplicate) virtual bool isCurrentThread() const noexcept = 0;
 
       // IMessageQueueThread
-      virtual void waitForShutdown() noexcept;
+      void waitForShutdown() noexcept override;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
+      void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
     public:
       virtual void process() noexcept;
