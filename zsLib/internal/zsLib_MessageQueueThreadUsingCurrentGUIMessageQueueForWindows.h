@@ -60,17 +60,21 @@ namespace zsLib
       static MessageQueueThreadUsingCurrentGUIMessageQueueForWindowsPtr singleton() noexcept;
 
       // IMessageQueue
-      virtual void post(IMessageQueueMessageUniPtr message) noexcept(false);
+      void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
 
-      virtual size_type getTotalUnprocessedMessages() const noexcept;
+      size_type getTotalUnprocessedMessages() const noexcept override;
+
+      bool isCurrentThread() const noexcept override;
 
       // IMessageQueueNotify
-      virtual void notifyMessagePosted() noexcept;
+      void notifyMessagePosted() noexcept override;
+
+      // (duplicate) virtual bool isCurrentThread() const noexcept;
 
       // IMessageQueueThread
-      virtual void waitForShutdown() noexcept;
+      void waitForShutdown() noexcept override;
 
-      virtual void setThreadPriority(ThreadPriorities threadPriority) noexcept;
+      void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
     public:
       virtual void process() noexcept;

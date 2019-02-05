@@ -112,6 +112,15 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool MessageQueueThreadBasic::isCurrentThread() const noexcept
+    {
+      if (!mThread)
+        return false;
+
+      return mThread->get_id() == std::this_thread::get_id();
+    }
+
+    //-------------------------------------------------------------------------
     void MessageQueueThreadBasic::notifyMessagePosted() noexcept
     {
       mEvent.notify();

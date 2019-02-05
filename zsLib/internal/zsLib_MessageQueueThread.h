@@ -56,7 +56,7 @@ namespace zsLib
     class MessageQueueThread : public IMessageQueueThread
     {
     public:
-      virtual bool isCurrent() const noexcept { return false; }
+      virtual bool isCurrentThread() const noexcept { return false; }
 
     protected:
       friend interaction IMessageQueueThread;

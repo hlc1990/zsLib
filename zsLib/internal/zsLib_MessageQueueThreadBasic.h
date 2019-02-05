@@ -63,6 +63,8 @@ namespace zsLib
 
       size_type getTotalUnprocessedMessages() const noexcept override;
 
+      bool isCurrentThread() const noexcept override;
+
       // IMessageQueueNotify
       void notifyMessagePosted() noexcept override;
 
