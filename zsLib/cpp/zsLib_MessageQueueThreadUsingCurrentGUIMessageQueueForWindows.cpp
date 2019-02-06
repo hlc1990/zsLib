@@ -204,6 +204,13 @@ namespace zsLib
       return mQueue->getTotalUnprocessedMessages();
     }
 
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::isCurrentThread() const noexcept
+    {
+      return FALSE != ::IsGUIThread(FALSE);
+    }
+
     //-------------------------------------------------------------------------
     void MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::notifyMessagePosted() noexcept
     {
