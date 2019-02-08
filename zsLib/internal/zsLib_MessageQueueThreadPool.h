@@ -92,6 +92,7 @@ namespace zsLib
       void init() noexcept;
 
       void notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue) noexcept;
+      bool isCurrentThread() const noexcept;
       void notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher) noexcept;
       void processOneQueue() noexcept;
 

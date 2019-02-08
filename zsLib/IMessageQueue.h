@@ -61,6 +61,8 @@ namespace zsLib
   interaction IMessageQueueNotify
   {
     virtual void notifyMessagePosted() noexcept = 0;
+
+    virtual bool isCurrentThread() const noexcept = 0;
   };
 
   interaction IMessageQueue
@@ -80,5 +82,7 @@ namespace zsLib
     void postClosure(const Closure &closure) noexcept(false) {post(IMessageQueueMessageUniPtr(new IMessageQueueMessageClosure<Closure>(closure)));}
 
     virtual size_type getTotalUnprocessedMessages() const noexcept = 0;
+
+    virtual bool isCurrentThread() const noexcept = 0;
   };
 }
