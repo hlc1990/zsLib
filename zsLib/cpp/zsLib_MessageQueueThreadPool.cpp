@@ -69,7 +69,7 @@ namespace zsLib
       static MessageQueueThreadPoolDispatcherThreadPtr create(
         MessageQueueThreadPoolPtr pool,
         const char *threadName = NULL,
-        ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+        ThreadPriorities threadPriority = ThreadPriority_Normal
       )
       {
         MessageQueueThreadPoolDispatcherThreadPtr pThis(new MessageQueueThreadPoolDispatcherThread(make_private{}, threadName));
@@ -177,7 +177,7 @@ namespace zsLib
 
       mutable Lock mLock;
       std::atomic_bool mMustShutdown{};
-      ThreadPriorities mThreadPriority{ ThreadPriority_NormalPriority };
+      ThreadPriorities mThreadPriority{ ThreadPriority_Normal };
 
       std::atomic_bool mIsShutdown{};
 

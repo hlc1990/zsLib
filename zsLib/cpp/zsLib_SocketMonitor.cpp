@@ -206,7 +206,7 @@ namespace zsLib
     public:
       //-----------------------------------------------------------------------
       SocketMonitorLoadBalancer(const make_private &) noexcept :
-        shutdownQueue_(IMessageQueueThread::createBasic("zsLib.SocketMonitorLoadBalancer", ThreadPriority_LowPriority)),
+        shutdownQueue_(IMessageQueueThread::createBasic("zsLib.SocketMonitorLoadBalancer", ThreadPriority_Low)),
 #ifdef _WIN32
         maxSocketsPerMonitor_(WSA_MAXIMUM_WAIT_EVENTS)
 #else
