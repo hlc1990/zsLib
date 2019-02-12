@@ -188,15 +188,22 @@ namespace zsLib
         }
       }
 
+      {
+        auto found = mPools.find(name);
+        if (found != mPools.end()) {
+          return ((*found).second.first)->createQueue();
+        }
+      }
+
       IMessageQueuePtr queue;
 
       // creating new thread
       if (ZSLIB_MESSAGE_QUEUE_MANAGER_RESERVED_GUI_THREAD_NAME == name) {
-        ZS_LOG_TRACE(log("creating GUI thread"))
+        ZS_LOG_TRACE(log("creating GUI thread"));
         queue = IMessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue();
       } else {
 
-        ThreadPriorities priority = zsLib::ThreadPriority_NormalPriority;
+        ThreadPriorities priority = zsLib::ThreadPriority_Normal;
 
         ThreadPriorityMap::const_iterator foundPriority = mThreadPriorities.find(name);
         if (foundPriority != mThreadPriorities.end()) {
@@ -215,29 +222,31 @@ namespace zsLib
     //-------------------------------------------------------------------------
     IMessageQueuePtr MessageQueueManager::getThreadPoolQueue(
                                                              const char *assignedThreadPoolQueueName,
-                                                             const char *registeredQueueName,
                                                              size_t minThreadsRequired
                                                              ) noexcept
     {
       String poolName(assignedThreadPoolQueueName);
-      String name(registeredQueueName);
 
       AutoRecursiveLock lock(mLock);
 
-      // scope: check registered queues
-      if (name.hasData()) {
-        auto found = mRegisteredPoolQueues.find(String(poolName + ":" + name));
-        if (found != mRegisteredPoolQueues.end()) {
-          ZS_LOG_TRACE(log("re-using existing pool message queue with name") + ZS_PARAM("name", poolName + ":" + name))
-          return (*found).second;
-        }
-      }
-
-      ThreadPriorities priority = zsLib::ThreadPriority_NormalPriority;
+      ThreadPriorities priority = zsLib::ThreadPriority_Normal;
 
       ThreadPriorityMap::const_iterator foundPriority = mThreadPriorities.find(poolName);
       if (foundPriority != mThreadPriorities.end()) {
         priority = (*foundPriority).second;
+      }
+
+      if (ZSLIB_MESSAGE_QUEUE_MANAGER_RESERVED_GUI_THREAD_NAME == poolName) {
+        ZS_LOG_TRACE(log("creating GUI thread"));
+        return IMessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue();
+      }      
+
+      {
+        auto found = mQueues.find(poolName);
+        if (found != mQueues.end()) {
+          ZS_LOG_ERROR(Basic, log("re-using existing thread message queue with name") + ZS_PARAM("name", poolName));
+          return (*found).second;
+        }
       }
 
       IMessageQueueThreadPoolPtr pool;
@@ -252,25 +261,19 @@ namespace zsLib
       }
 
       if (!pool) {
-        ZS_LOG_TRACE(log("creating thread pool") + ZS_PARAM("name", poolName))
+        ZS_LOG_TRACE(log("creating thread pool") + ZS_PARAM("name", poolName));
         pool = IMessageQueueThreadPool::create();
       }
 
       while (totalThreadsCreated < minThreadsRequired) {
         ++totalThreadsCreated;
-        ZS_LOG_TRACE(log("creating pool thread") + ZS_PARAM("poolName", poolName + "." + string(totalThreadsCreated)) + ZS_PARAM("priority", zsLib::toString(priority)))
+        ZS_LOG_TRACE(log("creating pool thread") + ZS_PARAM("poolName", poolName + "." + string(totalThreadsCreated)) + ZS_PARAM("priority", zsLib::toString(priority)));
         pool->createThread((poolName + "." + string(totalThreadsCreated)).c_str(), priority);
       }
 
       mPools[poolName] = MessageQueueThreadPoolPair(pool, totalThreadsCreated);
 
       IMessageQueuePtr queue = pool->createQueue();
-
-      if (name.hasData()) {
-        ZS_LOG_TRACE(log("registering queue with name") + ZS_PARAM("name", poolName + ":" + name))
-        mRegisteredPoolQueues[String(poolName + ":" + name)] = queue;
-      }
-
       return queue;
     }
 
@@ -323,20 +326,6 @@ namespace zsLib
       if (!inUse) {
         ZS_LOG_DEBUG(log("message queue specified is not in use at yet") + ZS_PARAM("name", name) + ZS_PARAM("priority", zsLib::toString(priority)));
       }
-    }
-
-    //-------------------------------------------------------------------------
-    IMessageQueueManager::MessageQueueMapPtr MessageQueueManager::getRegisteredQueues() noexcept
-    {
-      AutoRecursiveLock lock(mLock);
-
-      MessageQueueMapPtr result(make_shared<MessageQueueMap>(mQueues));
-      for (auto iter = mRegisteredPoolQueues.begin(); iter != mRegisteredPoolQueues.end(); ++iter) {
-        auto name = (*iter).first;
-        auto queue = (*iter).second;
-        (*result)[name] = queue;
-      }
-      return result;
     }
 
     //-------------------------------------------------------------------------
@@ -579,7 +568,6 @@ namespace zsLib
       IHelper::debugAppend(resultEl, "total priorities", mThreadPriorities.size());
 
       IHelper::debugAppend(resultEl, "pools", mPools.size());
-      IHelper::debugAppend(resultEl, "registered pool queues", mRegisteredPoolQueues.size());
 
       IHelper::debugAppend(resultEl, "process application queue on shutdown", mProcessApplicationQueueOnShutdown);
 
@@ -591,14 +579,23 @@ namespace zsLib
     {
       ZS_LOG_DEBUG(log("cancel called"))
 
-      while (true)
-      {
-        MessageQueueMapPtr queues = getRegisteredQueues();
+      MessageQueueMap queues;
+      MessageQueuePoolMap pools;
 
-        for (MessageQueueMap::iterator iter = queues->begin(); iter != queues->end(); ++iter)
+      {
+        queues = mQueues;
+        mQueues.clear();
+      }
+
+      // scope: clean out basic thread queues
+      {
+        for (MessageQueueMap::iterator iter_doNotUse = queues.begin(); iter_doNotUse != queues.end(); ++iter_doNotUse)
         {
-          MessageQueueName name = (*iter).first;
-          IMessageQueuePtr queue = (*iter).second;
+          auto current = iter_doNotUse;
+          ++iter_doNotUse;
+
+          MessageQueueName name = (*current).first;
+          IMessageQueuePtr queue = (*current).second;
 
           size_t totalMessagesLeft = queue->getTotalUnprocessedMessages();
           if (totalMessagesLeft > 0) {
@@ -610,43 +607,35 @@ namespace zsLib
           if (threadQueue) {
             threadQueue->waitForShutdown();
           }
-
-          // scope: remove the queue from the list of managed queues
-          {
-            AutoRecursiveLock lock(mLock);
-
-            MessageQueueMap::iterator found = mQueues.find(name);
-            if (found == mQueues.end()) {
-              ZS_LOG_WARNING(Detail, log("message queue was not found in managed list of queues") + ZS_PARAM("name", name))
-            }
-            mQueues.erase(found);
-          }
+          queues.erase(current);
         }
+      }
 
-        MessageQueuePoolMap pools;
+      {
+        AutoRecursiveLock lock(mLock);
+        pools = mPools;
 
-        {
-          AutoRecursiveLock lock(mLock);
-          pools = mPools;
+        mPools.clear();
+      }
 
-          mPools.clear();
-        }
-
+      // scope: clean out thread pool queues
+      {
         for (auto iter_doNotUse = pools.begin(); iter_doNotUse != pools.end(); ) {
           auto current = iter_doNotUse;
           ++iter_doNotUse;
 
           auto pool = (*current).second.first;
 
+          IMessageQueuePtr queue = pool->createQueue();
+
+          size_t totalMessagesLeft = queue->getTotalUnprocessedMessages();
+          if (totalMessagesLeft > 0) {
+            ZS_LOG_WARNING(Basic, log("unprocessed messages are still in the queue - did you check getTotalUnprocessedMessages() to make sure all queues are empty before quiting?"))
+          }
+
           pool->waitForShutdown();
 
           pools.erase(current);
-        }
-
-        if ((queues->size() < 1) &&
-            (pools.size() < 1)) {
-          ZS_LOG_DEBUG(log("all queues / pools are now gone"))
-          break;
         }
       }
 
@@ -687,13 +676,12 @@ namespace zsLib
   //---------------------------------------------------------------------------
   IMessageQueuePtr IMessageQueueManager::getThreadPoolQueue(
                                                             const char *assignedThreadPoolQueueName,
-                                                            const char *registeredQueueName,
                                                             size_t minThreadsRequired
                                                             ) noexcept
   {
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return IMessageQueuePtr();
-    return singleton->getThreadPoolQueue(assignedThreadPoolQueueName, registeredQueueName, minThreadsRequired);
+    return singleton->getThreadPoolQueue(assignedThreadPoolQueueName, minThreadsRequired);
   }
 
   //---------------------------------------------------------------------------
@@ -705,14 +693,6 @@ namespace zsLib
     internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
     if (!singleton) return;
     singleton->registerMessageQueueThreadPriority(assignedQueueName, priority);
-  }
-
-  //---------------------------------------------------------------------------
-  IMessageQueueManager::MessageQueueMapPtr IMessageQueueManager::getRegisteredQueues() noexcept
-  {
-    internal::MessageQueueManagerPtr singleton = internal::MessageQueueManager::singleton();
-    if (!singleton) return make_shared<IMessageQueueManager::MessageQueueMap>();
-    return singleton->getRegisteredQueues();
   }
 
   //---------------------------------------------------------------------------
