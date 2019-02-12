@@ -33,17 +33,16 @@
 #include <zsLib/internal/platform.h>
 
 #ifdef WINUWP
+#ifdef __cplusplus_winrt
 
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
+#include <zsLib/internal/zsLib_MessageQueueDispatcherForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
 #include <zsLib/internal/zsLib_MessageQueue.h>
 #include <zsLib/Log.h>
 #include <zsLib/helpers.h>
 #include <zsLib/Stringize.h>
 #include <zsLib/Singleton.h>
-
-#include <Windows.h>
-#include <tchar.h>
 
 using namespace Windows::UI::Core;
 
@@ -61,7 +60,7 @@ namespace zsLib
 
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::singleton() noexcept
+    IMessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::singleton() noexcept
     {
       CoreDispatcher ^dispatcher = setupDispatcher();
 
@@ -70,7 +69,7 @@ namespace zsLib
         return singleton.singleton();
       }
 
-      static SingletonLazySharedPtr<MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP> singleton(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::create(dispatcher));
+      static SingletonLazySharedPtr<MessageQueueDispatcherForWinUWP> singleton(MessageQueueDispatcherForWinUWP::create(dispatcher));
       return singleton.singleton();
     }
 
@@ -89,98 +88,8 @@ namespace zsLib
       return isSetup;
     }
 
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::create(CoreDispatcher ^dispatcher) noexcept
-    {
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr thread(new MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP);
-      thread->mThisWeak = thread;
-      thread->mQueue = MessageQueue::create(thread);
-      thread->mDispatcher = dispatcher;
-      ZS_ASSERT(thread->mDispatcher);
-      return thread;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr queue) noexcept
-    {
-      queue->process();
-    }
-
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept
-    {
-    }
-
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::~MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept
-    {
-      mThisWeak.reset();
-      mDispatcher = nullptr;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::process() noexcept
-    {
-      mQueue->processOnlyOneMessage(); // process only one message at a time since this must be syncrhonized through the GUI message queue
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::processMessagesFromThread() noexcept
-    {
-      mQueue->process();
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::post(IMessageQueueMessageUniPtr message) noexcept(false)
-    {
-      if (mIsShutdown) {
-        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
-      }
-      mQueue->post(std::move(message));
-    }
-
-    //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::getTotalUnprocessedMessages() const noexcept
-    {
-      return mQueue->getTotalUnprocessedMessages();
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::notifyMessagePosted() noexcept
-    {
-      CoreDispatcher ^dispatcher;
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr queue;
-
-      {
-        AutoLock lock(mLock);
-
-        ZS_ASSERT(nullptr != mDispatcher);
-
-        dispatcher = mDispatcher;
-        queue = mThisWeak.lock();
-      }
-
-      auto callback = [queue] () {dispatch(queue);};
-
-      dispatcher->RunAsync(
-        Windows::UI::Core::CoreDispatcherPriority::Normal,
-        ref new Windows::UI::Core::DispatchedHandler(callback)
-      );
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::waitForShutdown() noexcept
-    {
-      mIsShutdown = true;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::setThreadPriority(ZS_MAYBE_USED() ThreadPriorities threadPriority) noexcept
-    {
-      ZS_MAYBE_USED(threadPriority);
-      // no-op
-    }
   }
 }
 
+#endif //__cplusplus_winrt
 #endif //WINUWP

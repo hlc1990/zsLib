@@ -31,32 +31,43 @@
 
 #pragma once
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
+#ifdef WINUWP
+#ifdef __cplusplus_winrt
 
-#include <zsLib/internal/zsLib_MessageQueueThread.h>
+#include <Windows.h>
+
+#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
 
 #include <zsLib/Exception.h>
-#include <zsLib/Event.h>
 
 namespace zsLib
 {
   namespace internal
   {
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadBasic)
+    ZS_DECLARE_CLASS_PTR(MessageQueueDispatcherForWinUWP)
 
-    class MessageQueueThreadBasic : public MessageQueueThread,
-                                    public IMessageQueueNotify
+    class MessageQueueDispatcherForWinUWP : public MessageQueueDispatcher,
+                                            public IMessageQueueNotify
     {
+    public:
+      typedef Windows::UI::Core::CoreDispatcher CoreDispatcher;
+
+      struct Exceptions
+      {
+        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
+      };
+
     protected:
-      MessageQueueThreadBasic(const char *threadName) noexcept;
+      MessageQueueDispatcherForWinUWP() noexcept;
+      static void dispatch(MessageQueueDispatcherForWinUWPPtr queue) noexcept;
 
     public:
-      ~MessageQueueThreadBasic() noexcept;
+      ~MessageQueueDispatcherForWinUWP() noexcept;
 
-      static MessageQueueThreadBasicPtr create(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_Normal) noexcept;
-
-      void operator ()() noexcept;
+      static MessageQueueDispatcherForWinUWPPtr create(
+        CoreDispatcher ^dispatcher,
+        ThreadPriorities threadPriority = ThreadPriority_Normal
+        ) noexcept;
 
       // IMessageQueue
       void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
@@ -68,27 +79,30 @@ namespace zsLib
       // IMessageQueueNotify
       void notifyMessagePosted() noexcept override;
 
+      // (duplicate) virtual bool isCurrentThread() const noexcept = 0;
+
       // IMessageQueueThread
       void waitForShutdown() noexcept override;
 
       void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
-      void processMessagesFromThread() noexcept override;
+    public:
+      virtual void process() noexcept;
+      virtual void processMessagesFromThread() noexcept;
 
     protected:
-      ThreadPtr mThread;
-      String mThreadName;
+      mutable Lock lock_;
+      MessageQueueDispatcherForWinUWPWeakPtr thisWeak_;
 
-      mutable zsLib::Event mEvent {zsLib::Event::Reset_Auto};
-      MessageQueuePtr mQueue;
+      MessageQueuePtr queue_;
+      CoreDispatcher ^dispatcher_;
 
-      mutable Lock mLock;
-      std::atomic_bool mMustShutdown {};
-      ThreadPriorities mThreadPriority {ThreadPriority_Normal};
+      std::atomic_bool isShutdown_ {};
 
-      std::atomic_bool mIsShutdown {};
+      Windows::UI::Core::CoreDispatcherPriority priority_ {winrt::Windows::UI::Core::CoreDispatcherPriority::Normal};
     };
   }
 }
 
-#endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
+#endif //__cplusplus_winrt
+#endif //WINUWP

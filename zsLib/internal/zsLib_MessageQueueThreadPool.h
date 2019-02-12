@@ -77,7 +77,7 @@ namespace zsLib
 
       void createThread(
                         const char *threadName = NULL,
-                        ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+                        ThreadPriorities threadPriority = ThreadPriority_Normal
                         ) noexcept override;
 
       void waitForShutdown() noexcept override;
@@ -92,6 +92,7 @@ namespace zsLib
       void init() noexcept;
 
       void notifyPosted(MessageQueueThreadPoolQueueNotifierPtr queue) noexcept;
+      bool isCurrentThread() const noexcept;
       void notifyIdle(MessageQueueThreadPoolDispatcherThreadPtr dispatcher) noexcept;
       void processOneQueue() noexcept;
 

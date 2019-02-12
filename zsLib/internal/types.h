@@ -599,7 +599,10 @@ namespace zsLib
     ZS_INTERNAL_DECLARE_CLASS_PTR(Settings);
     ZS_INTERNAL_DECLARE_CLASS_PTR(Timer);
     ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueue);
+    ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueDispatcher);
     ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueThread);
+    ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueDispatcherForCppWinrt);
+    ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueDispatcherForWinUWP);
     ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueThreadPool);
     ZS_INTERNAL_DECLARE_CLASS_PTR(MessageQueueManager);
   }

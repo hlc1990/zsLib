@@ -39,11 +39,13 @@ namespace zsLib
 
   enum ThreadPriorities
   {
-    ThreadPriority_LowPriority,
-    ThreadPriority_NormalPriority,
-    ThreadPriority_HighPriority,
-    ThreadPriority_HighestPriority,
-    ThreadPriority_RealtimePriority
+    ThreadPriority_Idle,
+    ThreadPriority_Lowest,
+    ThreadPriority_Low,
+    ThreadPriority_Normal,
+    ThreadPriority_High,
+    ThreadPriority_Highest,
+    ThreadPriority_Realtime
   };
 
   const char *toString(ThreadPriorities priority) noexcept;
@@ -56,7 +58,7 @@ namespace zsLib
 
   interaction IMessageQueueThread : public IMessageQueue
   {
-    static IMessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority) noexcept;
+    static IMessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_Normal) noexcept;
     static IMessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue() noexcept;
 
     virtual void waitForShutdown() noexcept = 0;

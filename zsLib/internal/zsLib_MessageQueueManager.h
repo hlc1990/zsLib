@@ -94,7 +94,6 @@ namespace zsLib
 
       IMessageQueuePtr getThreadPoolQueue(
                                           const char *assignedThreadPoolQueueName,
-                                          const char *registeredQueueName = NULL,
                                           size_t minThreadsRequired = 4
                                           ) noexcept;
 
@@ -158,7 +157,6 @@ namespace zsLib
       ThreadPriorityMap mThreadPriorities;
 
       MessageQueuePoolMap mPools;
-      MessageQueueMap mRegisteredPoolQueues;
 
       bool mProcessApplicationQueueOnShutdown {};
     };

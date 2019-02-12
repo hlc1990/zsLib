@@ -31,6 +31,9 @@
 
 #pragma once
 
+#include <zsLib/types.h>
+#include <zsLib/IMessageQueueThread.h>
+
 #ifdef WINUWP
 
 #ifdef __has_include
@@ -39,38 +42,33 @@
 #endif //__has_include(<winrt/windows.ui.core.h>)
 #endif //__has_include
 
-#ifdef CPPWINRT_VERSION
-
+#ifdef __cplusplus_winrt
 #include <Windows.h>
-
-#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
-
-#include <zsLib/Exception.h>
+#endif //__cplusplus_winrt
 
 namespace zsLib
 {
-  namespace internal
+  interaction IMessageQueueDispatcher : public IMessageQueueThread
   {
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt);
+#ifdef CPPWINRT_VERSION
+    typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
 
-    class MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt
-    {
-    public:
-      typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
-
-    public:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
-
-      static IMessageQueueThreadPtr singleton() noexcept;
-      static CoreDispatcher setupDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
-      static bool hasDispatcher(bool ready = false) noexcept;
-
-    protected:
-    };
-  }
-}
-
+    static IMessageQueueDispatcherPtr create(
+      CoreDispatcher dispatcher,
+      ThreadPriorities threadPriority = ThreadPriority_Normal
+      ) noexcept;
 #endif //CPPWINRT_VERSION
 
-#endif //WINUWP
+#ifdef __cplusplus_winrt
+    typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
+
+    static IMessageQueueDispatcherPtr create(
+      LegacyCoreDispatcher ^dispatcher,
+      ThreadPriorities threadPriority = ThreadPriority_Normal
+      ) noexcept;
+#endif //__cplusplus_winrt
+  };
+
+} // namespace zsLib
+
+#endif // WINUWP

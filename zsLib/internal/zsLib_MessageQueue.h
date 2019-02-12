@@ -76,6 +76,8 @@ namespace zsLib
 
       size_type getTotalUnprocessedMessages() const noexcept override;
 
+      virtual bool isCurrentThread() const noexcept { return false; }
+
     public:
       //-----------------------------------------------------------------------
       // 

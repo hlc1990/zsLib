@@ -69,7 +69,7 @@ namespace zsLib
       static MessageQueueThreadPoolDispatcherThreadPtr create(
         MessageQueueThreadPoolPtr pool,
         const char *threadName = NULL,
-        ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+        ThreadPriorities threadPriority = ThreadPriority_Normal
       )
       {
         MessageQueueThreadPoolDispatcherThreadPtr pThis(new MessageQueueThreadPoolDispatcherThread(make_private{}, threadName));
@@ -158,6 +158,15 @@ namespace zsLib
         mEvent.notify();
       }
 
+      //-----------------------------------------------------------------------
+      bool isCurrentThread() const noexcept
+      {
+        AutoLock lock(mLock);
+        if (!mThread)
+          return false;
+        return mThread->get_id() == std::this_thread::get_id();
+      }
+
     protected:
       MessageQueueThreadPoolDispatcherThreadWeakPtr mThisWeak;
 
@@ -168,7 +177,7 @@ namespace zsLib
 
       mutable Lock mLock;
       std::atomic_bool mMustShutdown{};
-      ThreadPriorities mThreadPriority{ ThreadPriority_NormalPriority };
+      ThreadPriorities mThreadPriority{ ThreadPriority_Normal };
 
       std::atomic_bool mIsShutdown{};
 
@@ -251,6 +260,8 @@ namespace zsLib
       //-----------------------------------------------------------------------
       void notifyMessagePosted() noexcept override;
 
+      bool isCurrentThread() const noexcept override;
+
     protected:
       MessageQueueThreadPoolQueueNotifierWeakPtr mThisWeak;
 
@@ -269,6 +280,12 @@ namespace zsLib
       if (posted) return;
 
       mPool->notifyPosted(mThisWeak.lock());
+    }
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadPoolQueueNotifier::isCurrentThread() const noexcept
+    {
+      return mPool->isCurrentThread();
     }
 
     //-------------------------------------------------------------------------
@@ -313,6 +330,20 @@ namespace zsLib
       }
 
       idle->notify();
+    }
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadPool::isCurrentThread() const noexcept
+    {
+        AutoLock lock(mLock);
+
+        for (auto iter = mThreads.begin(); iter != mThreads.end(); ++iter) {
+          auto thread = (*iter);
+
+          if (thread->isCurrentThread())
+            return true;
+        }
+        return false;
     }
 
     //-------------------------------------------------------------------------

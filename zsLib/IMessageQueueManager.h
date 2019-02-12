@@ -69,7 +69,6 @@ namespace zsLib
     // PURPOSE: Create a message queue for a pool
     static IMessageQueuePtr getThreadPoolQueue(
                                                 const char *assignedThreadPoolQueueName,
-                                                const char *registeredQueueName = NULL,
                                                 size_t minThreadsRequired = 4
                                                 ) noexcept;
 
@@ -85,10 +84,6 @@ namespace zsLib
                                                    const char *assignedQueueName,
                                                    ThreadPriorities priority
                                                    ) noexcept;
-
-    //-------------------------------------------------------------------------
-    // PURPOSE: Obtain a list of all queues registered in the manager
-    static MessageQueueMapPtr getRegisteredQueues() noexcept;
 
     //-------------------------------------------------------------------------
     // PURPOSE: Count the number of unprocessed messages in each queue and

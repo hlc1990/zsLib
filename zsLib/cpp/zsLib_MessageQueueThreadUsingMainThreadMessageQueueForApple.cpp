@@ -134,6 +134,12 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingMainThreadMessageQueueForApple::isCurrentThread() const noexcept
+    {
+      return CFRunLoopGetMain() == CFRunLoopGetCurrent();
+    }
+
+    //-------------------------------------------------------------------------
     zsLib::Log::Params MessageQueueThreadUsingMainThreadMessageQueueForApple::slog(const char *message) noexcept
     {
       return zsLib::Log::Params(message, "MessageQueueThreadUsingMainThreadMessageQueueForApple");
