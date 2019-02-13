@@ -48,8 +48,6 @@
 #include <Windows.h>
 #include <tchar.h>
 
-using namespace Windows::UI::Core;
-
 namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
