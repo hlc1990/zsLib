@@ -31,14 +31,12 @@
 
 #pragma once
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
-
-#if defined(WINUWP) && defined(__cplusplus_winrt)
+#ifdef WINUWP
+#ifdef __cplusplus_winrt
 
 #include <Windows.h>
 
-#include <zsLib/internal/zsLib_MessageQueueThread.h>
+#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
 
 #include <zsLib/Exception.h>
 
@@ -48,62 +46,21 @@ namespace zsLib
   {
     ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP)
 
-    class MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP : public MessageQueueThread,
-                                                                   public IMessageQueueNotify
+    class MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP
     {
     public:
       typedef Windows::UI::Core::CoreDispatcher CoreDispatcher;
 
-      struct Exceptions
-      {
-        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
-      };
-
-    protected:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept;
-      static MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr create(CoreDispatcher ^dispatcher) noexcept;
-      static void dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPPtr queue) noexcept;
-
     public:
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept;
+      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept = delete;
+      ~MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP() noexcept = delete;
 
-      static MessageQueueThreadPtr singleton() noexcept;
+      static IMessageQueueThreadPtr singleton() noexcept;
       static CoreDispatcher ^setupDispatcher(CoreDispatcher ^dispatcher = nullptr) noexcept;
       static bool hasDispatcher(bool ready = false) noexcept;
-
-      // IMessageQueue
-      void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
-
-      size_type getTotalUnprocessedMessages() const noexcept override;
-
-      bool isCurrentThread() const noexcept override;
-
-      // IMessageQueueNotify
-      void notifyMessagePosted() noexcept override;
-
-      // (duplicate) virtual bool isCurrentThread() const noexcept = 0;
-
-      // IMessageQueueThread
-      void waitForShutdown() noexcept override;
-
-      void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
-
-    public:
-      virtual void process() noexcept;
-      virtual void processMessagesFromThread() noexcept;
-
-    protected:
-      mutable Lock mLock;
-      MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWPWeakPtr mThisWeak;
-
-      MessageQueuePtr mQueue;
-      CoreDispatcher ^mDispatcher;
-
-      std::atomic_bool mIsShutdown {};
     };
   }
 }
 
-#endif //defined(WINUWP) && defined(__cplusplus_winrt)
-
-#endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREADUSINGCURRENTGUIMESSAGEQUEUEFORWINUWP_H_f2c9eb6907a5b2e960f957688a668fcb
+#endif //__cplusplus_winrt
+#endif //WINUWP

@@ -35,9 +35,7 @@
 #ifdef WINUWP
 
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
-
-#ifdef CPPWINRT_VERSION
-
+#include <zsLib/internal/zsLib_MessageQueueDispatcherForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
 #include <zsLib/internal/zsLib_MessageQueue.h>
 #include <zsLib/Log.h>
@@ -45,8 +43,7 @@
 #include <zsLib/Stringize.h>
 #include <zsLib/Singleton.h>
 
-#include <Windows.h>
-#include <tchar.h>
+#ifdef CPPWINRT_VERSION
 
 using namespace winrt::Windows::UI::Core;
 
@@ -64,7 +61,7 @@ namespace zsLib
 
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton() noexcept
+    IMessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton() noexcept
     {
       CoreDispatcher dispatcher = setupDispatcher();
 
@@ -73,7 +70,7 @@ namespace zsLib
         return singleton.singleton();
       }
 
-      static SingletonLazySharedPtr<MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt> singleton(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::create(dispatcher));
+      static SingletonLazySharedPtr<MessageQueueDispatcherForCppWinrt> singleton(MessageQueueDispatcherForCppWinrt::create(dispatcher));
       return singleton.singleton();
     }
 
@@ -90,106 +87,6 @@ namespace zsLib
       static std::atomic<bool> isSetup {false};
       if (ready) isSetup = true;
       return isSetup;
-    }
-
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::create(CoreDispatcher dispatcher) noexcept
-    {
-      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr thread(new MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt);
-      thread->mThisWeak = thread;
-      thread->mQueue = MessageQueue::create(thread);
-      thread->mDispatcher = dispatcher;
-      ZS_ASSERT(thread->mDispatcher);
-      return thread;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::dispatch(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr queue) noexcept
-    {
-      queue->process();
-    }
-
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept
-    {
-    }
-
-    //-------------------------------------------------------------------------
-    MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept
-    {
-      mThisWeak.reset();
-      mDispatcher = nullptr;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::process() noexcept
-    {
-      mQueue->processOnlyOneMessage(); // process only one message at a time since this must be syncrhonized through the GUI message queue
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::processMessagesFromThread() noexcept
-    {
-      mQueue->process();
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::post(IMessageQueueMessageUniPtr message) noexcept(false)
-    {
-      if (mIsShutdown) {
-        ZS_THROW_CUSTOM(IMessageQueue::Exceptions::MessageQueueGone, "message posted to message queue after message queue was deleted.")
-      }
-      mQueue->post(std::move(message));
-    }
-
-    //-------------------------------------------------------------------------
-    IMessageQueue::size_type MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::getTotalUnprocessedMessages() const noexcept
-    {
-      return mQueue->getTotalUnprocessedMessages();
-    }
-
-    //-------------------------------------------------------------------------
-    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::isCurrentThread() const noexcept
-    {
-      ZS_ASSERT(nullptr != mDispatcher);
-
-      return mDispatcher.HasThreadAccess();
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::notifyMessagePosted() noexcept
-    {
-      CoreDispatcher dispatcher {nullptr};
-      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrtPtr queue;
-
-      {
-        AutoLock lock(mLock);
-
-        ZS_ASSERT(nullptr != mDispatcher);
-
-        dispatcher = mDispatcher;
-        queue = mThisWeak.lock();
-      }
-
-      auto callback = [queue] () {dispatch(queue);};
-
-      dispatcher.RunAsync(
-        winrt::Windows::UI::Core::CoreDispatcherPriority::Normal,
-        winrt::Windows::UI::Core::DispatchedHandler(callback)
-      );
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::waitForShutdown() noexcept
-    {
-      mIsShutdown = true;
-    }
-
-    //-------------------------------------------------------------------------
-    void MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setThreadPriority(ZS_MAYBE_USED() ThreadPriorities threadPriority) noexcept
-    {
-      ZS_MAYBE_USED(threadPriority);
-      // no-op
     }
   }
 }

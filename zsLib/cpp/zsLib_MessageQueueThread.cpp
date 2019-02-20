@@ -59,19 +59,25 @@ namespace zsLib
       sched_param param;
       switch (threadPriority)
       {
-        case ThreadPriority_LowPriority:
+        case ThreadPriority_Idle:
+          param.sched_priority = minPrio;
+          break;
+        case ThreadPriority_Lowest:
           param.sched_priority = minPrio + 1;
           break;
-        case ThreadPriority_NormalPriority:
+        case ThreadPriority_Low:
+          param.sched_priority = minPrio + 2;
+          break;
+        case ThreadPriority_Normal:
           param.sched_priority = (minPrio + maxPrio) / 2;
           break;
-        case ThreadPriority_HighPriority:
+        case ThreadPriority_High:
           param.sched_priority = maxPrio - 3;
           break;
-        case ThreadPriority_HighestPriority:
+        case ThreadPriority_Highest:
           param.sched_priority = maxPrio - 2;
           break;
-        case ThreadPriority_RealtimePriority:
+        case ThreadPriority_Realtime:
           param.sched_priority = maxPrio - 1;
           break;
       }
@@ -79,11 +85,13 @@ namespace zsLib
 #else
 		  int priority = THREAD_PRIORITY_NORMAL;
 		  switch (threadPriority) {
-        case ThreadPriority_LowPriority:      priority = THREAD_PRIORITY_LOWEST; break;
-        case ThreadPriority_NormalPriority:   priority = THREAD_PRIORITY_NORMAL; break;
-        case ThreadPriority_HighPriority:     priority = THREAD_PRIORITY_ABOVE_NORMAL; break;
-        case ThreadPriority_HighestPriority:  priority = THREAD_PRIORITY_HIGHEST; break;
-        case ThreadPriority_RealtimePriority: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
+        case ThreadPriority_Idle:     priority = THREAD_PRIORITY_IDLE; break;
+        case ThreadPriority_Lowest:   priority = THREAD_PRIORITY_LOWEST; break;
+        case ThreadPriority_Low:      priority = THREAD_PRIORITY_BELOW_NORMAL; break;
+        case ThreadPriority_Normal:   priority = THREAD_PRIORITY_NORMAL; break;
+        case ThreadPriority_High:     priority = THREAD_PRIORITY_ABOVE_NORMAL; break;
+        case ThreadPriority_Highest:  priority = THREAD_PRIORITY_HIGHEST; break;
+        case ThreadPriority_Realtime: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
       }
 #ifndef WINUWP
 		  ZS_MAYBE_USED() auto result = SetThreadPriority(handle, priority);
@@ -106,36 +114,44 @@ namespace zsLib
     {
       static StrToPriority gPriorities[] = {
         {
+          "idle",
+          ThreadPriority_Idle
+        },
+        {
+          "lowest",
+          ThreadPriority_Lowest
+        },
+        {
           "low",
-          ThreadPriority_LowPriority
+          ThreadPriority_Low
         },
         {
           "normal",
-          ThreadPriority_NormalPriority
+          ThreadPriority_Normal
         },
         {
           "high",
-          ThreadPriority_HighPriority
+          ThreadPriority_High
         },
         {
           "highest",
-          ThreadPriority_HighestPriority
+          ThreadPriority_Highest
         },
         {
           "real-time",
-          ThreadPriority_RealtimePriority
+          ThreadPriority_Realtime
         },
         {
           "real time",
-          ThreadPriority_RealtimePriority
+          ThreadPriority_Realtime
         },
         {
           "realtime",
-          ThreadPriority_RealtimePriority
+          ThreadPriority_Realtime
         },
         {
           NULL,
-          ThreadPriority_NormalPriority
+          ThreadPriority_Normal
         }
       };
       return gPriorities;
@@ -156,7 +172,7 @@ namespace zsLib
     }
 
     //-------------------------------------------------------------------------
-    MessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
+    IMessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
     {
 #ifdef _WIN32
 #ifdef WINUWP
@@ -197,11 +213,12 @@ namespace zsLib
   const char *toString(ThreadPriorities priority) noexcept
   {
     switch (priority) {
-      case ThreadPriority_LowPriority:      return "Low";
-      case ThreadPriority_NormalPriority:   return "Normal";
-      case ThreadPriority_HighPriority:     return "High";
-      case ThreadPriority_HighestPriority:  return "Highest";
-      case ThreadPriority_RealtimePriority: return "Real-time";
+      case ThreadPriority_Lowest:   return "Lowest";
+      case ThreadPriority_Low:      return "Low";
+      case ThreadPriority_Normal:   return "Normal";
+      case ThreadPriority_High:     return "High";
+      case ThreadPriority_Highest:  return "Highest";
+      case ThreadPriority_Realtime: return "Real-time";
     }
     ZS_ASSERT_FAIL("unknown thread priority");
     return "UNDEFINED";
@@ -212,7 +229,7 @@ namespace zsLib
   //---------------------------------------------------------------------------
   ThreadPriorities threadPriorityFromString(const char *str) noexcept
   {
-    if (!str) return ThreadPriority_NormalPriority;
+    if (!str) return ThreadPriority_Normal;
 
     String compareTo(str);
     compareTo.trim();
@@ -227,7 +244,7 @@ namespace zsLib
       }
     }
 
-    return ThreadPriority_NormalPriority;
+    return ThreadPriority_Normal;
   }
 
   //---------------------------------------------------------------------------

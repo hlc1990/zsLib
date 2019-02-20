@@ -140,6 +140,7 @@ namespace zsLib
   ZS_DECLARE_INTERACTION_PTR(IMessageQueueNotify);
   ZS_DECLARE_INTERACTION_PTR(IMessageQueueManager);
   ZS_DECLARE_INTERACTION_PTR(IMessageQueueThread);
+  ZS_DECLARE_INTERACTION_PTR(IMessageQueueDispatcher);
 
   ZS_DECLARE_INTERACTION_PTR(IMessageQueueThreadPool);
 

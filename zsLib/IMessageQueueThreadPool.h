@@ -42,7 +42,7 @@ namespace zsLib
 
     virtual void createThread(
                               const char *threadName = NULL,
-                              ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+                              ThreadPriorities threadPriority = ThreadPriority_Normal
                               ) noexcept = 0;
 
     virtual void waitForShutdown() noexcept = 0;

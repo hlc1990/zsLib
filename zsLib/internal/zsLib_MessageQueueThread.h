@@ -31,9 +31,6 @@
 
 #pragma once
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREAD_H_5d1955ad9e4c1689e30f9affd5ea319e
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREAD_H_5d1955ad9e4c1689e30f9affd5ea319e
-
 #include <zsLib/IMessageQueueThread.h>
 
 namespace zsLib
@@ -62,10 +59,8 @@ namespace zsLib
       friend interaction IMessageQueueThread;
 
     protected:
-      static MessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_NormalPriority) noexcept;
-      static MessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue() noexcept;
+      static MessageQueueThreadPtr createBasic(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_Normal) noexcept;
+      static IMessageQueueThreadPtr singletonUsingCurrentGUIThreadsMessageQueue() noexcept;
     };
   }
 }
-
-#endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREAD_H_5d1955ad9e4c1689e30f9affd5ea319e

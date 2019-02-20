@@ -77,7 +77,7 @@ namespace zsLib
 
       void createThread(
                         const char *threadName = NULL,
-                        ThreadPriorities threadPriority = ThreadPriority_NormalPriority
+                        ThreadPriorities threadPriority = ThreadPriority_Normal
                         ) noexcept override;
 
       void waitForShutdown() noexcept override;

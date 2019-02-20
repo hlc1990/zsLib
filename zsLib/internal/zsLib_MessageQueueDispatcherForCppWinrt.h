@@ -31,32 +31,50 @@
 
 #pragma once
 
-#ifndef ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
-#define ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
+#ifdef WINUWP
 
-#include <zsLib/internal/zsLib_MessageQueueThread.h>
+#ifdef __has_include
+#if __has_include(<winrt/windows.ui.core.h>)
+#include <winrt/windows.ui.core.h>
+#endif //__has_include(<winrt/windows.ui.core.h>)
+#endif //__has_include
+
+#ifdef CPPWINRT_VERSION
+
+#include <Windows.h>
+
+#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
 
 #include <zsLib/Exception.h>
-#include <zsLib/Event.h>
 
 namespace zsLib
 {
   namespace internal
   {
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadBasic)
+    ZS_DECLARE_CLASS_PTR(MessageQueueDispatcherForCppWinrt);
 
-    class MessageQueueThreadBasic : public MessageQueueThread,
-                                    public IMessageQueueNotify
+    class MessageQueueDispatcherForCppWinrt : public MessageQueueDispatcher,
+                                              public IMessageQueueNotify
     {
+    public:
+      typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+
+      struct Exceptions
+      {
+        ZS_DECLARE_CUSTOM_EXCEPTION(MessageQueueAlreadyDeleted)
+      };
+
     protected:
-      MessageQueueThreadBasic(const char *threadName) noexcept;
+      MessageQueueDispatcherForCppWinrt() noexcept;
+      static void dispatch(MessageQueueDispatcherForCppWinrtPtr queue) noexcept;
 
     public:
-      ~MessageQueueThreadBasic() noexcept;
+      ~MessageQueueDispatcherForCppWinrt() noexcept;
 
-      static MessageQueueThreadBasicPtr create(const char *threadName = NULL, ThreadPriorities threadPriority = ThreadPriority_Normal) noexcept;
-
-      void operator ()() noexcept;
+      static MessageQueueDispatcherForCppWinrtPtr create(
+        CoreDispatcher dispatcher,
+        ThreadPriorities threadPriority = ThreadPriority_Normal
+        ) noexcept;
 
       // IMessageQueue
       void post(IMessageQueueMessageUniPtr message) noexcept(false) override;
@@ -68,27 +86,31 @@ namespace zsLib
       // IMessageQueueNotify
       void notifyMessagePosted() noexcept override;
 
+      // (duplicate) virtual bool isCurrentThread() const noexcept = 0;
+
       // IMessageQueueThread
       void waitForShutdown() noexcept override;
 
       void setThreadPriority(ThreadPriorities threadPriority) noexcept override;
 
-      void processMessagesFromThread() noexcept override;
+    public:
+      virtual void process() noexcept;
+      virtual void processMessagesFromThread() noexcept;
 
     protected:
-      ThreadPtr mThread;
-      String mThreadName;
+      mutable Lock lock_;
+      MessageQueueDispatcherForCppWinrtWeakPtr thisWeak_;
 
-      mutable zsLib::Event mEvent {zsLib::Event::Reset_Auto};
-      MessageQueuePtr mQueue;
+      MessageQueuePtr queue_;
+      CoreDispatcher dispatcher_ {nullptr};
 
-      mutable Lock mLock;
-      std::atomic_bool mMustShutdown {};
-      ThreadPriorities mThreadPriority {ThreadPriority_Normal};
+      std::atomic_bool isShutdown_ {};
 
-      std::atomic_bool mIsShutdown {};
+      winrt::Windows::UI::Core::CoreDispatcherPriority priority_ {winrt::Windows::UI::Core::CoreDispatcherPriority::Normal};
     };
   }
 }
 
-#endif //ZSLIB_INTERNAL_MESSAGEQUEUETHREADBASIC_H_f615413ac754769243970b0fefce2e2e
+#endif //CPPWINRT_VERSION
+
+#endif //WINUWP

@@ -31,46 +31,47 @@
 
 #pragma once
 
+#include <zsLib/IMessageQueueDispatcher.h>
+
 #ifdef WINUWP
-
-#ifdef __has_include
-#if __has_include(<winrt/windows.ui.core.h>)
-#include <winrt/windows.ui.core.h>
-#endif //__has_include(<winrt/windows.ui.core.h>)
-#endif //__has_include
-
-#ifdef CPPWINRT_VERSION
-
-#include <Windows.h>
-
-#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
-
-#include <zsLib/Exception.h>
 
 namespace zsLib
 {
   namespace internal
   {
-    ZS_DECLARE_CLASS_PTR(MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt);
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //
+    // MessageQueueThread
+    //
 
-    class MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt
+    class MessageQueueDispatcher : public IMessageQueueDispatcher
     {
-    public:
-      typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
-
-    public:
-      MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
-      ~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
-
-      static IMessageQueueThreadPtr singleton() noexcept;
-      static CoreDispatcher setupDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
-      static bool hasDispatcher(bool ready = false) noexcept;
+    protected:
+      friend interaction IMessageQueueDispatcher;
 
     protected:
+#ifdef CPPWINRT_VERSION
+    typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+
+    static MessageQueueDispatcherPtr create(
+      CoreDispatcher dispatcher,
+      ThreadPriorities threadPriority = ThreadPriority_Normal
+      ) noexcept;
+#endif //CPPWINRT_VERSION
+
+#ifdef __cplusplus_winrt
+      typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
+
+    static MessageQueueDispatcherPtr create(
+      LegacyCoreDispatcher ^dispatcher,
+      ThreadPriorities threadPriority = ThreadPriority_Normal
+      ) noexcept;
+#endif //__cplusplus_winrt
     };
   }
 }
-
-#endif //CPPWINRT_VERSION
 
 #endif //WINUWP

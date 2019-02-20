@@ -29,67 +29,85 @@
  
  */
 
-#include <zsLib/types.h>
-#include <zsLib/internal/platform.h>
-
-#ifdef WINUWP
-#ifdef __cplusplus_winrt
-
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
+#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
+#include <zsLib/internal/zsLib_MessageQueueDispatcherForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueDispatcherForWinUWP.h>
-#include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
-#include <zsLib/internal/zsLib_MessageQueue.h>
 #include <zsLib/Log.h>
-#include <zsLib/helpers.h>
-#include <zsLib/Stringize.h>
-#include <zsLib/Singleton.h>
 
-using namespace Windows::UI::Core;
-
-namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
+//namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {
   namespace internal
   {
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //
+    // MessageQueueDispatcher
+    //
+
+#ifdef CPPWINRT_VERSION
+    typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
 
     //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-
-
-    //-------------------------------------------------------------------------
-    IMessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::singleton() noexcept
+    MessageQueueDispatcherPtr MessageQueueDispatcher::create(
+      CoreDispatcher dispatcher,
+      ThreadPriorities threadPriority
+      ) noexcept
     {
-      CoreDispatcher ^dispatcher = setupDispatcher();
-
-      if (nullptr == dispatcher) {
-        static SingletonLazySharedPtr<MessageQueueThreadBasic> singleton(MessageQueueThreadBasic::create("zsLib.winuwp.backgroundDispatcher"));
-        return singleton.singleton();
-      }
-
-      static SingletonLazySharedPtr<MessageQueueDispatcherForWinUWP> singleton(MessageQueueDispatcherForWinUWP::create(dispatcher));
-      return singleton.singleton();
+      return internal::MessageQueueDispatcherForCppWinrt::create(dispatcher, threadPriority);
     }
+#endif //CPPWINRT_VERSION
+
+#ifdef __cplusplus_winrt
+    typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
 
     //-------------------------------------------------------------------------
-    Windows::UI::Core::CoreDispatcher ^MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::setupDispatcher(CoreDispatcher ^dispatcher) noexcept
+    MessageQueueDispatcherPtr MessageQueueDispatcher::create(
+      LegacyCoreDispatcher ^dispatcher,
+      ThreadPriorities threadPriority
+      ) noexcept
     {
-      static CoreDispatcher ^gDispatcher = dispatcher;
-      return gDispatcher;
+      return internal::MessageQueueDispatcherForWinUWP::create(dispatcher, threadPriority);
     }
+#endif // __cplusplus_winrt
 
-    //-------------------------------------------------------------------------
-    bool MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::hasDispatcher(bool ready) noexcept
-    {
-      static std::atomic<bool> isSetup{ false };
-      if (ready) isSetup = true;
-      return isSetup;
-    }
+  } // namespace internal
 
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //
+  // MessageQueueDispatcher
+  //
+
+#ifdef CPPWINRT_VERSION
+  typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+
+  //---------------------------------------------------------------------------
+  IMessageQueueDispatcherPtr IMessageQueueDispatcher::create(
+    CoreDispatcher dispatcher,
+    ThreadPriorities threadPriority
+    ) noexcept
+  {
+    return internal::MessageQueueDispatcher::create(dispatcher, threadPriority);
   }
-}
+#endif //CPPWINRT_VERSION
 
+#ifdef __cplusplus_winrt
+  typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
+
+  //---------------------------------------------------------------------------
+  IMessageQueueDispatcherPtr IMessageQueueDispatcher::create(
+    LegacyCoreDispatcher ^dispatcher,
+    ThreadPriorities threadPriority
+    ) noexcept
+  {
+    return internal::MessageQueueDispatcher::create(dispatcher, threadPriority);
+  }
 #endif //__cplusplus_winrt
-#endif //WINUWP
+
+}
