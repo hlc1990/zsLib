@@ -31,7 +31,6 @@
 
 #include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
 #include <zsLib/internal/zsLib_MessageQueueDispatcherForCppWinrt.h>
-#include <zsLib/internal/zsLib_MessageQueueDispatcherForWinUWP.h>
 #include <zsLib/Log.h>
 
 //namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
@@ -61,19 +60,6 @@ namespace zsLib
     }
 #endif //CPPWINRT_VERSION
 
-#ifdef __cplusplus_winrt
-    typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
-
-    //-------------------------------------------------------------------------
-    MessageQueueDispatcherPtr MessageQueueDispatcher::create(
-      LegacyCoreDispatcher ^dispatcher,
-      ThreadPriorities threadPriority
-      ) noexcept
-    {
-      return internal::MessageQueueDispatcherForWinUWP::create(dispatcher, threadPriority);
-    }
-#endif // __cplusplus_winrt
-
   } // namespace internal
 
   //---------------------------------------------------------------------------
@@ -96,18 +82,5 @@ namespace zsLib
     return internal::MessageQueueDispatcher::create(dispatcher, threadPriority);
   }
 #endif //CPPWINRT_VERSION
-
-#ifdef __cplusplus_winrt
-  typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
-
-  //---------------------------------------------------------------------------
-  IMessageQueueDispatcherPtr IMessageQueueDispatcher::create(
-    LegacyCoreDispatcher ^dispatcher,
-    ThreadPriorities threadPriority
-    ) noexcept
-  {
-    return internal::MessageQueueDispatcher::create(dispatcher, threadPriority);
-  }
-#endif //__cplusplus_winrt
 
 }

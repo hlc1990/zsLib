@@ -62,14 +62,6 @@ namespace zsLib
       ) noexcept;
 #endif //CPPWINRT_VERSION
 
-#ifdef __cplusplus_winrt
-      typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
-
-    static MessageQueueDispatcherPtr create(
-      LegacyCoreDispatcher ^dispatcher,
-      ThreadPriorities threadPriority = ThreadPriority_Normal
-      ) noexcept;
-#endif //__cplusplus_winrt
     };
   }
 }

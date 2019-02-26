@@ -52,12 +52,6 @@
 
 #ifdef _WIN32
 
-#ifdef __cplusplus_winrt
-#undef WINUWP
-#define WINUWP
-#endif //__cplusplus_winrt
-
-
 // WIN32 platforms have these defined
 #define HAVE_IPHLPAPI_H 1
 #define HAVE_WINDOWS_H 1

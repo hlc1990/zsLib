@@ -37,10 +37,6 @@
 
 #ifdef WINUWP
 
-#ifdef __cplusplus_winrt
-#include <windows.ui.core.h>
-#endif //__cplusplus_winrt
-
 #ifdef __has_include
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
@@ -72,9 +68,6 @@ namespace zsLib
 
     static void setup() noexcept;
 #ifdef WINUWP
-#ifdef __cplusplus_winrt
-    static void setup(Windows::UI::Core::CoreDispatcher ^dispatcher) noexcept;
-#endif //__cplusplus_winrt
 #ifdef CPPWINRT_VERSION
     static void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
