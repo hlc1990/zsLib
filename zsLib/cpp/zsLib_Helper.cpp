@@ -69,9 +69,6 @@ namespace zsLib
 
     void setup();
 #ifdef WINUWP
-#ifdef __cplusplus_winrt
-    void setup(Windows::UI::Core::CoreDispatcher ^dispatcher) noexcept;
-#endif //__cplusplus_winrt
 #ifdef CPPWINRT_VERSION
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
@@ -121,15 +118,6 @@ namespace zsLib
   }
 
 #ifdef WINUWP
-
-#ifdef __cplusplus_winrt
-  //---------------------------------------------------------------------------
-  void IHelper::setup(Windows::UI::Core::CoreDispatcher ^dispatcher) noexcept
-  {
-    internal::setup(dispatcher);
-  }
-#endif //__cplusplus_winrt
-
 #ifdef CPPWINRT_VERSION
   //---------------------------------------------------------------------------
   void IHelper::setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept
@@ -137,7 +125,6 @@ namespace zsLib
     internal::setup(dispatcher);
   }
 #endif //CPPWINRT_VERSION
-
 #endif //WINUWP
 
   //---------------------------------------------------------------------------

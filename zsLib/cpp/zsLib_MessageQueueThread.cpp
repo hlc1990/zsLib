@@ -32,7 +32,6 @@
 #include <zsLib/internal/zsLib_MessageQueueThread.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWindows.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingMainThreadMessageQueueForApple.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingBlackberryChannels.h>
@@ -176,11 +175,6 @@ namespace zsLib
     {
 #ifdef _WIN32
 #ifdef WINUWP
-#ifdef __cplusplus_winrt
-      if (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::hasDispatcher()) {
-        return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::singleton();
-      }
-#endif //__cplusplus_winrt
 #ifdef CPPWINRT_VERSION
       if (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher()) {
         return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton();

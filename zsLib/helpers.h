@@ -31,10 +31,6 @@
 
 #pragma once
 
-#ifdef __cplusplus_winrt
-#include <Windows.h>
-#endif //__cplusplus_winrt
-
 #include <zsLib/types.h>
 
 

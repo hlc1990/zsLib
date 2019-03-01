@@ -265,11 +265,6 @@ static_assert(ZS_INTERNAL_MACRO_SELECT_WITH_PROPERTY_5(ZS_INTERNAL_VERIFY_CHOICE
 
 #ifdef _WIN32
 
-#ifdef __cplusplus_winrt
-#undef WINUWP
-#define WINUWP
-#endif //__cplusplus_winrt
-
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif //WIN32_LEAN_AND_MEAN

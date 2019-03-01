@@ -42,10 +42,6 @@
 #endif //__has_include(<winrt/windows.ui.core.h>)
 #endif //__has_include
 
-#ifdef __cplusplus_winrt
-#include <Windows.h>
-#endif //__cplusplus_winrt
-
 namespace zsLib
 {
   interaction IMessageQueueDispatcher : public IMessageQueueThread
@@ -58,15 +54,6 @@ namespace zsLib
       ThreadPriorities threadPriority = ThreadPriority_Normal
       ) noexcept;
 #endif //CPPWINRT_VERSION
-
-#ifdef __cplusplus_winrt
-    typedef Windows::UI::Core::CoreDispatcher LegacyCoreDispatcher;
-
-    static IMessageQueueDispatcherPtr create(
-      LegacyCoreDispatcher ^dispatcher,
-      ThreadPriorities threadPriority = ThreadPriority_Normal
-      ) noexcept;
-#endif //__cplusplus_winrt
   };
 
 } // namespace zsLib

@@ -49,7 +49,6 @@
 #include <windows.h>
 #endif //HAVE_WINDOWS_H
 
-#include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
 
 #ifdef _WIN32
@@ -206,14 +205,6 @@ namespace zsLib
     }
 
 #ifdef WINUWP
-#ifdef __cplusplus_winrt
-    void setup(Windows::UI::Core::CoreDispatcher ^dispatcher)
-    {
-      setup();
-      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::setupDispatcher(dispatcher);
-      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWinUWP::hasDispatcher(true);
-    }
-#endif //__cplusplus_winrt
 #ifdef CPPWINRT_VERSION
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher)
     {
