@@ -65,6 +65,9 @@ namespace zsLib
       ZS_DECLARE_PTR(OutputListenerList);
       typedef std::list<ILogEventingDelegatePtr> EventingListenerList;
       ZS_DECLARE_PTR(EventingListenerList);
+      typedef std::list<ILogSubsystemDelegatePtr> SubsystemListenerList;
+      ZS_DECLARE_PTR(SubsystemListenerList);
+
       typedef std::list<ILogEventingProviderDelegatePtr> EventingProviderListenerList;
       ZS_DECLARE_PTR(EventingProviderListenerList);
 
@@ -122,6 +125,7 @@ namespace zsLib
 
       OutputListenerListPtr mOutputListeners;
       EventingListenerListPtr mEventingListeners;
+      SubsystemListenerListPtr mSubsystemListeners;
       EventingProviderListenerListPtr mEventingProviderListeners;
 
       SubsystemList mSubsystems;
