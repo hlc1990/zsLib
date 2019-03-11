@@ -438,33 +438,41 @@ namespace zsLib
 
     Log &refThis = (*log);
 
-    AutoRecursiveLock lock(refThis.mLock);
+    SubsystemListenerListPtr notifySubsystemListeners;
+    size_t count {};
 
-    OutputListenerListPtr replaceList(make_shared<OutputListenerList>());
-
-    (*replaceList) = (*refThis.mOutputListeners);
-
-    for (OutputListenerList::iterator iter = replaceList->begin(); iter != replaceList->end(); ++iter)
     {
-      if (delegate.get() == (*iter).get())
-      {
-        replaceList->erase(iter);
+      AutoRecursiveLock lock(refThis.mLock);
 
-        if (0 == replaceList->size()) {
-          if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
-            for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-              auto *subsystem = (*innerIter);
-              subsystem->setOutputLevel(None);
-            }
+      OutputListenerListPtr replaceList(make_shared<OutputListenerList>());
+      notifySubsystemListeners = refThis.mSubsystemListeners;
+
+      (*replaceList) = (*refThis.mOutputListeners);
+
+      for (OutputListenerList::iterator iter = replaceList->begin(); iter != replaceList->end(); ++iter)
+      {
+        if (delegate.get() == (*iter).get())
+        {
+          replaceList->erase(iter);
+        }
+      }
+
+      if (0 == replaceList->size()) {
+        if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
+          for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+            auto *subsystem = (*innerIter);
+            subsystem->setOutputLevel(None);
           }
         }
-
-        refThis.mOutputListeners = replaceList;
-        return;
       }
+
+      refThis.mOutputListeners = replaceList;
+      count = replaceList->size();
     }
 
-    ZS_THROW_INVALID_ARGUMENT("cound not remove log listener as it was not found");
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter) {
+      (*iter)->notifyLogSubscriberTotalChanged(count);
+    }
   }
 
   //---------------------------------------------------------------------------
@@ -788,34 +796,46 @@ namespace zsLib
     if (!log) return;
 
     Log &refThis = (*log);
+    SubsystemListenerListPtr notifySubsystemListeners;
+    size_t count {};
 
-    AutoRecursiveLock lock(refThis.mLock);
-
-    EventingListenerListPtr replaceList(make_shared<EventingListenerList>());
-
-    (*replaceList) = (*refThis.mEventingListeners);
-
-    auto originalSize = replaceList->size();
-
-    for (auto iter_doNotUse = replaceList->begin(); iter_doNotUse != replaceList->end(); )
     {
-      auto current = iter_doNotUse;
-      ++iter_doNotUse;
+      AutoRecursiveLock lock(refThis.mLock);
 
-      if (delegate.get() == (*current).get()) {
-        replaceList->erase(current);
+      notifySubsystemListeners = refThis.mSubsystemListeners;
+      EventingListenerListPtr replaceList(make_shared<EventingListenerList>());
+
+      (*replaceList) = (*refThis.mEventingListeners);
+
+      auto originalSize = replaceList->size();
+
+      for (auto iter_doNotUse = replaceList->begin(); iter_doNotUse != replaceList->end(); )
+      {
+        auto current = iter_doNotUse;
+        ++iter_doNotUse;
+
+        if (delegate.get() == (*current).get()) {
+          replaceList->erase(current);
+        }
+      }
+
+      count = replaceList->size();
+
+      if (originalSize != replaceList->size()) {
+        refThis.mEventingListeners = replaceList;
+
+        if (0 == replaceList->size()) {
+          for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+            auto *subsystem = (*innerIter);
+            subsystem->setEventingLevel(None);
+          }
+        }
       }
     }
 
-    if (originalSize != replaceList->size()) {
-      refThis.mEventingListeners = replaceList;
-
-      if (0 == replaceList->size()) {
-        for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-          auto *subsystem = (*innerIter);
-          subsystem->setEventingLevel(None);
-        }
-      }
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter)
+    {
+      (*iter)->notifyEventingSubscriberTotalChanged(count);
     }
   }
 
