@@ -84,7 +84,10 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void Subsystem::setOutputLevel(Log::Level inLevel) noexcept
   {
-    mOutputLevel = inLevel;
+    auto previous = mOutputLevel.exchange(inLevel);
+    if (inLevel == previous)
+      return;
+    notifyLevelChanged();
   }
 
   //---------------------------------------------------------------------------
@@ -96,7 +99,10 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void Subsystem::setEventingLevel(Log::Level inLevel) noexcept
   {
-    mEventingLevel = inLevel;
+    auto previous = mEventingLevel.exchange(inLevel);
+    if (inLevel == previous)
+      return;
+    notifyLevelChanged();
   }
 
   //---------------------------------------------------------------------------
