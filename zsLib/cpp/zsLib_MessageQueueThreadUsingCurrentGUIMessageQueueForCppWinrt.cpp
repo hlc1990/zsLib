@@ -32,8 +32,6 @@
 #include <zsLib/types.h>
 #include <zsLib/internal/platform.h>
 
-#ifdef WINUWP
-
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueDispatcherForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
@@ -92,5 +90,3 @@ namespace zsLib
 }
 
 #endif //CPPWINRT_VERSION
-
-#endif //WINUWP

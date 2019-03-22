@@ -34,16 +34,11 @@
 #include <zsLib/types.h>
 #include <zsLib/Log.h>
 
-
-#ifdef WINUWP
-
 #ifdef __has_include
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
 #endif //__has_include(<winrt/windows.ui.core.h>)
 #endif //__has_include
-
-#endif //WINUWP
 
 namespace zsLib
 {
@@ -67,11 +62,9 @@ namespace zsLib
     typedef std::set<IPAddress> IPAddressSet;
 
     static void setup() noexcept;
-#ifdef WINUWP
 #ifdef CPPWINRT_VERSION
     static void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
-#endif //WINUWP
 
     static RecursiveLockPtr getGlobalLock() noexcept;
 

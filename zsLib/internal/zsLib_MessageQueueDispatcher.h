@@ -33,8 +33,6 @@
 
 #include <zsLib/IMessageQueueDispatcher.h>
 
-#ifdef WINUWP
-
 namespace zsLib
 {
   namespace internal
@@ -65,5 +63,3 @@ namespace zsLib
     };
   }
 }
-
-#endif //WINUWP

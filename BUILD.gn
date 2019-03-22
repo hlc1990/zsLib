@@ -11,7 +11,10 @@ if  (is_android) {
 }
 
 config("zslib_config") {
+    configs = []
     if  (is_win) {
+      configs += [ "//build/config/win:cpp17" ]
+
       cflags_cc = [ 
         "/WX-",
         "/wd4068",

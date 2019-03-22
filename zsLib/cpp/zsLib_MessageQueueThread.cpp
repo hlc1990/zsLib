@@ -92,11 +92,9 @@ namespace zsLib
         case ThreadPriority_Highest:  priority = THREAD_PRIORITY_HIGHEST; break;
         case ThreadPriority_Realtime: priority = THREAD_PRIORITY_TIME_CRITICAL; break;
       }
-#ifndef WINUWP
 		  ZS_MAYBE_USED() auto result = SetThreadPriority(handle, priority);
       ZS_MAYBE_USED(result);
       ZS_ASSERT(0 != result);
-#endif //ndef WINUWP
 
 #endif //_WIN32
     }
@@ -174,13 +172,13 @@ namespace zsLib
     IMessageQueueThreadPtr MessageQueueThread::singletonUsingCurrentGUIThreadsMessageQueue() noexcept
     {
 #ifdef _WIN32
-#ifdef WINUWP
 #ifdef CPPWINRT_VERSION
       if (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher()) {
         return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton();
       }
 #endif //CPPWINRT_VERSION
-      return internal::MessageQueueThreadBasic::create("zsLib.backgroundThreadDispatcher");
+#ifdef WINUWP
+      return internal::MessageQueueThreadBasic::create("zsLib.backgroundThreadDispatcher.noDispatcherSpecified");
 #else //WINUWP
       return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForWindows::singleton();
 #endif //WINUWP

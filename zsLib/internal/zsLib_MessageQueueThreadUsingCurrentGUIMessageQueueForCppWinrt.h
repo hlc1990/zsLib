@@ -31,8 +31,6 @@
 
 #pragma once
 
-#ifdef WINUWP
-
 #ifdef __has_include
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
@@ -72,5 +70,3 @@ namespace zsLib
 }
 
 #endif //CPPWINRT_VERSION
-
-#endif //WINUWP

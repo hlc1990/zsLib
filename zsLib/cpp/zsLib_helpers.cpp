@@ -204,7 +204,6 @@ namespace zsLib
       internal::Setup::singleton().setup();
     }
 
-#ifdef WINUWP
 #ifdef CPPWINRT_VERSION
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher)
     {
@@ -213,7 +212,6 @@ namespace zsLib
       internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher(true);
     }
 #endif //CPPWINRT_VERSION
-#endif //WINUWP
 
   }
 

@@ -68,11 +68,9 @@ namespace zsLib
     //
 
     void setup();
-#ifdef WINUWP
 #ifdef CPPWINRT_VERSION
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
-#endif //WINUWP
 
     
     //-------------------------------------------------------------------------
@@ -117,7 +115,6 @@ namespace zsLib
     internal::setup();
   }
 
-#ifdef WINUWP
 #ifdef CPPWINRT_VERSION
   //---------------------------------------------------------------------------
   void IHelper::setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept
@@ -125,7 +122,6 @@ namespace zsLib
     internal::setup(dispatcher);
   }
 #endif //CPPWINRT_VERSION
-#endif //WINUWP
 
   //---------------------------------------------------------------------------
   RecursiveLockPtr IHelper::getGlobalLock() noexcept
