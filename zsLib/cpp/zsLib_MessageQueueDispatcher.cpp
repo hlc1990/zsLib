@@ -49,10 +49,20 @@ namespace zsLib
 
 #ifdef CPPWINRT_VERSION
     typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+    typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
     //-------------------------------------------------------------------------
     MessageQueueDispatcherPtr MessageQueueDispatcher::create(
       CoreDispatcher dispatcher,
+      ThreadPriorities threadPriority
+      ) noexcept
+    {
+      return internal::MessageQueueDispatcherForCppWinrt::create(dispatcher, threadPriority);
+    }
+
+    //-------------------------------------------------------------------------
+    MessageQueueDispatcherPtr MessageQueueDispatcher::create(
+      DispatcherQueue dispatcher,
       ThreadPriorities threadPriority
       ) noexcept
     {
@@ -72,10 +82,20 @@ namespace zsLib
 
 #ifdef CPPWINRT_VERSION
   typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+  typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
   //---------------------------------------------------------------------------
   IMessageQueueDispatcherPtr IMessageQueueDispatcher::create(
     CoreDispatcher dispatcher,
+    ThreadPriorities threadPriority
+    ) noexcept
+  {
+    return internal::MessageQueueDispatcher::create(dispatcher, threadPriority);
+  }
+
+  //---------------------------------------------------------------------------
+  IMessageQueueDispatcherPtr IMessageQueueDispatcher::create(
+    DispatcherQueue dispatcher,
     ThreadPriorities threadPriority
     ) noexcept
   {

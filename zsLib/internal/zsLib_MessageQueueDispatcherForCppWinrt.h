@@ -35,6 +35,9 @@
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
 #endif //__has_include(<winrt/windows.ui.core.h>)
+#if __has_include(<winrt/windows.system.h>)
+#include <winrt/windows.system.h>
+#endif //__has_include(<winrt/windows.system.h>)
 #endif //__has_include
 
 #ifdef CPPWINRT_VERSION
@@ -56,6 +59,7 @@ namespace zsLib
     {
     public:
       typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+      typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
       struct Exceptions
       {
@@ -71,6 +75,11 @@ namespace zsLib
 
       static MessageQueueDispatcherForCppWinrtPtr create(
         CoreDispatcher dispatcher,
+        ThreadPriorities threadPriority = ThreadPriority_Normal
+        ) noexcept;
+
+      static MessageQueueDispatcherForCppWinrtPtr create(
+        DispatcherQueue dispatcher,
         ThreadPriorities threadPriority = ThreadPriority_Normal
         ) noexcept;
 
@@ -100,11 +109,13 @@ namespace zsLib
       MessageQueueDispatcherForCppWinrtWeakPtr thisWeak_;
 
       MessageQueuePtr queue_;
-      CoreDispatcher dispatcher_ {nullptr};
+      CoreDispatcher coreDispatcher_ {nullptr};
+      DispatcherQueue dispatcherQueue_ {nullptr};
 
       std::atomic_bool isShutdown_ {};
 
-      winrt::Windows::UI::Core::CoreDispatcherPriority priority_ {winrt::Windows::UI::Core::CoreDispatcherPriority::Normal};
+      winrt::Windows::UI::Core::CoreDispatcherPriority coreDispatcherPriority_ {winrt::Windows::UI::Core::CoreDispatcherPriority::Normal};
+      winrt::Windows::System::DispatcherQueuePriority  dispatcherQueuePriority_ {winrt::Windows::System::DispatcherQueuePriority::Normal};
     };
   }
 }

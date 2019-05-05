@@ -46,13 +46,16 @@
 #include <Windows.h>
 #include <tchar.h>
 
+#include <sdkddkver.h>
+
 namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
 namespace zsLib
 {
   namespace internal
   {
-    static winrt::Windows::UI::Core::CoreDispatcherPriority convert(ThreadPriorities threadPriority)
+    //-------------------------------------------------------------------------
+    static winrt::Windows::UI::Core::CoreDispatcherPriority convertCoreDispatcher(ThreadPriorities threadPriority)
     {
       switch (threadPriority)
       {
@@ -65,6 +68,22 @@ namespace zsLib
           case ThreadPriority_Realtime: return winrt::Windows::UI::Core::CoreDispatcherPriority::High;
       }
       return winrt::Windows::UI::Core::CoreDispatcherPriority::Normal;
+    }
+
+    //-------------------------------------------------------------------------
+    static winrt::Windows::System::DispatcherQueuePriority convertDispatcherQueue(ThreadPriorities threadPriority)
+    {
+      switch (threadPriority)
+      {
+          case ThreadPriority_Idle:     
+          case ThreadPriority_Lowest:   
+          case ThreadPriority_Low:      return winrt::Windows::System::DispatcherQueuePriority::Low;
+          case ThreadPriority_Normal:   return winrt::Windows::System::DispatcherQueuePriority::Normal;
+          case ThreadPriority_High:
+          case ThreadPriority_Highest:
+          case ThreadPriority_Realtime: return winrt::Windows::System::DispatcherQueuePriority::High;
+      }
+      return winrt::Windows::System::DispatcherQueuePriority::Normal;
     }
 
     //-------------------------------------------------------------------------
@@ -87,7 +106,8 @@ namespace zsLib
     MessageQueueDispatcherForCppWinrt::~MessageQueueDispatcherForCppWinrt() noexcept
     {
       thisWeak_.reset();
-      dispatcher_ = nullptr;
+      coreDispatcher_ = nullptr;
+      dispatcherQueue_ = nullptr;
     }
 
     //-------------------------------------------------------------------------
@@ -99,9 +119,24 @@ namespace zsLib
       MessageQueueDispatcherForCppWinrtPtr thread(new MessageQueueDispatcherForCppWinrt);
       thread->thisWeak_ = thread;
       thread->queue_ = MessageQueue::create(thread);
-      thread->dispatcher_ = dispatcher;
-      thread->priority_ = convert(threadPriority);
-      ZS_ASSERT(thread->dispatcher_);
+      thread->coreDispatcher_ = dispatcher;
+      thread->coreDispatcherPriority_ = convertCoreDispatcher(threadPriority);
+      ZS_ASSERT(thread->coreDispatcher_);
+      return thread;
+    }
+
+    //-------------------------------------------------------------------------
+    MessageQueueDispatcherForCppWinrtPtr MessageQueueDispatcherForCppWinrt::create(
+      DispatcherQueue dispatcher,
+      ThreadPriorities threadPriority
+      ) noexcept
+    {
+      MessageQueueDispatcherForCppWinrtPtr thread(new MessageQueueDispatcherForCppWinrt);
+      thread->thisWeak_ = thread;
+      thread->queue_ = MessageQueue::create(thread);
+      thread->dispatcherQueue_ = dispatcher;
+      thread->dispatcherQueuePriority_ = convertDispatcherQueue(threadPriority);
+      ZS_ASSERT(thread->dispatcherQueue_);
       return thread;
     }
 
@@ -135,34 +170,53 @@ namespace zsLib
     //-------------------------------------------------------------------------
     bool MessageQueueDispatcherForCppWinrt::isCurrentThread() const noexcept
     {
-      ZS_ASSERT(nullptr != dispatcher_);
+      ZS_ASSERT((nullptr != coreDispatcher_) ||
+                (nullptr != dispatcherQueue_));
 
-      return dispatcher_.HasThreadAccess();
+      if (coreDispatcher_) {
+        return coreDispatcher_.HasThreadAccess();
+      }
+#ifdef NTDDI_WIN10_RS5
+#if (NTDDI_VERSION > NTDDI_WIN10_RS5)
+      return dispatcherQueue_.HasThreadAccess();
+#else
+      return false;
+#endif (NTDDI_VERSION > NTDDI_WIN10_RS5)
+#else
+      return false;
+#endif //ndef NTDDI_WIN10_RS5
     }
 
     //-------------------------------------------------------------------------
     void MessageQueueDispatcherForCppWinrt::notifyMessagePosted() noexcept
     {
-      CoreDispatcher dispatcher {nullptr};
-      MessageQueueDispatcherForCppWinrtPtr queue;
-      winrt::Windows::UI::Core::CoreDispatcherPriority priority {};
+      ZS_ASSERT((nullptr != coreDispatcher_) ||
+                (nullptr != dispatcherQueue_));
+
+      auto queue = thisWeak_.lock();
+
+      winrt::Windows::UI::Core::CoreDispatcherPriority coreDispatcherPriority {};
+      winrt::Windows::System::DispatcherQueuePriority  dispatcherQueuePriority {};
 
       {
         AutoLock lock(lock_);
-
-        ZS_ASSERT(nullptr != dispatcher_);
-
-        dispatcher = dispatcher_;
-        queue = thisWeak_.lock();
-        priority = priority_;
+        coreDispatcherPriority = coreDispatcherPriority_;
+        dispatcherQueuePriority = dispatcherQueuePriority_;
       }
 
       auto callback = [queue] () {dispatch(queue);};
 
-      dispatcher.RunAsync(
-        priority,
-        winrt::Windows::UI::Core::DispatchedHandler(callback)
-      );
+      if (coreDispatcher_) {
+        coreDispatcher_.RunAsync(
+          coreDispatcherPriority,
+          winrt::Windows::UI::Core::DispatchedHandler(callback)
+        );
+      } else {
+        dispatcherQueue_.TryEnqueue(
+          dispatcherQueuePriority,
+          winrt::Windows::System::DispatcherQueueHandler(callback)
+        );
+      }
     }
 
     //-------------------------------------------------------------------------
@@ -175,7 +229,8 @@ namespace zsLib
     void MessageQueueDispatcherForCppWinrt::setThreadPriority(ThreadPriorities threadPriority) noexcept
     {
       AutoLock lock(lock_);
-      priority_ = convert(threadPriority);
+      coreDispatcherPriority_ = convertCoreDispatcher(threadPriority);
+      dispatcherQueuePriority_ = convertDispatcherQueue(threadPriority);
     }
   }
 }

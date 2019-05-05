@@ -53,9 +53,15 @@ namespace zsLib
     protected:
 #ifdef CPPWINRT_VERSION
     typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+    typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
     static MessageQueueDispatcherPtr create(
       CoreDispatcher dispatcher,
+      ThreadPriorities threadPriority = ThreadPriority_Normal
+      ) noexcept;
+    
+    static MessageQueueDispatcherPtr create(
+      DispatcherQueue dispatcher,
       ThreadPriorities threadPriority = ThreadPriority_Normal
       ) noexcept;
 #endif //CPPWINRT_VERSION
