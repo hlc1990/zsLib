@@ -33,12 +33,13 @@
 #include <zsLib/Exception.h>
 #include <zsLib/SafeInt.h>
 
-
-#ifdef _WIN32
-namespace std {
-	inline int tolower(int c) noexcept { return _tolower(c); }
-}
-#endif //_WIN32
+#if _MSC_VER < 1920
+  #ifdef _WIN32
+  namespace std {
+    inline int tolower(int c) noexcept { return _tolower(c); }
+  }
+  #endif //_WIN32
+#endif //_MSC_VER < 1920
 
 namespace zsLib {ZS_DECLARE_SUBSYSTEM(zslib)}
 
