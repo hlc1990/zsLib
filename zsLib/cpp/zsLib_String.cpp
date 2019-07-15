@@ -34,6 +34,7 @@
 #include <zsLib/Exception.h>
 
 #include <algorithm>
+#include <functional>
 
 #define ZS_INTERNAL_UTF8_MAX_CHARACTER_ENCODED_BYTE_SIZE (sizeof(BYTE)*6)
 
