@@ -34,6 +34,7 @@
 
 #include <zsLib/internal/zsLib_MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt.h>
 #include <zsLib/internal/zsLib_MessageQueueDispatcherForCppWinrt.h>
+#include <zsLib/internal/zsLib_MessageQueueDispatcher.h>
 #include <zsLib/internal/zsLib_MessageQueueThreadBasic.h>
 #include <zsLib/internal/zsLib_MessageQueue.h>
 #include <zsLib/Log.h>
@@ -44,6 +45,7 @@
 #ifdef CPPWINRT_VERSION
 
 using namespace winrt::Windows::UI::Core;
+typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
 namespace zsLib { ZS_DECLARE_SUBSYSTEM(zslib) }
 
@@ -57,30 +59,106 @@ namespace zsLib
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
+    //-------------------------------------------------------------------------
+    static IMessageQueueThreadPtr CoreDispatcherSingleton() noexcept
+    {
+      if (MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasCoreDispatcher()) {
+        CoreDispatcher dispatcher = MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupCoreDispatcher();
+
+        if (dispatcher) {
+          static SingletonLazySharedPtr<MessageQueueDispatcherForCppWinrt> singleton(MessageQueueDispatcherForCppWinrt::create(dispatcher));
+          return singleton.singleton();
+        }
+      }
+      return IMessageQueueThreadPtr();
+    }
+
+
+    //-------------------------------------------------------------------------
+    static IMessageQueueThreadPtr DispatcherQueueSingleton() noexcept
+    {
+      if (MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcherQueue()) {
+        DispatcherQueue dispatcher = MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupDispatcherQueue();
+
+        if (dispatcher) {
+          static SingletonLazySharedPtr<MessageQueueDispatcherForCppWinrt> singleton(MessageQueueDispatcherForCppWinrt::create(dispatcher));
+          return singleton.singleton();
+        }
+      }
+      return IMessageQueueThreadPtr();
+    }
 
     //-------------------------------------------------------------------------
     IMessageQueueThreadPtr MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton() noexcept
     {
-      CoreDispatcher dispatcher = setupDispatcher();
-
-      if (nullptr == dispatcher) {
-        static SingletonLazySharedPtr<MessageQueueThreadBasic> singleton(MessageQueueThreadBasic::create("zsLib.cppwinrt.backgroundDispatcher"));
-        return singleton.singleton();
+      {
+        auto result = CoreDispatcherSingleton();
+        if (result)
+          return result;
+      }
+      {
+        auto result = DispatcherQueueSingleton();
+        if (result)
+          return result;
       }
 
-      static SingletonLazySharedPtr<MessageQueueDispatcherForCppWinrt> singleton(MessageQueueDispatcherForCppWinrt::create(dispatcher));
+      if (!hasDispatcherQueue()) {
+        auto dispatcher = DispatcherQueue::GetForCurrentThread();
+        if (dispatcher) {
+          setupDispatcherQueue(dispatcher);
+        }
+      }
+      {
+        auto result = DispatcherQueueSingleton();
+        if (result)
+          return result;
+      }
+
+      if (!hasCoreDispatcher()) {
+        auto window = winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread();
+        auto dispatcher = window.Dispatcher();
+        if (dispatcher) {
+          setupCoreDispatcher(dispatcher);
+        }
+      }
+      {
+        auto result = CoreDispatcherSingleton();
+        if (result)
+          return result;
+      }
+
+      static SingletonLazySharedPtr<MessageQueueThreadBasic> singleton(MessageQueueThreadBasic::create("zsLib.cppwinrt.backgroundDispatcher"));
       return singleton.singleton();
     }
 
     //-------------------------------------------------------------------------
-    winrt::Windows::UI::Core::CoreDispatcher MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupDispatcher(CoreDispatcher dispatcher) noexcept
+    CoreDispatcher MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupCoreDispatcher(CoreDispatcher dispatcher) noexcept
     {
       static CoreDispatcher gDispatcher = dispatcher;
+      if (dispatcher)
+        MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasCoreDispatcher(true);
       return gDispatcher;
     }
 
     //-------------------------------------------------------------------------
-    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher(bool ready) noexcept
+    DispatcherQueue MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupDispatcherQueue(DispatcherQueue dispatcher) noexcept
+    {
+      static DispatcherQueue gDispatcher = dispatcher;
+      if (dispatcher)
+        MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcherQueue(true);
+      return gDispatcher;
+    }
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasCoreDispatcher(bool ready) noexcept
+    {
+      static std::atomic<bool> isSetup {false};
+      if (ready) isSetup = true;
+      return isSetup;
+    }
+
+    //-------------------------------------------------------------------------
+    bool MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcherQueue(bool ready) noexcept
     {
       static std::atomic<bool> isSetup {false};
       if (ready) isSetup = true;

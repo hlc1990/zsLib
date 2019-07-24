@@ -38,6 +38,9 @@
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
 #endif //__has_include(<winrt/windows.ui.core.h>)
+#if __has_include(<winrt/windows.system.h>)
+#include <winrt/windows.system.h>
+#endif //__has_include(<winrt/windows.system.h>)
 #endif //__has_include
 
 namespace zsLib
@@ -64,6 +67,7 @@ namespace zsLib
     static void setup() noexcept;
 #ifdef CPPWINRT_VERSION
     static void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
+    static void setup(winrt::Windows::System::DispatcherQueue dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
 
     static RecursiveLockPtr getGlobalLock() noexcept;

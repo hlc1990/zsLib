@@ -35,6 +35,9 @@
 #if __has_include(<winrt/windows.ui.core.h>)
 #include <winrt/windows.ui.core.h>
 #endif //__has_include(<winrt/windows.ui.core.h>)
+#if __has_include(<winrt/windows.system.h>)
+#include <winrt/windows.system.h>
+#endif //__has_include(<winrt/windows.system.h>)
 #endif //__has_include
 
 #ifdef CPPWINRT_VERSION
@@ -55,14 +58,17 @@ namespace zsLib
     {
     public:
       typedef winrt::Windows::UI::Core::CoreDispatcher CoreDispatcher;
+      typedef winrt::Windows::System::DispatcherQueue DispatcherQueue;
 
     public:
       MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
       ~MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt() noexcept = delete;
 
       static IMessageQueueThreadPtr singleton() noexcept;
-      static CoreDispatcher setupDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
-      static bool hasDispatcher(bool ready = false) noexcept;
+      static CoreDispatcher setupCoreDispatcher(CoreDispatcher dispatcher = nullptr) noexcept;
+      static DispatcherQueue setupDispatcherQueue(DispatcherQueue dispatcher = nullptr) noexcept;
+      static bool hasCoreDispatcher(bool ready = false) noexcept;
+      static bool hasDispatcherQueue(bool ready = false) noexcept;
 
     protected:
     };

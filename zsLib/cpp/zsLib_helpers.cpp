@@ -205,11 +205,18 @@ namespace zsLib
     }
 
 #ifdef CPPWINRT_VERSION
+    //-------------------------------------------------------------------------    
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher)
     {
       setup();
-      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupDispatcher(dispatcher);
-      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasDispatcher(true);
+      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupCoreDispatcher(dispatcher);
+    }
+
+    //-------------------------------------------------------------------------    
+    void setup(winrt::Windows::System::DispatcherQueue dispatcher) noexcept
+    {
+      setup();
+      internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::setupDispatcherQueue(dispatcher);
     }
 #endif //CPPWINRT_VERSION
 

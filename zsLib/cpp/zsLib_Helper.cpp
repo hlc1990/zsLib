@@ -70,6 +70,7 @@ namespace zsLib
     void setup();
 #ifdef CPPWINRT_VERSION
     void setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept;
+    void setup(winrt::Windows::System::DispatcherQueue dispatcher) noexcept;
 #endif //CPPWINRT_VERSION
 
     
@@ -118,6 +119,12 @@ namespace zsLib
 #ifdef CPPWINRT_VERSION
   //---------------------------------------------------------------------------
   void IHelper::setup(winrt::Windows::UI::Core::CoreDispatcher dispatcher) noexcept
+  {
+    internal::setup(dispatcher);
+  }
+
+  //---------------------------------------------------------------------------
+  void IHelper::setup(winrt::Windows::System::DispatcherQueue dispatcher) noexcept
   {
     internal::setup(dispatcher);
   }
