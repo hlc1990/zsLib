@@ -131,6 +131,7 @@ namespace zsLib
   ZS_DECLARE_INTERACTION_PTR(ILogOutputDelegate);
   ZS_DECLARE_INTERACTION_PTR(ILogEventingProviderDelegate);
   ZS_DECLARE_INTERACTION_PTR(ILogEventingDelegate);
+  ZS_DECLARE_INTERACTION_PTR(ILogSubsystemDelegate);
 
   ZS_DECLARE_CLASS_PTR(SingletonManager);
   ZS_DECLARE_INTERACTION_PTR(ISingletonManagerDelegate);

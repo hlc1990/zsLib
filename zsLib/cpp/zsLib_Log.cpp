@@ -76,9 +76,18 @@ namespace zsLib
   }
 
   //---------------------------------------------------------------------------
+  void Subsystem::notifyLevelChanged() noexcept
+  {
+    Log::notifySubsystemLevelChanged(this);
+  }
+
+  //---------------------------------------------------------------------------
   void Subsystem::setOutputLevel(Log::Level inLevel) noexcept
   {
-    mOutputLevel = inLevel;
+    auto previous = mOutputLevel.exchange(inLevel);
+    if (inLevel == previous)
+      return;
+    notifyLevelChanged();
   }
 
   //---------------------------------------------------------------------------
@@ -90,7 +99,10 @@ namespace zsLib
   //---------------------------------------------------------------------------
   void Subsystem::setEventingLevel(Log::Level inLevel) noexcept
   {
-    mEventingLevel = inLevel;
+    auto previous = mEventingLevel.exchange(inLevel);
+    if (inLevel == previous)
+      return;
+    notifyLevelChanged();
   }
 
   //---------------------------------------------------------------------------
@@ -141,6 +153,7 @@ namespace zsLib
     Log::Log(const make_private &) noexcept :
         mOutputListeners(make_shared<OutputListenerList>()),
         mEventingListeners(make_shared<EventingListenerList>()),
+        mSubsystemListeners(make_shared<SubsystemListenerList>()),
         mEventingProviderListeners(make_shared<EventingProviderListenerList>())
     {
     }
@@ -364,10 +377,15 @@ namespace zsLib
 
     Log &refThis = (*log);
 
+    size_t count {};
+
     SubsystemList notifyList;
+    SubsystemListenerListPtr notifySubsystemListeners;
+
     // copy the list but notify without the lock
     {
       AutoRecursiveLock lock(refThis.mLock);
+      notifySubsystemListeners = refThis.mSubsystemListeners;
 
       OutputListenerListPtr replaceList(make_shared<OutputListenerList>());
 
@@ -376,6 +394,8 @@ namespace zsLib
       (*replaceList) = (*refThis.mOutputListeners);
 
       replaceList->push_back(delegate);
+
+      count = replaceList->size();
 
       refThis.mOutputListeners = replaceList;
 
@@ -408,6 +428,10 @@ namespace zsLib
     {
       delegate->notifyNewSubsystem(*(*iter));
     }
+
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter) {
+      (*iter)->notifyLogSubscriberTotalChanged(count);
+    }
   }
 
   //---------------------------------------------------------------------------
@@ -420,33 +444,41 @@ namespace zsLib
 
     Log &refThis = (*log);
 
-    AutoRecursiveLock lock(refThis.mLock);
+    SubsystemListenerListPtr notifySubsystemListeners;
+    size_t count {};
 
-    OutputListenerListPtr replaceList(make_shared<OutputListenerList>());
-
-    (*replaceList) = (*refThis.mOutputListeners);
-
-    for (OutputListenerList::iterator iter = replaceList->begin(); iter != replaceList->end(); ++iter)
     {
-      if (delegate.get() == (*iter).get())
-      {
-        replaceList->erase(iter);
+      AutoRecursiveLock lock(refThis.mLock);
 
-        if (0 == replaceList->size()) {
-          if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
-            for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-              auto *subsystem = (*innerIter);
-              subsystem->setOutputLevel(None);
-            }
+      OutputListenerListPtr replaceList(make_shared<OutputListenerList>());
+      notifySubsystemListeners = refThis.mSubsystemListeners;
+
+      (*replaceList) = (*refThis.mOutputListeners);
+
+      for (OutputListenerList::iterator iter = replaceList->begin(); iter != replaceList->end(); ++iter)
+      {
+        if (delegate.get() == (*iter).get())
+        {
+          replaceList->erase(iter);
+        }
+      }
+
+      if (0 == replaceList->size()) {
+        if (refThis.mDefaultOutputSubsystemLevels.size() > 0) {
+          for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+            auto *subsystem = (*innerIter);
+            subsystem->setOutputLevel(None);
           }
         }
-
-        refThis.mOutputListeners = replaceList;
-        return;
       }
+
+      refThis.mOutputListeners = replaceList;
+      count = replaceList->size();
     }
 
-    ZS_THROW_INVALID_ARGUMENT("cound not remove log listener as it was not found");
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter) {
+      (*iter)->notifyLogSubscriberTotalChanged(count);
+    }
   }
 
   //---------------------------------------------------------------------------
@@ -460,6 +492,7 @@ namespace zsLib
     OutputListenerListPtr notify1List;
     EventingListenerListPtr notify2List;
     EventingProviderListenerListPtr notify3List;
+    SubsystemListenerListPtr notify4List;
 
     // scope: remember the subsystem
     {
@@ -468,6 +501,7 @@ namespace zsLib
       notify1List = refThis.mOutputListeners;
       notify2List = refThis.mEventingListeners;
       notify3List = refThis.mEventingProviderListeners;
+      notify4List = refThis.mSubsystemListeners;
 
       {
         auto found = refThis.mDefaultOutputSubsystemLevels.find(String(inSubsystem->getName()));
@@ -535,6 +569,31 @@ namespace zsLib
     for (auto iter = notify3List->begin(); iter != notify3List->end(); ++iter)
     {
       (*iter)->notifyNewSubsystem(*inSubsystem);
+    }
+    for (auto iter = notify4List->begin(); iter != notify4List->end(); ++iter)
+    {
+      (*iter)->notifyNewSubsystem(*inSubsystem);
+    }
+  }
+
+  //---------------------------------------------------------------------------
+  void Log::notifySubsystemLevelChanged(Subsystem *inSubsystem)
+  {
+    LogPtr log = Log::singleton();
+    if (!log) return;
+
+    Log &refThis = (*log);
+
+    SubsystemListenerListPtr notifyList;
+
+    // scope: remember the subsystem
+    {
+      AutoRecursiveLock lock(refThis.mLock);
+      notifyList = refThis.mSubsystemListeners;
+    }
+    for (auto iter = notifyList->begin(); iter != notifyList->end(); ++iter)
+    {
+      (*iter)->notifySubsystemLevelChange(*inSubsystem);
     }
   }
 
@@ -651,11 +710,16 @@ namespace zsLib
 
     Log &refThis = (*log);
 
+    size_t count {};
+
     SubsystemList notifyList;
+    SubsystemListenerListPtr notifySubsystemListeners;
 
     // copy the list but notify without the lock
     {
       AutoRecursiveLock lock(refThis.mLock);
+
+      notifySubsystemListeners = refThis.mSubsystemListeners;
 
       EventingListenerListPtr replaceList(make_shared<EventingListenerList>());
 
@@ -666,6 +730,7 @@ namespace zsLib
       replaceList->push_back(delegate);
 
       refThis.mEventingListeners = replaceList;
+      count = replaceList->size();
 
       notifyList = refThis.mSubsystems;
 
@@ -721,6 +786,11 @@ namespace zsLib
     {
       delegate->notifyNewSubsystem(*(*iter));
     }
+
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter)
+    {
+      (*iter)->notifyEventingSubscriberTotalChanged(count);
+    }
   }
 
   //---------------------------------------------------------------------------
@@ -732,34 +802,46 @@ namespace zsLib
     if (!log) return;
 
     Log &refThis = (*log);
+    SubsystemListenerListPtr notifySubsystemListeners;
+    size_t count {};
 
-    AutoRecursiveLock lock(refThis.mLock);
-
-    EventingListenerListPtr replaceList(make_shared<EventingListenerList>());
-
-    (*replaceList) = (*refThis.mEventingListeners);
-
-    auto originalSize = replaceList->size();
-
-    for (auto iter_doNotUse = replaceList->begin(); iter_doNotUse != replaceList->end(); )
     {
-      auto current = iter_doNotUse;
-      ++iter_doNotUse;
+      AutoRecursiveLock lock(refThis.mLock);
 
-      if (delegate.get() == (*current).get()) {
-        replaceList->erase(current);
+      notifySubsystemListeners = refThis.mSubsystemListeners;
+      EventingListenerListPtr replaceList(make_shared<EventingListenerList>());
+
+      (*replaceList) = (*refThis.mEventingListeners);
+
+      auto originalSize = replaceList->size();
+
+      for (auto iter_doNotUse = replaceList->begin(); iter_doNotUse != replaceList->end(); )
+      {
+        auto current = iter_doNotUse;
+        ++iter_doNotUse;
+
+        if (delegate.get() == (*current).get()) {
+          replaceList->erase(current);
+        }
+      }
+
+      count = replaceList->size();
+
+      if (originalSize != replaceList->size()) {
+        refThis.mEventingListeners = replaceList;
+
+        if (0 == replaceList->size()) {
+          for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
+            auto *subsystem = (*innerIter);
+            subsystem->setEventingLevel(None);
+          }
+        }
       }
     }
 
-    if (originalSize != replaceList->size()) {
-      refThis.mEventingListeners = replaceList;
-
-      if (0 == replaceList->size()) {
-        for (auto innerIter = refThis.mSubsystems.begin(); innerIter != refThis.mSubsystems.end(); ++innerIter) {
-          auto *subsystem = (*innerIter);
-          subsystem->setEventingLevel(None);
-        }
-      }
+    for (auto iter = notifySubsystemListeners->begin(); iter != notifySubsystemListeners->end(); ++iter)
+    {
+      (*iter)->notifyEventingSubscriberTotalChanged(count);
     }
   }
 
@@ -840,6 +922,67 @@ namespace zsLib
       {
         replaceList->erase(iter);
         refThis.mEventingProviderListeners = replaceList;
+        return;
+      }
+    }
+  }
+
+  //---------------------------------------------------------------------------
+  void Log::addSubsystemDelegate(ILogSubsystemDelegatePtr delegate)
+  {
+    if (!delegate) return;
+
+    LogPtr log = Log::singleton();
+    if (!log) return;
+
+    Log &refThis = (*log);
+
+    SubsystemList notifyList;
+
+    // copy the list but notify without the lock
+    {
+      AutoRecursiveLock lock(refThis.mLock);
+
+      auto replaceList(make_shared<SubsystemListenerList>());
+
+      (*replaceList) = (*refThis.mSubsystemListeners);
+
+      replaceList->push_back(delegate);
+
+      refThis.mSubsystemListeners = replaceList;
+
+      notifyList = refThis.mSubsystems;
+    }
+
+    for (auto iter = notifyList.begin(); iter != notifyList.end(); ++iter)
+    {
+      delegate->notifyNewSubsystem(*(*iter));
+    }
+
+  }
+
+  //---------------------------------------------------------------------------
+  void Log::removeSubsystemDelegate(ILogSubsystemDelegatePtr delegate)
+  {
+    if (!delegate) return;
+
+    LogPtr log = Log::singleton();
+    if (!log) return;
+
+    Log &refThis = (*log);
+
+    AutoRecursiveLock lock(refThis.mLock);
+
+    auto replaceList(make_shared<SubsystemListenerList>());
+
+    (*replaceList) = (*refThis.mSubsystemListeners);
+
+    for (auto iter = replaceList->begin(); iter != replaceList->end(); ++iter)
+    {
+      if (delegate.get() == (*iter).get())
+      {
+        replaceList->erase(iter);
+        refThis.mSubsystemListeners = replaceList;
         return;
       }
     }

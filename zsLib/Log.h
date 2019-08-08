@@ -263,6 +263,7 @@ namespace zsLib
     static void removeOutputListener(ILogOutputDelegatePtr delegate);
 
     static void notifyNewSubsystem(Subsystem *inSubsystem);
+    static void notifySubsystemLevelChanged(Subsystem *inSubsystem);
 
     static void setOutputLevelByName(
                                      const char *subsystemName,
@@ -298,6 +299,9 @@ namespace zsLib
 
     static void addEventingProviderListener(ILogEventingProviderDelegatePtr delegate);
     static void removeEventingProviderListener(ILogEventingProviderDelegatePtr delegate);
+
+    static void addSubsystemDelegate(ILogSubsystemDelegatePtr delegate);
+    static void removeSubsystemDelegate(ILogSubsystemDelegatePtr delegate);
 
     static EventingAtomIndex registerEventingAtom(const char *atomNamespace); // a result of "0" is an error
 
@@ -466,6 +470,7 @@ namespace zsLib
                                   ) noexcept { ZS_MAYBE_USED(handle); ZS_MAYBE_USED(eventingAtomDataArray); ZS_MAYBE_USED(severity); ZS_MAYBE_USED(level); ZS_MAYBE_USED(descriptor); ZS_MAYBE_USED(paramDescriptor); ZS_MAYBE_USED(dataDescriptor); ZS_MAYBE_USED(dataDescriptorCount); }
   };
 
+
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
@@ -495,11 +500,36 @@ namespace zsLib
 
   protected:
     virtual void notifyNewSubsystem() noexcept;
+    virtual void notifyLevelChanged() noexcept;
 
   private:
     CSTR mSubsystem;
     mutable std::atomic<LevelType> mOutputLevel;
     mutable std::atomic<LevelType> mEventingLevel;
+  };
+
+
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //
+  // ILogSubsystemDelegate
+  //
+
+  interaction ILogSubsystemDelegate
+  {
+    // notification that a new subsystem exists
+    virtual void notifyNewSubsystem(ZS_MAYBE_USED() zsLib::Subsystem &inSubsystem) noexcept { ZS_MAYBE_USED(inSubsystem); }
+
+    // notofication that a subsystem has changed its log level
+    virtual void notifySubsystemLevelChange(ZS_MAYBE_USED() zsLib::Subsystem &inSubsystem) noexcept { ZS_MAYBE_USED(inSubsystem); }
+
+    // notification that the total number of subscribers that receive logging events has changed
+    virtual void notifyLogSubscriberTotalChanged(size_t count) { ZS_MAYBE_USED(count); }
+
+    // notification that the total number of susbcribers that receive events has changed
+    virtual void notifyEventingSubscriberTotalChanged(size_t count) { ZS_MAYBE_USED(count); }
   };
 
 } // namespace zsLib
