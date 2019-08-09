@@ -173,9 +173,10 @@ namespace zsLib
     {
 #ifdef _WIN32
 #ifdef CPPWINRT_VERSION
-      if ((internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasCoreDispatcher()) ||
-          (internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::hasCoreDispatcher())) {
-        return internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton();
+      {
+        auto result = internal::MessageQueueThreadUsingCurrentGUIMessageQueueForCppWinrt::singleton();
+        if (result)
+          return result;
       }
 #endif //CPPWINRT_VERSION
 #ifdef WINUWP
