@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include <experimental/coroutine>
 #include <zsLib/Proxy.h>
 
 namespace zsLib
@@ -189,6 +190,19 @@ namespace zsLib
 
     void setReferenceHolder(AnyPtr referenceHolder) noexcept      {mReferenceHolder = referenceHolder;}
 
+    bool await_ready() const noexcept { return isSettled(); }
+
+    void await_suspend(std::experimental::coroutine_handle<> resume)
+    {
+      thenClosure(resume);
+    }
+
+    void await_resume() const
+    {
+      if (isRejected())
+        throw mReason;
+    }
+
   protected:
     void onPromiseSettled(PromisePtr promise) override;
     void onPromiseResolved(PromisePtr promise) override;
@@ -264,6 +278,13 @@ namespace zsLib
     UseDataTypePtr value() const noexcept {return Promise::value<DataType>();}
     UseReasonTypePtr reason() const noexcept {return Promise::reason<UseReasonType>();}
     UseUserTypePtr userData() const noexcept {return Promise::userData<UseUserType>();}
+
+    auto await_resume() const
+    {
+      if (isRejected())
+        throw reason();
+      return value();
+    }
   };
 
   template <typename DataType, typename ReasonType = zsLib::Any, typename UserType = zsLib::Any>
@@ -351,6 +372,13 @@ namespace zsLib
     UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
     UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
     UseUserTypePtr userData() const noexcept { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
+
+    auto await_resume() const
+    {
+      if (isRejected())
+        throw reason();
+      return value();
+    }
   };
 
 
@@ -433,6 +461,13 @@ namespace zsLib
     UseDataTypePtr value() const noexcept { auto result = Promise::value<AnyHolderUseDataType>(); if (result) return result->value_; return UseDataTypePtr(); }
     UseReasonTypePtr reason() const noexcept { auto result = Promise::reason<AnyHolderUseReasonType>(); if (result) return result->value_; return UseReasonTypePtr(); }
     UseUserTypePtr userData() const noexcept { auto result = Promise::userData<AnyHolderUseUserType>(); if (result) return result->value_; return UseUserTypePtr(); }
+
+    auto await_resume() const
+    {
+      if (isRejected())
+        throw reason();
+      return value();
+    }
   };
 
 
