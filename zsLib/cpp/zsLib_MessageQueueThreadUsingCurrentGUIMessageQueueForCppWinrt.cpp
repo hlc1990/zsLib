@@ -116,9 +116,11 @@ namespace zsLib
 
       if (!hasCoreDispatcher()) {
         auto window = winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread();
-        auto dispatcher = window.Dispatcher();
-        if (dispatcher) {
-          setupCoreDispatcher(dispatcher);
+        if (window) {
+          auto dispatcher = window.Dispatcher();
+          if (dispatcher) {
+            setupCoreDispatcher(dispatcher);
+          }
         }
       }
       {
